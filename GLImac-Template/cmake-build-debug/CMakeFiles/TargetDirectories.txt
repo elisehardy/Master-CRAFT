@@ -1,0 +1,8 @@
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/CMakeFiles/rebuild_cache.dir
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/CMakeFiles/glimac.dir
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/CMakeFiles/edit_cache.dir
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/CMakeFiles/rebuild_cache.dir
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/CMakeFiles/TP_template_SDLtemplate.dir
+/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/CMakeFiles/edit_cache.dir

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ImacGL"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\CMake\;CMake Files\glimac\;CMake Files\TP_template\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="glimac">
+				<Option output="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/libglimac.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/SDL"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/third-party/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 glimac"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="glimac/fast">
+				<Option output="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/libglimac.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/SDL"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/third-party/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 glimac/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/glimac/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="TP_template_SDLtemplate">
+				<Option output="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/TP_template_SDLtemplate" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/SDL"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/third-party/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 TP_template_SDLtemplate"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="TP_template_SDLtemplate/fast">
+				<Option output="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/TP_template_SDLtemplate" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/SDL"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include"/>
+					<Add directory="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/third-party/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 TP_template_SDLtemplate/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/cmake-build-debug/TP_template/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/TP_template/SDLtemplate.cpp">
+			<Option target="TP_template_SDLtemplate"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/BBox.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/Cone.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/FilePath.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/Geometry.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/Image.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/Program.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/SDLWindowManager.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/Shader.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/Sphere.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/common.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/include/glimac/glm.hpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/Cone.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/Geometry.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/Image.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/Program.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/SDLWindowManager.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/Shader.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/Sphere.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/tiny_obj_loader.cpp">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/src/tiny_obj_loader.h">
+			<Option target="glimac"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/CMake/FindGLEW.cmake">
+			<Option virtualFolder="CMake Files\CMake\"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/glimac/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\glimac\"/>
+		</Unit>
+		<Unit filename="/home/ehardy/Documents/master-craft/Master-CRAFT/GLImac-Template/TP_template/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\TP_template\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
