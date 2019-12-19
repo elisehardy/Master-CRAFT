@@ -132,6 +132,8 @@ namespace mastercraft::world {
             [[nodiscard]] GLuint texturesCount() const;
             
             [[nodiscard]] GLuint indexesCount() const;
+            
+            void load(GLuint &vbo, GLuint &vao, GLuint &ibo) const;
     };
 }
 

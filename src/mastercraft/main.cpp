@@ -57,17 +57,10 @@ int main(int argc, char **argv) {
     
     FilePath applicationPath(argv[0]);
     CubeProgram cubeProgram(applicationPath, "../shader/3D.vs.glsl", "../shader/3D.fs.glsl");
-    
-    const GLuint VERTEX_ATTR_POSITION = 0;
-    const GLuint VERTEX_ATTR_NORMAL = 1;
-    const GLuint VERTEX_ATTR_TEXTURE = 2;
-    
     GLuint vbo, vao, ibo, dirt;
-    
     world::CubeModel &cube = world::CubeModel::get();
     
-    mat4 projMatrix;
-    projMatrix = perspective(radians(70.f), 800.f / 800.f, 0.1f, 100.f);
+    mat4 projMatrix = perspective(radians(70.f), 800.f / 800.f, 0.1f, 100.f);
     
     std::unique_ptr<Image> dirtTex = loadImage("../assets/textures/dirt.jpg");
     
@@ -80,37 +73,11 @@ int main(int argc, char **argv) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
     
-    // VBO
     glEnable(GL_DEPTH_TEST);
     glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, cube.size(), &cube, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-    // IBO
     glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube.indexes), cube.indexes, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    
-    
-    // VAO
     glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    
-    glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-    glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
-    glEnableVertexAttribArray(VERTEX_ATTR_TEXTURE);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(vec3),
-                          (const GLvoid *) (offsetof(world::CubeModel, vertices)));
-    glVertexAttribPointer(VERTEX_ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(vec3),
-                          (const GLvoid *) (offsetof(world::CubeModel, normals)));
-    glVertexAttribPointer(VERTEX_ATTR_TEXTURE, 2, GL_FLOAT, GL_FALSE, sizeof(vec2),
-                          (const GLvoid *) (offsetof(world::CubeModel, textures)));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    cube.load(vbo, vao, ibo);
     
     glBindVertexArray(0);
     
