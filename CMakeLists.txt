@@ -65,4 +65,6 @@ TARGET_COMPILE_OPTIONS(
     -Wno-cast-qual
     -Wno-disabled-macro-expansion
     -Wno-comma
+    -Wno-unknown-warning-option
+    -Wno-conversion
 )

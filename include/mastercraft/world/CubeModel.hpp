@@ -50,19 +50,42 @@ namespace mastercraft::world {
                     { 1, 1, 1, },
             };
             
-            const glm::vec3 normals[6] = {
+            const glm::vec3 normals[24] = {
                     // Face
                     { 0.f,  0.f,  -1.f },
+                    { 0.f,  0.f,  -1.f },
+                    { 0.f,  0.f,  -1.f },
+                    { 0.f,  0.f,  -1.f },
+
                     // Top
                     { 0.f,  1.f,  0.f },
+                    { 0.f,  1.f,  0.f },
+                    { 0.f,  1.f,  0.f },
+                    { 0.f,  1.f,  0.f },
+
                     // Back
                     { 0.f,  0.f,  1.f },
+                    { 0.f,  0.f,  1.f },
+                    { 0.f,  0.f,  1.f },
+                    { 0.f,  0.f,  1.f },
+
                     // Bottom
+                    { 0.f,  -1.f, 0.f },
+                    { 0.f,  -1.f, 0.f },
+                    { 0.f,  -1.f, 0.f },
                     { 0.f,  -1.f, 0.f },
                     // Left
                     { -1.f, 0.f,  0.f },
+                    { -1.f, 0.f,  0.f },
+                    { -1.f, 0.f,  0.f },
+                    { -1.f, 0.f,  0.f },
+
                     // Right
                     { 1.f,  0.f,  0.f },
+                    { 1.f,  0.f,  0.f },
+                    { 1.f,  0.f,  0.f },
+                    { 1.f,  0.f,  0.f },
+
             };
             
             const glm::vec2 textures[24] = {
