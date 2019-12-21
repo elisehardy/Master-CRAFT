@@ -3,15 +3,45 @@
 #include <glimac/SDLWindowManager.hpp>
 #include <glimac/FilePath.hpp>
 #include <glimac/common.hpp>
-#include <glimac/Image.hpp>
 #include <GL/glew.h>
 
 #include <mastercraft/world/CubeModel.hpp>
-#include <mastercraft/world/TrackballCamera.hpp>
 #include <mastercraft/shader/ShaderTexture.hpp>
+#include <mastercraft/world/FreeflyCamera.hpp>
 
 
 using namespace mastercraft;
+
+
+//struct CubeProgram {
+//    mastercraft::util::Program m_Program;
+//
+//    GLint uMVPMatrix;
+//    GLint uMVMatrix;
+//    GLint uNormalMatrix;
+//    GLint uTexture;
+//    //GLint uKd;
+//    //GLint uKs;
+//    GLint uShininess;
+//    GLint uLightDir_vs;
+//    GLint uLightIntensity;
+//
+//
+//    CubeProgram(const FilePath &applicationPath, const std::string &vs, const std::string &fs) :
+//            m_Program(mastercraft::util::Program::loadProgram(applicationPath.dirPath() + vs,
+//                                  applicationPath.dirPath() + fs
+//            )) {
+//        uMVPMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVPMatrix");
+//        uMVMatrix = glGetUniformLocation(m_Program.getGLId(), "uMVMatrix");
+//        uNormalMatrix = glGetUniformLocation(m_Program.getGLId(), "uNormalMatrix");
+//        uTexture = glGetUniformLocation(m_Program.getGLId(), "uTexture");
+//        //uKd =  glGetUniformLocation(m_Program.getGLId(), "uKd");
+//        //uKs = glGetUniformLocation(m_Program.getGLId(), "uKs");
+//        uShininess = glGetUniformLocation(m_Program.getGLId(), "uShininess");
+//        uLightDir_vs = glGetUniformLocation(m_Program.getGLId(), "uLightDir_vs");
+//        uLightIntensity = glGetUniformLocation(m_Program.getGLId(), "uLightIntensity");
+//    }
+//};
 
 
 static void initGlew() {
@@ -31,7 +61,7 @@ int main(int argc, char **argv) {
     initGlew();
     
     glimac::FilePath applicationPath(argv[0]);
-    shader::ShaderTexture cubeProgram("../shader/3D.vs.glsl", "../shader/3D.fs.glsl", "../assets/textures/dirt.jpg");
+    shader::ShaderTexture cubeProgram("../shader/3D.vs.glsl", "../shader/light3D.fs.glsl", "../assets/textures/dirt.jpg");
     world::CubeModel &cube = world::CubeModel::get();
     GLuint vbo, vao, ibo;
     
@@ -43,32 +73,68 @@ int main(int argc, char **argv) {
     glGenVertexArrays(1, &vao);
     cube.load(vbo, vao, ibo);
     
-    // Application Loop:
-    bool done = false;
+    world::FreeflyCamera tbcam = world::FreeflyCamera();
     glm::ivec2 lastMousePos;
-    world::TrackballCamera tbcam = world::TrackballCamera();
+    bool done = false;
+    ////////////////////////////////////////////
+    //boucle de rendu
+    ///////////////////////////////////////////
     while (!done) {
         
         // Event loop:
         SDL_Event e;
         while (windowManager.pollEvent(e)) {
+            SDL_GetRelativeMouseState(&lastMousePos.x, &lastMousePos.y);
+            
             if (e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             }
+            
+            else if (windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)) {
+                if (lastMousePos.x > 0) {
+                    tbcam.rotateLeft(-1.);
+                }
+                else if (lastMousePos.x < 0) {
+                    tbcam.rotateLeft(1.);
+                }
+                if (lastMousePos.y > 0) {
+                    tbcam.rotateUp(-1.);
+                }
+                else if (lastMousePos.y < 0) {
+                    tbcam.rotateUp(1.);
+                }
+            }
         }
         
-        SDL_GetRelativeMouseState(&lastMousePos.x, &lastMousePos.y);
-        if (windowManager.isMouseButtonPressed(SDL_BUTTON_LEFT)) {
-            tbcam.rotateLeft(lastMousePos.x);
-            tbcam.rotateUp(lastMousePos.y);
+        // Keyboard
+        if (windowManager.isKeyPressed(SDLK_z) || windowManager.isKeyPressed(SDLK_UP)) {
+            tbcam.moveFront(0.3);
+        }
+        else if (windowManager.isKeyPressed(SDLK_s) || windowManager.isKeyPressed(SDLK_DOWN)) {
+            tbcam.moveFront(-0.3);
+        }
+        if (windowManager.isKeyPressed(SDLK_q) || windowManager.isKeyPressed(SDLK_LEFT)) {
+            tbcam.moveLeft(0.3);
+        }
+        else if (windowManager.isKeyPressed(SDLK_d) || windowManager.isKeyPressed(SDLK_RIGHT)) {
+            tbcam.moveLeft(-0.3);
         }
         
         // Cleaning
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         // Transformations
+        tbcam.computeDirectionVectors();
         glm::mat4 globalMVMatrix = tbcam.getViewMatrix();
         glm::mat4 cubeMVMatrix = glm::rotate(globalMVMatrix, 0.f, glm::vec3(0, 1, 0));
+        
+        cubeMVMatrix = glm::rotate(cubeMVMatrix, 0.f, glm::vec3(1, 0, 0));
+        
+        // Lumiere
+        //        glUniform1f(cubeProgram.uShininess, 32.0);
+        //        glm::vec4 LightDir = tbcam.getViewMatrix() * glm::vec4(-1.0, -1.0, -1.0, 0.0);
+        //        glUniform3f(cubeProgram.uLightDir_vs, LightDir.x, LightDir.y, LightDir.z);
+        //        glUniform3f(cubeProgram.uLightIntensity, 2.0, 2.0, 2.0);
         
         cubeProgram.use();
         cubeProgram.loadMatrices(cubeMVMatrix, projMatrix * cubeMVMatrix, glm::transpose(glm::inverse(cubeMVMatrix)));
