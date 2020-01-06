@@ -30,8 +30,8 @@ namespace mastercraft::world {
         float d = M_PI / 180.;
         
         t = glm::translate(i, glm::vec3(0., 0., -this->m_fDistance));
-        ry = glm::rotate(i, this->m_fAngleY * d, glm::vec3(1., 0., 0.));
         rx = glm::rotate(i, this->m_fAngleX * d, glm::vec3(0., 1., 0.));
+        ry = glm::rotate(i, this->m_fAngleY * d, glm::vec3(1., 0., 0.));
         
         return t * rx * ry;
     }

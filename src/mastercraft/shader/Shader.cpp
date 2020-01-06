@@ -3,33 +3,17 @@
 #include <glimac/glm.hpp>
 
 #include <mastercraft/shader/Shader.hpp>
+#include <iostream>
 
 
 namespace mastercraft::shader {
     
-    GLint Shader::tryGettingUniformLocation(const std::string &varname) const {
-        GLint location = glGetUniformLocation(this->program.getGLId(), varname.c_str());
-        
-        if (location < 0) {
-            if (varname.substr(0, 3) == "gl_") {
-                throw std::runtime_error("Error: '" + varname + "' starts with the reserved prefix \"gl_\"");
-            }
-            throw std::runtime_error(
-                    "Error: '" + varname + "' does not correspond to an active uniform variable in program,"
-                    + " or is associated with an atomic counter or a named uniform block."
-            );
-        }
-        
-        return location;
-    }
-    
-    
     Shader::Shader(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile) :
             program(util::Program::loadProgram(vsFile, fsFile)) {
         
-        this->uMVMatrix = tryGettingUniformLocation("uMVMatrix");
-        this->uMVPMatrix = tryGettingUniformLocation("uMVPMatrix");
-        this->uNormalMatrix = tryGettingUniformLocation("uNormalMatrix");
+        this->uMVMatrix = glGetUniformLocation(this->program.getGLId(), "uMVMatrix");
+        this->uMVPMatrix = glGetUniformLocation(this->program.getGLId(), "uMVPMatrix");
+        this->uNormalMatrix = glGetUniformLocation(this->program.getGLId(), "uNormalMatrix");
     }
     
     
@@ -52,5 +36,10 @@ namespace mastercraft::shader {
         loadModelViewMatrix(mv);
         loadModelViewProjectionMatrix(mvp);
         loadNormalMatrix(normal);
+    }
+    
+    
+    void Shader::use() const {
+        this->program.use();
     }
 }

@@ -18,7 +18,7 @@ namespace mastercraft::world {
         
         public:
             const glm::vec3 vertices[24] = {
-                    // Face
+                    // Back
                     { 0, 0, 1, },
                     { 1, 0, 1, },
                     { 1, 1, 1, },
@@ -28,7 +28,7 @@ namespace mastercraft::world {
                     { 1, 1, 1, },
                     { 1, 1, 0, },
                     { 0, 1, 0, },
-                    // Back
+                    // Face
                     { 1, 0, 0, },
                     { 0, 0, 0, },
                     { 0, 1, 0, },
@@ -89,7 +89,7 @@ namespace mastercraft::world {
             };
             
             const glm::vec2 textures[24] = {
-                    // Face
+                    // Back
                     { 0.0, 0.0, },
                     { 1.0, 0.0, },
                     { 1.0, 1.0, },
@@ -99,7 +99,7 @@ namespace mastercraft::world {
                     { 1.0, 0.0, },
                     { 1.0, 1.0, },
                     { 0.0, 1.0, },
-                    // Back
+                    // Face
                     { 0.0, 0.0, },
                     { 1.0, 0.0, },
                     { 1.0, 1.0, },
@@ -122,13 +122,13 @@ namespace mastercraft::world {
             };
             
             const GLuint indexes[36] = {
-                    // Face
+                    // Back
                     0, 1, 2,
                     2, 3, 0,
                     // Top
                     4, 5, 6,
                     6, 7, 4,
-                    // Back
+                    // Face
                     8, 9, 10,
                     10, 11, 8,
                     // Bottom

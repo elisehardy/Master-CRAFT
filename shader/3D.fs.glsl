@@ -1,7 +1,7 @@
 #{{ HEADER }}
 
-in vec3 vPosition_vs;
-in vec3 vNormal_vs;
+in vec3 vPosition;
+in vec3 vNormal;
 in vec2 vTexCoords;
 
 out vec3 fFragColor;

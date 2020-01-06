@@ -11,14 +11,12 @@ namespace mastercraft::shader {
     
     class Shader : public util::NonCopyable {
         private:
-            util::Program program;
             GLint uMVMatrix = -1;
             GLint uMVPMatrix = -1;
             GLint uNormalMatrix = -1;
         
         protected:
-            
-            [[nodiscard]] GLint tryGettingUniformLocation(const std::string &varname) const;
+            util::Program program;
         
         public:
             
@@ -31,6 +29,8 @@ namespace mastercraft::shader {
             void loadNormalMatrix(glm::mat4 matrix) const;
             
             void loadMatrices(glm::mat4 mv, glm::mat4 mvp, glm::mat4 normal) const;
+            
+            void use() const;
     };
 }
 
