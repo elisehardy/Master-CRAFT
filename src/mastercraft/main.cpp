@@ -10,7 +10,8 @@
 #include <mastercraft/util/Program.hpp>
 #include <mastercraft/world/TrackballCamera.hpp>
 #include <mastercraft/world/FreeflyCamera.hpp>
-
+#include <mastercraft/world/PerlinNoise.hpp>
+#include <mastercraft/world/PPM.h>
 
 using namespace mastercraft;
 using namespace glimac;
@@ -64,7 +65,9 @@ static void initGlew() {
 
 int main(int argc, char **argv) {
     SDLWindowManager windowManager(800, 800, "Mastercraft");
+
     initGlew();
+
     
     FilePath applicationPath(argv[0]);
     CubeProgram cubeProgram(applicationPath, "../shader/3D.vs.glsl", "../shader/Light3D.fs.glsl");
@@ -187,6 +190,34 @@ int main(int argc, char **argv) {
     
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
-    
+
+
+    //perlinNoise test
+    unsigned int width = 600, height = 450;
+    PPM image_perlin(width, height);
+
+    PerlinNoise noise(456);
+    unsigned int kk = 0;
+    // Visit every pixel of the image and assign a color generated with Perlin noise
+    for(unsigned int i = 0; i < height; ++i) {     // y
+        for(unsigned int j = 0; j < width; ++j) {  // x
+            double x = (double)j/((double)width);
+            double y = (double)i/((double)height);
+
+            // Typical Perlin noise
+            double n = noise.noise(10 * x, 10 * y, 0.8);
+
+            // Map the values to the [0, 255] interval, for simplicity we use
+            // tones of grey
+            image_perlin.r[kk] = floor(255 * n);
+            image_perlin.g[kk] = floor(255 * n);
+            image_perlin.b[kk] = floor(255 * n);
+            kk++;
+        }
+    }
+
+    // Save the image in a binary PPM file
+    image_perlin.write("PerlinNoiseTest.ppm");
+
     return EXIT_SUCCESS;
 }
