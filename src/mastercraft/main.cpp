@@ -93,11 +93,13 @@ int main(int argc, char **argv) {
         SDL_Event e;
         while (windowManager.pollEvent(e)) {
             SDL_GetRelativeMouseState(&lastMousePos.x, &lastMousePos.y);
-            
+
+
+            //croix window
             if (e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             }
-            
+
             else if (windowManager.isMouseButtonPressed(SDL_BUTTON_RIGHT)) {
                 if (lastMousePos.x > 0) {
                     tbcam.rotateLeft(-1.);
@@ -115,6 +117,9 @@ int main(int argc, char **argv) {
         }
         
         // Keyboard
+        if (windowManager.isKeyPressed(SDLK_ESCAPE)){
+            done = true;
+        }
         if (windowManager.isKeyPressed(SDLK_z) || windowManager.isKeyPressed(SDLK_UP)) {
             tbcam.moveFront(0.3);
         }

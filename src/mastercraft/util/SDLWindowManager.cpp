@@ -48,8 +48,8 @@ namespace mastercraft::util {
     bool SDLWindowManager::isMouseButtonPressed(uint32_t button) const {
         return SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(button);
     }
-    
-    
+
+
     glm::ivec2 SDLWindowManager::getMousePosition() const {
         glm::ivec2 mousePos;
         SDL_GetMouseState(&mousePos.x, &mousePos.y);
