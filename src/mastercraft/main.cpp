@@ -1,15 +1,17 @@
 #include <iostream>
 
-#include <glimac/SDLWindowManager.hpp>
+//#include <glimac/SDLWindowManager.hpp>
 #include <glimac/FilePath.hpp>
 #include <glimac/common.hpp>
 #include <GL/glew.h>
+
 
 #include <mastercraft/world/CubeModel.hpp>
 #include <mastercraft/shader/ShaderTexture.hpp>
 #include <mastercraft/world/FreeflyCamera.hpp>
 #include <mastercraft/world/PerlinNoise.hpp>
 #include <mastercraft/world/PPM.h>
+#include <mastercraft/util/SDLWindowManager.hpp>
 
 using namespace mastercraft;
 
@@ -59,16 +61,19 @@ static void initGlew() {
 
 int main(int argc, char **argv) {
 
-    glimac::SDLWindowManager windowManager(800, 800, "Mastercraft");
+
+    util::SDLWindowManager windowManager( "Mastercraft");
     initGlew();
 
-    
+    auto window_size  = SDL_GetVideoInfo();
+
+
     glimac::FilePath applicationPath(argv[0]);
     shader::ShaderTexture cubeProgram("../shader/3D.vs.glsl", "../shader/light3D.fs.glsl", "../assets/textures/dirt.jpg");
     world::CubeModel &cube = world::CubeModel::get();
     GLuint vbo, vao, ibo;
     
-    glm::mat4 projMatrix = glm::perspective(glm::radians(70.f), 800.f / 800.f, 0.1f, 100.f);
+    glm::mat4 projMatrix = glm::perspective(glm::radians(70.f), float(window_size->current_w) / float(window_size->current_h), 0.1f, 100.f);
     
     glEnable(GL_DEPTH_TEST);
     glGenBuffers(1, &vbo);
