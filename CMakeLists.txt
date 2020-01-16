@@ -8,7 +8,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
 SET(OpenGL_GL_PREFERENCE GLVND)
 SET(OPENGL_LIBRARIES /usr/lib/x86_64-linux-gnu/libGL.so.1)
 
-FIND_PACKAGE(SDL REQUIRED)
+FIND_PACKAGE(SDL2 REQUIRED)
 FIND_PACKAGE(OpenGL REQUIRED)
 FIND_PACKAGE(GLEW REQUIRED)
 
@@ -16,7 +16,7 @@ SET(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/)
 SET(LIBS_INCLUDE_DIR libs/include)
 INCLUDE_DIRECTORIES(
     SYSTEM
-    ${SDL_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIRS}
     ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
     ${LIBS_INCLUDE_DIR}
@@ -31,15 +31,20 @@ FILE(GLOB_RECURSE SHADER_FILES ${CMAKE_SOURCE_DIR}/shader/*.glsl)
 
 SET(TARGET_NAME mastercraft)
 ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES})
-TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
+TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 TARGET_COMPILE_OPTIONS(
     ${TARGET_NAME} PRIVATE
     -g
     -O2
     -Werror
     -Weverything
-    #    -Wfatal-errors
+    -Wfatal-errors
     -std=c++17
+)
+
+# Disable some warnings
+TARGET_COMPILE_OPTIONS(
+    ${TARGET_NAME} PRIVATE
     -Wno-unused-parameter
     -Wno-effc++
     -Wno-shadow
@@ -64,7 +69,7 @@ TARGET_COMPILE_OPTIONS(
     -Wno-shorten-64-to-32
     -Wno-cast-qual
     -Wno-disabled-macro-expansion
-    -Wno-comma
     -Wno-unknown-warning-option
     -Wno-conversion
+    -Wno-unused-exception-parameter
 )

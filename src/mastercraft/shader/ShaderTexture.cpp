@@ -6,7 +6,7 @@
 namespace mastercraft::shader {
     
     ShaderTexture::ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile,
-                                 std::string texturePath) :
+                                 const std::string& texturePath) :
             Shader(vsFile, fsFile) {
         this->uTexture = glGetUniformLocation(this->program.getGLId(), "uTexture");
         

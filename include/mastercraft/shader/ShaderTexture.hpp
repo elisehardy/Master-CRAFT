@@ -15,7 +15,7 @@ namespace mastercraft::shader {
         
         public:
             
-            ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile, std::string texturePath);
+            ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile, const std::string& texturePath);
             
             void bindTexture() const;
             

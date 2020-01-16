@@ -1,34 +1,30 @@
 #ifndef MASTERCRAFT_SHADER_HPP
 #define MASTERCRAFT_SHADER_HPP
 
-#include <glm/mat4x4.hpp>
+#include <string>
+#include <vector>
+#include <memory>
+#include <unordered_map>
 
 #include <mastercraft/util/Program.hpp>
 #include <mastercraft/util/NonCopyable.hpp>
+#include <mastercraft/shader/uniform/Uniform.hpp>
 
 
 namespace mastercraft::shader {
     
     class Shader : public util::NonCopyable {
-        private:
-            GLint uMVMatrix = -1;
-            GLint uMVPMatrix = -1;
-            GLint uNormalMatrix = -1;
-        
         protected:
+            std::unordered_map<std::string, std::shared_ptr<Uniform>> uniforms;
             util::Program program;
         
         public:
             
             Shader(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile);
             
-            void loadModelViewMatrix(glm::mat4 matrix) const;
+            void addUniform(const std::string &name, UniformType type);
             
-            void loadModelViewProjectionMatrix(glm::mat4 matrix) const;
-            
-            void loadNormalMatrix(glm::mat4 matrix) const;
-            
-            void loadMatrices(glm::mat4 mv, glm::mat4 mvp, glm::mat4 normal) const;
+            void loadUniform(const std::string &name, const void* value);
             
             void use() const;
     };

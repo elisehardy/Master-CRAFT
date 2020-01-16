@@ -1,32 +1,36 @@
 #pragma once
 
 #include <cstdint>
-#include <SDL/SDL.h>
+
+#include <SDL2/SDL.h>
 #include <glimac/glm.hpp>
 
 
 namespace mastercraft::util {
     
     class SDLWindowManager {
-        public:
-            SDLWindowManager(uint32_t width, uint32_t height, const char *title);
-            SDLWindowManager(const char *title);
-
-
-            ~SDLWindowManager();
+        private:
+            SDL_Window *window;
+            SDL_GLContext context;
             
+        public:
+            explicit SDLWindowManager(const char *title);
+            
+            ~SDLWindowManager();
+        
+            void refresh();
+        
             bool pollEvent(SDL_Event &e);
             
-            bool isKeyPressed(SDLKey key) const;
+            [[nodiscard]] int getWidth() const;
+        
+            [[nodiscard]] int getHeight() const;
             
-            // button can SDL_BUTTON_LEFT, SDL_BUTTON_RIGHT and SDL_BUTTON_MIDDLE
-            bool isMouseButtonPressed(uint32_t button) const;
+            [[nodiscard]] bool isKeyPressed(SDL_Scancode key) const;
+        
+            [[nodiscard]] bool isMouseButtonPressed(uint32_t button) const;
             
-            glm::ivec2 getMousePosition() const;
-            
-            void swapBuffers();
-            
-            // Return the time in seconds
-            float getTime() const;
+            [[nodiscard]] glm::ivec2 getMousePosition() const;
     };
+    
 }

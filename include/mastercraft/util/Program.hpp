@@ -1,9 +1,10 @@
 #ifndef MASTERCRAFT_PROGRAM_HPP
 #define MASTERCRAFT_PROGRAM_HPP
 
+#include <GL/glew.h>
+
 #include <glimac/Shader.hpp>
 #include <glimac/FilePath.hpp>
-#include <GL/glew.h>
 
 
 namespace mastercraft::util {
@@ -11,11 +12,15 @@ namespace mastercraft::util {
     class Program {
         private:
             GLuint m_nGLId;
-            
+        
             Program(const Program &);
-            
+        
+            Program(const std::string &vs, const std::string &fs);
+        
             Program &operator=(const Program &);
-            
+        
+            Program(Program &&rvalue) noexcept;
+        
             [[nodiscard]] std::string getInfoLog() const;
         
             void attachShader(const glimac::Shader &shader);
@@ -25,8 +30,6 @@ namespace mastercraft::util {
         public:
         
             Program();
-        
-            Program(Program &&rvalue) noexcept;
         
             ~Program();
         

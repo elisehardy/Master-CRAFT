@@ -36,7 +36,7 @@ static glimac::FilePath addVersion(const glimac::FilePath &shaderPath) {
     content = content.replace(0, 13, header);
     
     glimac::FilePath newPath =
-            glimac::FilePath("/tmp/" + mastercraft::util::Uuid::uuid4() + "_" + basename(shaderPath.c_str()));
+        glimac::FilePath("/tmp/" + mastercraft::util::Uuid::uuid4() + "_" + basename(shaderPath.c_str()));
     std::ofstream tmpShader(newPath);
     tmpShader << content;
     tmpShader.flush();
@@ -49,7 +49,7 @@ static glimac::FilePath addVersion(const glimac::FilePath &shaderPath) {
 namespace mastercraft::util {
     
     Program::Program() :
-            m_nGLId(glCreateProgram()) {
+        m_nGLId(glCreateProgram()) {
     }
     
     
@@ -59,7 +59,7 @@ namespace mastercraft::util {
     
     
     Program::Program(Program &&rvalue) noexcept:
-            m_nGLId(rvalue.m_nGLId) {
+        m_nGLId(rvalue.m_nGLId) {
         rvalue.m_nGLId = 0;
     }
     
@@ -77,7 +77,7 @@ namespace mastercraft::util {
         
         if (!vs.compile()) {
             throw std::runtime_error(
-                    "Compilation error for vertex shader (from file " + std::string(vsPath) + "): " + vs.getInfoLog()
+                "Compilation error for vertex shader (from file " + std::string(vsPath) + "): " + vs.getInfoLog()
             );
         }
         
@@ -86,13 +86,13 @@ namespace mastercraft::util {
                                      + fs.getInfoLog());
         }
         
-        Program program;
+        Program program = Program();
         program.attachShader(vs);
         program.attachShader(fs);
         
         if (!program.link()) {
             throw std::runtime_error(
-                    "Link error (for files " + vsPath.str() + " and " + fsPath.str() + "): " + program.getInfoLog());
+                "Link error (for files " + vsPath.str() + " and " + fsPath.str() + "): " + program.getInfoLog());
         }
         
         return program;
