@@ -1,48 +1,100 @@
-#include <mastercraft/world/Cube.hpp>
-#include <mastercraft/world/CubeVertex.hpp>
+
+
+#include <mastercraft/world/CubeFace.hpp>
 
 
 namespace mastercraft::world {
+
     
-    Cube::Cube(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+    CubeFace world::CubeFace::face(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+        CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
-            // Face
             CubeVertex({ x + 0, y + 0, z + 1 }, { 0, 0, -1 }, { 0, 0, }, type),
             CubeVertex({ x + 1, y + 0, z + 1 }, { 0, 0, -1 }, { 1, 0, }, type),
             CubeVertex({ x + 1, y + 1, z + 1 }, { 0, 0, -1 }, { 1, 1, }, type),
             CubeVertex({ x + 1, y + 1, z + 1 }, { 0, 0, -1 }, { 1, 1, }, type),
             CubeVertex({ x + 0, y + 1, z + 1 }, { 0, 0, -1 }, { 0, 1, }, type),
             CubeVertex({ x + 0, y + 0, z + 1 }, { 0, 0, -1 }, { 0, 0, }, type),
-            // Top
+        };
+    
+        std::memcpy(face.vertices, v, sizeof(face.vertices));
+        return face;
+    }
+    
+    
+    CubeFace CubeFace::top(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+        CubeFace face;
+    
+        CubeVertex v[VERTICE_COUNT] = {
             CubeVertex({ x + 0, y + 1, z + 1 }, { 0, 1, 0 }, { 0, 0, }, type),
             CubeVertex({ x + 1, y + 1, z + 1 }, { 0, 1, 0 }, { 1, 0, }, type),
             CubeVertex({ x + 1, y + 1, z + 0 }, { 0, 1, 0 }, { 1, 1, }, type),
             CubeVertex({ x + 1, y + 1, z + 0 }, { 0, 1, 0 }, { 1, 1, }, type),
             CubeVertex({ x + 0, y + 1, z + 0 }, { 0, 1, 0 }, { 0, 1, }, type),
             CubeVertex({ x + 0, y + 1, z + 1 }, { 0, 1, 0 }, { 0, 0, }, type),
-            // Back
+        };
+    
+        std::memcpy(face.vertices, v, sizeof(face.vertices));
+        return face;
+    }
+    
+    
+    CubeFace CubeFace::back(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+        CubeFace face;
+    
+        CubeVertex v[VERTICE_COUNT] = {
             CubeVertex({ x + 1, y + 0, z + 0 }, { 0, 0, 1 }, { 0, 0, }, type),
             CubeVertex({ x + 0, y + 0, z + 0 }, { 0, 0, 1 }, { 1, 0, }, type),
             CubeVertex({ x + 0, y + 1, z + 0 }, { 0, 0, 1 }, { 1, 1, }, type),
             CubeVertex({ x + 0, y + 1, z + 0 }, { 0, 0, 1 }, { 1, 1, }, type),
             CubeVertex({ x + 1, y + 1, z + 0 }, { 0, 0, 1 }, { 0, 1, }, type),
             CubeVertex({ x + 1, y + 0, z + 0 }, { 0, 0, 1 }, { 0, 0, }, type),
-            // Bottom
+        };
+    
+        std::memcpy(face.vertices, v, sizeof(face.vertices));
+        return face;
+    }
+    
+    
+    CubeFace CubeFace::bottom(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+        CubeFace face;
+    
+        CubeVertex v[VERTICE_COUNT] = {
             CubeVertex({ x + 0, y + 0, z + 0 }, { 0, -1, 0 }, { 0, 0, }, type),
             CubeVertex({ x + 1, y + 0, z + 0 }, { 0, -1, 0 }, { 1, 0, }, type),
             CubeVertex({ x + 1, y + 0, z + 1 }, { 0, -1, 0 }, { 1, 1, }, type),
             CubeVertex({ x + 1, y + 0, z + 1 }, { 0, -1, 0 }, { 1, 1, }, type),
             CubeVertex({ x + 0, y + 0, z + 1 }, { 0, -1, 0 }, { 0, 1, }, type),
             CubeVertex({ x + 0, y + 0, z + 0 }, { 0, -1, 0 }, { 0, 0, }, type),
-            // Left
+        };
+    
+        std::memcpy(face.vertices, v, sizeof(face.vertices));
+        return face;
+    }
+    
+    
+    CubeFace CubeFace::left(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+        CubeFace face;
+    
+        CubeVertex v[VERTICE_COUNT] = {
             CubeVertex({ x + 0, y + 0, z + 0 }, { -1, 0, 0 }, { 0, 0, }, type),
             CubeVertex({ x + 0, y + 0, z + 1 }, { -1, 0, 0 }, { 1, 0, }, type),
             CubeVertex({ x + 0, y + 1, z + 1 }, { -1, 0, 0 }, { 1, 1, }, type),
             CubeVertex({ x + 0, y + 1, z + 1 }, { -1, 0, 0 }, { 1, 1, }, type),
             CubeVertex({ x + 0, y + 1, z + 0 }, { -1, 0, 0 }, { 0, 1, }, type),
             CubeVertex({ x + 0, y + 0, z + 0 }, { -1, 0, 0 }, { 0, 0, }, type),
-            // Right
+        };
+    
+        std::memcpy(face.vertices, v, sizeof(face.vertices));
+        return face;
+    }
+    
+    
+    CubeFace CubeFace::right(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+        CubeFace face;
+    
+        CubeVertex v[VERTICE_COUNT] = {
             CubeVertex({ x + 1, y + 0, z + 1 }, { 1, 0, 0 }, { 0, 0, }, type),
             CubeVertex({ x + 1, y + 0, z + 0 }, { 1, 0, 0 }, { 1, 0, }, type),
             CubeVertex({ x + 1, y + 1, z + 0 }, { 1, 0, 0 }, { 1, 1, }, type),
@@ -50,7 +102,8 @@ namespace mastercraft::world {
             CubeVertex({ x + 1, y + 1, z + 1 }, { 1, 0, 0 }, { 0, 1, }, type),
             CubeVertex({ x + 1, y + 0, z + 1 }, { 1, 0, 0 }, { 0, 0, }, type),
         };
-        
-        std::memcpy(this->vertices, v, sizeof(this->vertices));
+    
+        std::memcpy(face.vertices, v, sizeof(face.vertices));
+        return face;
     }
 }

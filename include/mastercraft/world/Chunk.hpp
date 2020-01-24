@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include <mastercraft/world/CubeType.hpp>
+#include <mastercraft/world/CubeDirection.hpp>
 
 
 namespace mastercraft::world {
@@ -28,7 +29,7 @@ namespace mastercraft::world {
             GLuint vbo;
             GLuint vao;
             
-            [[nodiscard]] bool occluded(GLubyte x, GLubyte y, GLubyte z) const;
+            [[nodiscard]] bool occluded(GLubyte x, GLubyte y, GLubyte z, CubeDirection direction) const;
         
         public:
             

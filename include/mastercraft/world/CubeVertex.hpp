@@ -18,7 +18,7 @@ namespace mastercraft::world {
         bvec3 vertex;
         bvec3 normal;
         bvec2 texture;
-        GLbyte type;
+        CubeType type;
         
         CubeVertex() = default;
         

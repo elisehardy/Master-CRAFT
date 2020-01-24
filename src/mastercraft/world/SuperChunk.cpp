@@ -3,7 +3,6 @@
 #include <glm/ext.hpp>
 
 #include <mastercraft/world/SuperChunk.hpp>
-#include <mastercraft/world/Cube.hpp>
 
 
 namespace mastercraft::world {
@@ -68,7 +67,11 @@ namespace mastercraft::world {
         for (GLubyte x = 0; x < CHUNK_X; x++) {
             for (GLubyte y = 0; y < CHUNK_Y; y++) {
                 for (GLubyte z = 0; z < CHUNK_Z; z++) {
-                    position = glm::vec3(x + this->position.x, y + this->position.y, z + this->position.z);
+                    position = glm::vec3(
+                        x * Chunk::X + this->position.x,
+                        y * Chunk::Y + this->position.y,
+                        z * Chunk::Z + this->position.z
+                    );
                     shader.loadUniform("uChunkPosition", glm::value_ptr(position));
                     this->chunks[x][y][z].draw();
                 }

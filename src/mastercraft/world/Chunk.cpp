@@ -1,6 +1,7 @@
-#include <mastercraft/world/Chunk.hpp>
-#include <mastercraft/world/Cube.hpp>
 #include <iostream>
+
+#include <mastercraft/world/Chunk.hpp>
+#include <mastercraft/world/CubeFace.hpp>
 
 
 namespace mastercraft::world {
@@ -17,17 +18,25 @@ namespace mastercraft::world {
     }
     
     
-    bool Chunk::occluded(GLubyte x, GLubyte y, GLubyte z) const {
+    bool Chunk::occluded(GLubyte x, GLubyte y, GLubyte z, CubeDirection direction) const {
         static constexpr GLubyte MAX_X = X - 1;
         static constexpr GLubyte MAX_Y = Y - 1;
         static constexpr GLubyte MAX_Z = Z - 1;
         
-        return (
-            (x > 0) && (x < MAX_X) && (y > 0) && (y < MAX_Y) && (z > 0) && (z < MAX_Z)
-            && (this->cubes[x + 1][y][z] != CubeType::AIR) && (this->cubes[x - 1][y][z] != CubeType::AIR)
-            && (this->cubes[x][y + 1][z] != CubeType::AIR) && (this->cubes[x][y - 1][z] != CubeType::AIR)
-            && (this->cubes[x][y][z + 1] != CubeType::AIR) && (this->cubes[x][y][z - 1] != CubeType::AIR)
-        );
+        switch (direction) {
+            case CubeDirection::FACE:
+                return z < MAX_Z && this->cubes[x][y][z + 1] != CubeType::AIR;
+            case CubeDirection::TOP:
+                return y < MAX_Y && this->cubes[x][y + 1][z] != CubeType::AIR;
+            case CubeDirection::BACK:
+                return z > 0 && this->cubes[x][y][z - 1] != CubeType::AIR;
+            case CubeDirection::BOTTOM:
+                return y > 0 && this->cubes[x][y - 1][z] != CubeType::AIR;
+            case CubeDirection::LEFT:
+                return x > 0 && this->cubes[x - 1][y][z] != CubeType::AIR;
+            case CubeDirection::RIGHT:
+                return x < MAX_X && this->cubes[x + 1][y][z] != CubeType::AIR;
+        }
     }
     
     
@@ -56,23 +65,42 @@ namespace mastercraft::world {
         }
         
         CubeType type;
-        Cube drawn[SIZE];
+        CubeFace drawn[SIZE];
         
         this->count = 0;
         for (GLubyte x = 0; x < X; x++) {
             for (GLubyte y = 0; y < Y; y++) {
                 for (GLubyte z = 0; z < Z; z++) {
                     type = this->cubes[x][y][z];
-                    if (type != CubeType::AIR && !this->occluded(x, y, z)) {
-                        drawn[this->count++] = Cube(x, y, z, type);
+                    if (type != CubeType::AIR) {
+                        if (!occluded(x, y, z, CubeDirection::FACE)) {
+                            drawn[this->count++] = CubeFace::face(x, y, z, type);
+                        }
+                        if (!occluded(x, y, z, CubeDirection::TOP)) {
+                            drawn[this->count++] = CubeFace::top(x, y, z, type);
+                        }
+                        if (!occluded(x, y, z, CubeDirection::BACK)) {
+                            drawn[this->count++] = CubeFace::back(x, y, z, type);
+                        }
+                        if (!occluded(x, y, z, CubeDirection::BOTTOM)) {
+                            drawn[this->count++] = CubeFace::bottom(x, y, z, type);
+                        }
+                        if (!occluded(x, y, z, CubeDirection::LEFT)) {
+                            drawn[this->count++] = CubeFace::left(x, y, z, type);
+                        }
+                        if (!occluded(x, y, z, CubeDirection::RIGHT)) {
+                            drawn[this->count++] = CubeFace::right(x, y, z, type);
+                        }
                     }
                 }
             }
         }
         
+        std::cout << "Update " << this->count << std::endl;
+        
         // Fill the VBO
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Cube) * this->count, drawn, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(CubeFace) * this->count, drawn, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         
         // Set the VAO
@@ -113,8 +141,10 @@ namespace mastercraft::world {
             return 0;
         }
         
+//        std::cout << this->count << std::endl;
+        
         glBindVertexArray(this->vao);
-        glDrawArrays(GL_TRIANGLES, 0, this->count * Cube::VERTICE_COUNT);
+        glDrawArrays(GL_TRIANGLES, 0, this->count * CubeFace::VERTICE_COUNT);
         glBindVertexArray(0);
         
         return this->count;

@@ -3,12 +3,10 @@
 
 namespace mastercraft::world {
     
-    enum CubeType : GLbyte {
-        INODE = -1,
+    enum struct CubeType : GLbyte {
         AIR = 0,
-        DIRT,
-        STONE,
-        SAND
+        DIRT
     };
 }
+
 #endif //MASTERCRAFT_CUBETYPE_HPP
