@@ -1,16 +1,16 @@
 #ifndef MASTERCRAFT_UNIFORM1FV_HPP
 #define MASTERCRAFT_UNIFORM1FV_HPP
 
-#include <mastercraft/shader/uniform/Uniform.hpp>
+#include <mastercraft/shader/uniform/IUniform.hpp>
 
 
 namespace mastercraft::shader {
     
-    class Uniform1fv : public Uniform {
+    class Uniform1fv : public IUniform {
         
         public:
             
-            using Uniform::Uniform;
+            using IUniform::IUniform;
             
             void load(const void *value) final;
     };

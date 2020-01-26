@@ -3,16 +3,17 @@
 
 #include <glm/glm.hpp>
 
-#include <mastercraft/world/Chunk.hpp>
+#include <mastercraft/cube/Chunk.hpp>
 #include <mastercraft/shader/Shader.hpp>
+#include <mastercraft/util/INonCopyable.hpp>
 
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
     
-    class SuperChunk {
+    class SuperChunk : public util::INonCopyable {
         public:
             static constexpr GLubyte CHUNK_X = 1;
-            static constexpr GLubyte CHUNK_Y = 2;
+            static constexpr GLubyte CHUNK_Y = 16;
             static constexpr GLubyte CHUNK_Z = 1;
             static constexpr GLuint CHUNK_SIZE = CHUNK_X * CHUNK_Y * CHUNK_Z;
             static constexpr GLuint X = Chunk::X * CHUNK_X;
@@ -28,9 +29,15 @@ namespace mastercraft::world {
         
         public:
             
+            SuperChunk() = default;
+            
             explicit SuperChunk(glm::ivec3 position);
             
             SuperChunk(GLuint x, GLuint y, GLuint z);
+        
+            static SuperChunk *loadOrCreate(glm::ivec3 position);
+            
+            static SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
             
             ~SuperChunk() = default;
             
@@ -40,7 +47,7 @@ namespace mastercraft::world {
             
             GLuint update();
             
-            GLuint draw(shader::Shader &shader);
+            GLuint render();
     };
 }
 

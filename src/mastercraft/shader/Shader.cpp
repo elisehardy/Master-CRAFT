@@ -13,7 +13,7 @@ namespace mastercraft::shader {
     
     
     void Shader::addUniform(const std::string &name, UniformType type) {
-        std::shared_ptr<Uniform> uniform;
+        std::shared_ptr<IUniform> uniform;
         
         switch (type) {
             case UNIFORM_1_F:

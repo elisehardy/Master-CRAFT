@@ -7,18 +7,20 @@
 #include <unordered_map>
 
 #include <mastercraft/util/Program.hpp>
-#include <mastercraft/util/NonCopyable.hpp>
-#include <mastercraft/shader/uniform/Uniform.hpp>
+#include <mastercraft/util/INonCopyable.hpp>
+#include <mastercraft/shader/uniform/IUniform.hpp>
 
 
 namespace mastercraft::shader {
     
-    class Shader : public util::NonCopyable {
+    class Shader : public util::INonCopyable {
         protected:
-            std::unordered_map<std::string, std::shared_ptr<Uniform>> uniforms;
+            std::unordered_map<std::string, std::shared_ptr<IUniform>> uniforms;
             util::Program program;
         
         public:
+            
+            Shader() = default;
             
             Shader(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile);
             

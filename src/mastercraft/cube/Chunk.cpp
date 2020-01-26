@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include <mastercraft/world/Chunk.hpp>
-#include <mastercraft/world/CubeFace.hpp>
+#include <mastercraft/cube/Chunk.hpp>
+#include <mastercraft/cube/CubeFace.hpp>
 
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
     
     Chunk::Chunk() {
         glGenBuffers(1, &vbo);
@@ -96,8 +96,6 @@ namespace mastercraft::world {
             }
         }
         
-        std::cout << "Update " << this->count << std::endl;
-        
         // Fill the VBO
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(CubeFace) * this->count, drawn, GL_STATIC_DRAW);
@@ -111,20 +109,20 @@ namespace mastercraft::world {
         glEnableVertexAttribArray(VERTEX_ATTR_TYPE);
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
         glVertexAttribPointer(
-            VERTEX_ATTR_POSITION, 3, GL_BYTE, GL_FALSE, sizeof(world::CubeVertex),
-            (const GLvoid *) (offsetof(world::CubeVertex, vertex))
+            VERTEX_ATTR_POSITION, 3, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
+            (const GLvoid *) (offsetof(cube::CubeVertex, vertex))
         );
         glVertexAttribPointer(
-            VERTEX_ATTR_NORMAL, 3, GL_BYTE, GL_FALSE, sizeof(world::CubeVertex),
-            (const GLvoid *) (offsetof(world::CubeVertex, normal))
+            VERTEX_ATTR_NORMAL, 3, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
+            (const GLvoid *) (offsetof(cube::CubeVertex, normal))
         );
         glVertexAttribPointer(
-            VERTEX_ATTR_TEXTURE, 2, GL_BYTE, GL_FALSE, sizeof(world::CubeVertex),
-            (const GLvoid *) (offsetof(world::CubeVertex, texture))
+            VERTEX_ATTR_TEXTURE, 2, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
+            (const GLvoid *) (offsetof(cube::CubeVertex, texture))
         );
         glVertexAttribIPointer(
-            VERTEX_ATTR_TYPE, 1, GL_BYTE, sizeof(world::CubeVertex),
-            (const GLvoid *) (offsetof(world::CubeVertex, type))
+            VERTEX_ATTR_TYPE, 1, GL_BYTE, sizeof(cube::CubeVertex),
+            (const GLvoid *) (offsetof(cube::CubeVertex, type))
         );
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -134,14 +132,12 @@ namespace mastercraft::world {
     }
     
     
-    GLuint Chunk::draw() {
+    GLuint Chunk::render() {
         assert(!modified);
         
         if (this->count == 0) {
             return 0;
         }
-        
-//        std::cout << this->count << std::endl;
         
         glBindVertexArray(this->vao);
         glDrawArrays(GL_TRIANGLES, 0, this->count * CubeFace::VERTICE_COUNT);

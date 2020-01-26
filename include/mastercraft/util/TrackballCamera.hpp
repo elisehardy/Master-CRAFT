@@ -27,6 +27,7 @@ namespace mastercraft::util {
             void rotateLeft(float degrees);
         
             void rotateUp(float degrees);
+            
             [[nodiscard]] glm::mat4 getViewMatrix() const;
     };
 }

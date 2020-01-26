@@ -4,10 +4,10 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-#include <mastercraft/world/CubeType.hpp>
+#include <mastercraft/cube/CubeType.hpp>
 
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
     
     typedef glm::tvec3<GLbyte> bvec3;
     typedef glm::tvec2<GLbyte> bvec2;

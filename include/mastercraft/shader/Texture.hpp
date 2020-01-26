@@ -6,12 +6,12 @@
 #include <glimac/Image.hpp>
 #include <GL/glew.h>
 
-#include <mastercraft/util/NonCopyable.hpp>
+#include <mastercraft/util/INonCopyable.hpp>
 
 
 namespace mastercraft::texture {
     
-    class Texture : public util::NonCopyable {
+    class Texture : public util::INonCopyable {
         private:
             GLuint textureId = 0;
         

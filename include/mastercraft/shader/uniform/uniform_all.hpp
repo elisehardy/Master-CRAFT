@@ -1,7 +1,7 @@
 #ifndef MASTERCRAFT_UNIFORM_ALL_HPP
 #define MASTERCRAFT_UNIFORM_ALL_HPP
 
-#include <mastercraft/shader/uniform/Uniform.hpp>
+#include <mastercraft/shader/uniform/IUniform.hpp>
 
 #include <mastercraft/shader/uniform/Uniform1fv.hpp>
 #include <mastercraft/shader/uniform/Uniform2fv.hpp>

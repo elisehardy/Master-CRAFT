@@ -1,5 +1,5 @@
-#ifndef MASTERCRAFT_UNIFORM_HPP
-#define MASTERCRAFT_UNIFORM_HPP
+#ifndef MASTERCRAFT_IUNIFORM_HPP
+#define MASTERCRAFT_IUNIFORM_HPP
 
 #include <GL/glew.h>
 
@@ -16,7 +16,7 @@ namespace mastercraft::shader {
         UNIFORM_MATRIX_3X4F, UNIFORM_MATRIX_4X3F
     };
     
-    class Uniform {
+    class IUniform {
         
         protected:
             const GLchar *name;
@@ -25,10 +25,10 @@ namespace mastercraft::shader {
         
         public:
             
-            Uniform(GLuint program, const GLchar *name);
+            IUniform(GLuint program, const GLchar *name);
         
             virtual void load(const void *value) = 0;
     };
 }
 
-#endif // MASTERCRAFT_UNIFORM_HPP
+#endif //MASTERCRAFT_IUNIFORM_HPP

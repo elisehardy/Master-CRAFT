@@ -14,9 +14,7 @@ namespace mastercraft::util {
             GLuint m_nGLId;
         
             Program(const Program &);
-        
-            Program(const std::string &vs, const std::string &fs);
-        
+            
             Program &operator=(const Program &);
         
             Program(Program &&rvalue) noexcept;

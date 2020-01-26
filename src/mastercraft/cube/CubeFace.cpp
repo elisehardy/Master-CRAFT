@@ -1,12 +1,12 @@
 
 
-#include <mastercraft/world/CubeFace.hpp>
+#include <mastercraft/cube/CubeFace.hpp>
 
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
 
     
-    CubeFace world::CubeFace::face(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
+    CubeFace cube::CubeFace::face(GLubyte x, GLubyte y, GLubyte z, CubeType type) {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {

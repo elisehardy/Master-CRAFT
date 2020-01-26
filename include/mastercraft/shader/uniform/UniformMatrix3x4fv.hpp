@@ -1,16 +1,16 @@
 #ifndef MASTERCRAFT_UNIFORMMATRIX34_HPP
 #define MASTERCRAFT_UNIFORMMATRIX34_HPP
 
-#include <mastercraft/shader/uniform/Uniform.hpp>
+#include <mastercraft/shader/uniform/IUniform.hpp>
 
 
 namespace mastercraft::shader {
     
-    class UniformMatrix3x4fv : public Uniform {
+    class UniformMatrix3x4fv : public IUniform {
         
         public:
         
-            using Uniform::Uniform;
+            using IUniform::IUniform;
             
             void load(const void *value) final;
     };

@@ -4,11 +4,11 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include <mastercraft/world/CubeType.hpp>
-#include <mastercraft/world/CubeDirection.hpp>
+#include <mastercraft/cube/CubeType.hpp>
+#include <mastercraft/cube/CubeDirection.hpp>
 
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
     
     class Chunk {
         public:
@@ -43,7 +43,7 @@ namespace mastercraft::world {
             
             GLuint update();
             
-            GLuint draw();
+            GLuint render();
     };
 }
 

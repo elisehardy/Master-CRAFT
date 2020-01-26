@@ -1,16 +1,16 @@
 #ifndef MASTERCRAFT_UNIFORM2uiv_HPP
 #define MASTERCRAFT_UNIFORM2uiv_HPP
 
-#include <mastercraft/shader/uniform/Uniform.hpp>
+#include <mastercraft/shader/uniform/IUniform.hpp>
 
 
 namespace mastercraft::shader {
     
-    class Uniform2uiv : public Uniform {
+    class Uniform2uiv : public IUniform {
         
         public:
         
-            using Uniform::Uniform;
+            using IUniform::IUniform;
             
             void load(const void *value) final;
     };

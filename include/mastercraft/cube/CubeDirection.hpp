@@ -1,7 +1,7 @@
 #ifndef MASTERCRAFT_CUBEDIRECTION_HPP
 #define MASTERCRAFT_CUBEDIRECTION_HPP
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
     
     enum struct CubeDirection : GLbyte {
         FACE,

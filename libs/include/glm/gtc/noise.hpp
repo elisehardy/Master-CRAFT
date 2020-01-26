@@ -11,7 +11,7 @@
 /// Defines 2D, 3D and 4D procedural noise functions
 /// Based on the work of Stefan Gustavson and Ashima Arts on "webgl-noise":
 /// https://github.com/ashima/webgl-noise
-/// Following Stefan Gustavson's paper "Simplex noise demystified":
+/// Following Stefan Gustavson's paper "SimplexNoise noise demystified":
 /// http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
 
 #pragma once
@@ -49,7 +49,7 @@ namespace glm
 		vec<L, T, Q> const& p,
 		vec<L, T, Q> const& rep);
 
-	/// Simplex noise.
+	/// SimplexNoise noise.
 	/// @see gtc_noise
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_DECL T simplex(

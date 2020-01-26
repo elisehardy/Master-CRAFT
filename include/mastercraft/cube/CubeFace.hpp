@@ -7,11 +7,11 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-#include <mastercraft/world/CubeType.hpp>
-#include <mastercraft/world/CubeVertex.hpp>
+#include <mastercraft/cube/CubeType.hpp>
+#include <mastercraft/cube/CubeVertex.hpp>
 
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
     
     struct CubeFace {
         

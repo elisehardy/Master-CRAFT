@@ -2,10 +2,11 @@
 
 #include <glm/ext.hpp>
 
-#include <mastercraft/world/SuperChunk.hpp>
+#include <mastercraft/cube/SuperChunk.hpp>
+#include <mastercraft/game/Game.hpp>
 
 
-namespace mastercraft::world {
+namespace mastercraft::cube {
     
     SuperChunk::SuperChunk(glm::ivec3 t_position) :
         position(t_position) {
@@ -14,6 +15,26 @@ namespace mastercraft::world {
     
     SuperChunk::SuperChunk(GLuint x, GLuint y, GLuint z) :
         position(glm::ivec3(x, y, z)) {
+    }
+    
+    
+    SuperChunk *SuperChunk::loadOrCreate(glm::ivec3 position) {
+        SuperChunk *chunk = new SuperChunk(position);
+    
+        for (GLuint x = 0; x < SuperChunk::X; x++) {
+            for (GLuint y = 0; y < SuperChunk::Y; y++) {
+                for (GLuint z = 0; z < SuperChunk::Z; z++) {
+                    chunk->set(x, y, z, cube::CubeType::DIRT);
+                }
+            }
+        }
+        
+        return chunk;
+    }
+    
+    
+    SuperChunk *SuperChunk::loadOrCreate(GLuint x, GLuint y, GLuint z) {
+        return loadOrCreate({x, y, z});
     }
     
     
@@ -56,7 +77,7 @@ namespace mastercraft::world {
     }
     
     
-    GLuint SuperChunk::draw(shader::Shader &shader) {
+    GLuint SuperChunk::render() {
         assert(!modified);
         
         if (this->count == 0) {
@@ -64,16 +85,17 @@ namespace mastercraft::world {
         }
         
         glm::vec3 position;
+        auto shader = game::Game::getInstance()->shaderManager->cubeShader;
         for (GLubyte x = 0; x < CHUNK_X; x++) {
             for (GLubyte y = 0; y < CHUNK_Y; y++) {
                 for (GLubyte z = 0; z < CHUNK_Z; z++) {
-                    position = glm::vec3(
+                    position = glm::ivec3(
                         x * Chunk::X + this->position.x,
                         y * Chunk::Y + this->position.y,
                         z * Chunk::Z + this->position.z
                     );
-                    shader.loadUniform("uChunkPosition", glm::value_ptr(position));
-                    this->chunks[x][y][z].draw();
+                    shader->loadUniform("uChunkPosition", glm::value_ptr(position));
+                    this->chunks[x][y][z].render();
                 }
             }
         }
