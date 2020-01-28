@@ -18,26 +18,6 @@ namespace mastercraft::cube {
     }
     
     
-    SuperChunk *SuperChunk::loadOrCreate(glm::ivec3 position) {
-        SuperChunk *chunk = new SuperChunk(position);
-    
-        for (GLuint x = 0; x < SuperChunk::X; x++) {
-            for (GLuint y = 0; y < SuperChunk::Y; y++) {
-                for (GLuint z = 0; z < SuperChunk::Z; z++) {
-                    chunk->set(x, y, z, cube::CubeType::DIRT);
-                }
-            }
-        }
-        
-        return chunk;
-    }
-    
-    
-    SuperChunk *SuperChunk::loadOrCreate(GLuint x, GLuint y, GLuint z) {
-        return loadOrCreate({x, y, z});
-    }
-    
-    
     CubeType SuperChunk::get(GLuint x, GLuint y, GLuint z) {
         assert(x < X);
         assert(y < Y);

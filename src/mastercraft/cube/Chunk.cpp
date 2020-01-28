@@ -60,14 +60,15 @@ namespace mastercraft::cube {
     
     
     GLuint Chunk::update() {
+        static constexpr GLint FACE_COUNT = SIZE * 6;
         if (!modified) {
             return this->count;
         }
-        
-        CubeType type;
-        CubeFace drawn[SIZE];
-        
+    
         this->count = 0;
+        
+        CubeFace drawn[FACE_COUNT];
+        CubeType type;
         for (GLubyte x = 0; x < X; x++) {
             for (GLubyte y = 0; y < Y; y++) {
                 for (GLubyte z = 0; z < Z; z++) {

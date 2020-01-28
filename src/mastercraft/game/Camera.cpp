@@ -8,7 +8,7 @@
 namespace mastercraft::game {
     
     Camera::Camera() :
-        position(glm::vec3(0)), pitch(0.0), yaw(M_PI) {
+        position(glm::vec3(0, ConfigManager::GEN_MAX_HEIGHT + 1, 0)), pitch(0.0), yaw(M_PI) {
         computeDirectionVectors();
     }
     
@@ -43,6 +43,7 @@ namespace mastercraft::game {
     
     void Camera::rotateUp(float degrees) {
         this->pitch += glm::radians(degrees * Game::getInstance()->configManager->getMouseSensitivity());
+        this->pitch = std::max(std::min(this->pitch, M_PI_2f32), -M_PI_2f32);
         computeDirectionVectors();
     }
     

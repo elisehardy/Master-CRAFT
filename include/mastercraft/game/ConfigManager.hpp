@@ -22,6 +22,15 @@ namespace mastercraft::game {
     
     
     class ConfigManager : public util::INonCopyable {
+        public:
+            static constexpr GLint TEXTURE_SIZE = 32;
+            
+            static constexpr GLubyte GEN_MIN_HEIGHT = 32; /**< Minimum height when procedurally generating a chunk. */
+            static constexpr GLubyte GEN_MAX_HEIGHT = 98; /**< Maximum height when procedurally generating a chunk. */
+            static constexpr GLubyte GEN_INTERVAL_HEIGHT = GEN_MAX_HEIGHT - GEN_MIN_HEIGHT;
+        
+            static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
+            
         private:
             const GLubyte *OpenGLVersion = nullptr; /**< Version of OpenGL. */
             const GLubyte *GLEWVersion = nullptr;   /**< Version of GLEW. */
@@ -29,7 +38,7 @@ namespace mastercraft::game {
             GLfloat mouseSensitivity = 0.10; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;          /**< Field of view, default to 70. */
-            GLubyte drawDistance = 1;  /**< Draw distance as the radius of SuperChunk rendered. */
+            GLubyte drawDistance = 20;  /**< Draw distance as the radius of SuperChunk rendered. */
             GLubyte framerate = 0;     /**< Framerate real value, default to 0 (uncapped). */
             Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
             

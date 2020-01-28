@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include <glimac/Image.hpp>
 #include <GL/glew.h>
 
 #include <mastercraft/util/INonCopyable.hpp>
+#include <mastercraft/util/Image.hpp>
 
 
 namespace mastercraft::texture {
@@ -16,8 +16,8 @@ namespace mastercraft::texture {
             GLuint textureId = 0;
         
         public:
-            explicit Texture(const std::unique_ptr <glimac::Image> &texture);
             
+            explicit Texture(const std::unique_ptr<util::Image> &tex);
             
             void bind() const;
     };

@@ -10,9 +10,6 @@ namespace mastercraft::util {
     class SimplexNoise {
         private:
             glm::vec2 seed;
-            float e1 = 0.46;
-            float e2 = 0.33;
-            float e3 = 0.21;
             
             /**
              * Narrow glm's simplex to [0, 1] and to float.
@@ -23,19 +20,28 @@ namespace mastercraft::util {
              */
             static GLfloat simplex(const glm::vec2 &p);
             
+            /**
+             * Convert a value from a range to another range, maintaining the same ratio.
+             *
+             * @param value Value to be converted.
+             * @param oldMin Minimum value of the old range.
+             * @param oldMax Maximum value of the old range.
+             * @param newMin Minimum value of the new range.
+             * @param newMax Maximum value of the new range.
+             *
+             * @return The value converted to the new range.
+             */
+            static GLfloat toRange(GLfloat value, GLfloat oldMin, GLfloat oldMax, GLfloat newMin, GLfloat newMax);
+            
         public:
             
             SimplexNoise();
             
-            SimplexNoise(GLfloat e1, GLfloat e2, GLfloat e3);
-            
             explicit SimplexNoise(const glm::vec2 &seed);
-            
-            explicit SimplexNoise(const glm::vec2 &seed, GLfloat e1, GLfloat e2, GLfloat e3);
         
-            GLubyte operator()(const glm::vec2 &position);
+            GLfloat operator()(const glm::vec2 &position, GLfloat min = 0, GLfloat max = 0);
         
-            GLubyte operator()(GLint x, GLint y);
+            GLfloat operator()(GLfloat x, GLfloat y, GLfloat min = 0, GLfloat max = 0);
     };
 }
 

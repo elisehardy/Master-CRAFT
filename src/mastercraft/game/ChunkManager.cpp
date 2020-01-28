@@ -1,8 +1,8 @@
 #include <algorithm>
+#include <iostream>
 
 #include <mastercraft/game/ChunkManager.hpp>
 #include <mastercraft/game/Game.hpp>
-#include <iostream>
 
 
 namespace mastercraft::game {
@@ -30,6 +30,63 @@ namespace mastercraft::game {
     }
     
     
+    cube::CubeType ChunkManager::getBiome(GLubyte height, GLubyte moisture) {
+        assert(height >= ConfigManager::GEN_MIN_HEIGHT);
+        assert(height <= ConfigManager::GEN_MAX_HEIGHT);
+        
+        static constexpr GLubyte waterLevel = ConfigManager::GEN_MIN_HEIGHT + 3;
+        static constexpr GLubyte sandLevel = waterLevel + 4;
+        static constexpr GLubyte stoneLevel = ConfigManager::GEN_MAX_HEIGHT - 5;
+        static constexpr GLubyte dirtLevel = sandLevel + (stoneLevel - sandLevel) * 0.6;
+        if (height <= waterLevel) {
+            return cube::CubeType::WATER;
+        }
+        if (height <= sandLevel) {
+            return cube::CubeType::SAND;
+        }
+        if (height <= dirtLevel) {
+            return cube::CubeType::DIRT;
+        }
+        if (height <= stoneLevel) {
+            return cube::CubeType::STONE;
+        }
+        return cube::CubeType::SNOW;
+    }
+    
+    
+    cube::SuperChunk *ChunkManager::loadOrCreate(glm::ivec3 position) {
+        auto *chunk = new cube::SuperChunk(position);
+        GLubyte height, moisture;
+        cube::CubeType biome;
+        
+        for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
+            for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
+                height = this->heightSimplex(
+                    position.x + x, position.z + z, ConfigManager::GEN_MIN_HEIGHT, ConfigManager::GEN_MAX_HEIGHT
+                );
+//                moisture = this->heightSimplex(position.x + x, position.z + z, 0, 255);
+                moisture = 0;
+                biome = ChunkManager::getBiome(height, moisture);
+                for (GLuint y = 0; y < cube::SuperChunk::Y; y++) {
+                    if (y <= height) {
+                        chunk->set(x, y, z, biome);
+                    }
+                    else {
+                        chunk->set(x, y, z, cube::CubeType::AIR);
+                    }
+                }
+            }
+        }
+        
+        return chunk;
+    }
+    
+    
+    cube::SuperChunk *ChunkManager::loadOrCreate(GLuint x, GLuint y, GLuint z) {
+        return loadOrCreate({ x, y, z });
+    }
+    
+    
     void ChunkManager::updateDrawDistance(GLubyte distance) {
         this->distanceView = distance;
     }
@@ -50,7 +107,7 @@ namespace mastercraft::game {
         
         for (const auto &key : keys) {
             if (!this->chunks.count(key)) {
-                this->chunks.emplace(key, cube::SuperChunk::loadOrCreate(key));
+                this->chunks.emplace(key, ChunkManager::loadOrCreate(key));
             }
             this->chunks[key]->update();
         }

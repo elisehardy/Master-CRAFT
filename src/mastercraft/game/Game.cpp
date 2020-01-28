@@ -40,9 +40,10 @@ namespace mastercraft::game {
         this->configManager->setFaceCulling(true);
         glCullFace(GL_BACK);
         glEnable(GL_DEPTH_TEST);
-        
+    
+        util::Image *atlas = util::Image::loadPNG("../assets/textures/atlas2.png", 192, 32);
         this->shaderManager->cubeShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/3D.vs.glsl", "../shader/3D.fs.glsl", "../assets/textures/dirt.jpg"
+            "../shader/3D.vs.glsl", "../shader/3D.fs.glsl", atlas
         );
         this->shaderManager->cubeShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
         this->shaderManager->cubeShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);

@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include <mastercraft/util/INonCopyable.hpp>
+#include <mastercraft/util/SimplexNoise.hpp>
 #include <mastercraft/cube/SuperChunk.hpp>
 
 
@@ -28,16 +29,24 @@ namespace mastercraft::game {
         
         private:
             std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash, Ivec3Hash> chunks;
+            util::SimplexNoise moistureSimplex;
+            util::SimplexNoise heightSimplex;
             GLubyte distanceView;  /**< Current distanceView. */
+        
+            [[nodiscard]] std::vector<glm::ivec3> generateKeys();
             
-            std::vector<glm::ivec3> generateKeys();
+            [[nodiscard]] cube::CubeType getBiome(GLubyte height, GLubyte moisture);
+        
+            [[nodiscard]] cube::SuperChunk *loadOrCreate(glm::ivec3 position);
+            
+            [[nodiscard]] cube::SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
         
         public:
-            
+        
             ChunkManager() = default;
-            
+        
             void updateDrawDistance(GLubyte distance);
-            
+        
             void update();
             
             void render();

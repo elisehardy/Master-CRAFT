@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include <mastercraft/shader/Shader.hpp>
+#include <mastercraft/util/Image.hpp>
 
 
 namespace mastercraft::shader {
@@ -17,7 +18,7 @@ namespace mastercraft::shader {
             
             ShaderTexture() = default;
             
-            ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile, const std::string& texturePath);
+            ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile, const util::Image *tex);
             
             void bindTexture() const;
             

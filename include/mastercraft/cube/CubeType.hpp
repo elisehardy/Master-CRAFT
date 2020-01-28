@@ -5,7 +5,11 @@ namespace mastercraft::cube {
     
     enum struct CubeType : GLbyte {
         AIR = 0,
-        DIRT
+        WATER,
+        SAND,
+        DIRT,
+        STONE,
+        SNOW
     };
 }
 

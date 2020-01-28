@@ -6,6 +6,7 @@
 #include <mastercraft/cube/Chunk.hpp>
 #include <mastercraft/shader/Shader.hpp>
 #include <mastercraft/util/INonCopyable.hpp>
+#include <mastercraft/game/ConfigManager.hpp>
 
 
 namespace mastercraft::cube {
@@ -13,13 +14,15 @@ namespace mastercraft::cube {
     class SuperChunk : public util::INonCopyable {
         public:
             static constexpr GLubyte CHUNK_X = 1;
-            static constexpr GLubyte CHUNK_Y = 16;
+            static constexpr GLubyte CHUNK_Y = 8;
             static constexpr GLubyte CHUNK_Z = 1;
             static constexpr GLuint CHUNK_SIZE = CHUNK_X * CHUNK_Y * CHUNK_Z;
             static constexpr GLuint X = Chunk::X * CHUNK_X;
             static constexpr GLuint Y = Chunk::Y * CHUNK_Y;
             static constexpr GLuint Z = Chunk::Z * CHUNK_Z;
             static constexpr GLuint SIZE = CHUNK_SIZE * Chunk::SIZE;
+            
+            static_assert(game::ConfigManager::GEN_MAX_HEIGHT < Y);
         
         private:
             Chunk chunks[CHUNK_X][CHUNK_Y][CHUNK_Z];
@@ -34,10 +37,6 @@ namespace mastercraft::cube {
             explicit SuperChunk(glm::ivec3 position);
             
             SuperChunk(GLuint x, GLuint y, GLuint z);
-        
-            static SuperChunk *loadOrCreate(glm::ivec3 position);
-            
-            static SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
             
             ~SuperChunk() = default;
             

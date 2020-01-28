@@ -36,22 +36,22 @@ namespace mastercraft::game {
               game->stop();
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_W) || InputManager::isKeyPressed(SDL_SCANCODE_UP)) {
-            game->camera->moveForward(0.3);
+            game->camera->moveForward(0.6);
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_S) || InputManager::isKeyPressed(SDL_SCANCODE_DOWN)) {
-            game->camera->moveForward(-0.3);
+            game->camera->moveForward(-0.6);
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_A) || InputManager::isKeyPressed(SDL_SCANCODE_LEFT)) {
-            game->camera->moveLeft(0.3);
+            game->camera->moveLeft(0.6);
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_D) || InputManager::isKeyPressed(SDL_SCANCODE_RIGHT)) {
-            game->camera->moveLeft(-0.3);
+            game->camera->moveLeft(-0.6);
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_LCTRL)) {
-            game->camera->moveUp(-0.3);
+            game->camera->moveUp(-0.6);
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_SPACE)) {
-            game->camera->moveUp(0.3);
+            game->camera->moveUp(0.6);
         }
     }
     
