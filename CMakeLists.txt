@@ -19,14 +19,15 @@ SET(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/)
 SET(LIBS_INCLUDE_DIR libs/include)
 SET(LIBS_SRC_DIR libs/include)
 INCLUDE_DIRECTORIES(
-    SYSTEM
-    ${SDL2_INCLUDE_DIRS}
-    ${OPENGL_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIR}
-    ${LIBS_INCLUDE_DIR}
+        SYSTEM
+        ${SDL2_INCLUDE_DIRS}
+        ${OPENGL_INCLUDE_DIR}
+        ${GLEW_INCLUDE_DIR}
+        ${LIBS_INCLUDE_DIR}
+
 )
 INCLUDE_DIRECTORIES(
-    ${INCLUDE_DIR}
+        ${INCLUDE_DIR}
 )
 
 
@@ -39,43 +40,58 @@ SET(TARGET_NAME mastercraft)
 ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES})
 TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 TARGET_COMPILE_OPTIONS(
-    ${TARGET_NAME} PRIVATE
-    -g
-    -O2
-    -Werror
-    -Weverything
-    -Wfatal-errors
-    -std=c++17
+        ${TARGET_NAME} PRIVATE
+        -g
+        -O2
+        -Werror
+        -Weverything
+        -Wfatal-errors
+        -std=c++17
 )
 
 # Disable some warnings
 TARGET_COMPILE_OPTIONS(
-    ${TARGET_NAME} PRIVATE
-    -Wno-unused-parameter
-    -Wno-effc++
-    -Wno-shadow
-    -Wno-c++98-compat
-    -Wno-sign-conversion
-    -Wno-padded
-    -Wno-global-constructors
-    -Wno-weak-vtables
-    -Wno-delete-non-abstract-non-virtual-dtor
-    -Wno-exit-time-destructors
-    -Wno-c++11-narrowing
-    -Wno-unneeded-internal-declaration
-    -Wno-float-conversion
-    -Wno-unused-template
-    -Wno-documentation-unknown-command
-    -Wno-documentation
-    -Wno-undefined-reinterpret-cast
-    -Wno-implicit-float-conversion
-    -Wno-double-promotion
-    -Wno-old-style-cast
-    -Wno-reserved-id-macro
-    -Wno-shorten-64-to-32
-    -Wno-cast-qual
-    -Wno-disabled-macro-expansion
-    -Wno-unknown-warning-option
-    -Wno-conversion
-    -Wno-unused-exception-parameter
+        ${TARGET_NAME} PRIVATE
+        -std=c++17
+        -Wno-unused-parameter
+        -Wno-effc++
+        -Wno-shadow
+        -Wno-c++98-compat
+        -Wno-sign-conversion
+        -Wno-padded
+        -Wno-global-constructors
+        -Wno-weak-vtables
+        -Wno-exit-time-destructors
+        -Wno-c++11-narrowing
+        -Wno-unneeded-internal-declaration
+        -Wno-float-conversion
+        -Wno-unused-template
+        -Wno-documentation-unknown-command
+        -Wno-documentation
+        -Wno-undefined-reinterpret-cast
+        -Wno-implicit-float-conversion
+        -Wno-double-promotion
+        -Wno-old-style-cast
+        -Wno-reserved-id-macro
+        -Wno-shorten-64-to-32
+        -Wno-cast-qual
+        -Wno-disabled-macro-expansion
+        -Wno-comma
+        -Wno-unknown-warning-option
+        -Wno-conversion
+        -Wno-deprecated
+        -Wno-unused-exception-parameter
 )
+
+
+IF (CLANG_VERSION_MAJOR GREATER_EQUAL 9)
+    TARGET_COMPILE_OPTIONS(
+            ${TARGET_NAME} PRIVATE
+            -Wno-delete-non-abstract-non-virtual-dtor
+    )
+ELSE ()
+    TARGET_COMPILE_OPTIONS(
+            ${TARGET_NAME} PRIVATE
+            -Wno-delete-non-virtual-dtor
+    )
+ENDIF ()

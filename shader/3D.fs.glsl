@@ -22,7 +22,7 @@ vec3 diffuseLight(vec3 normal, vec3 lightDir) {
 }
 
 void main() {
-    vec3 objectColor = texture(uTexture, vec2((vTexture.x + vType) / 6, vTexture.y)).xyz;
-    vec3 result = ambientLight() + diffuseLight(vNormal, vec3(1, 1, -1));
+    vec3 objectColor = texture(uTexture, vec2((vTexture.x + float(vType)) / 6.f, vTexture.y)).xyz;
+    vec3 result = ambientLight() + diffuseLight(vNormal, vec3(1.f, 1.f, -1.f));
     fFragColor = result * objectColor;
 }

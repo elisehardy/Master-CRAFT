@@ -30,7 +30,6 @@ namespace mastercraft::game {
         private:
             std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash, Ivec3Hash> chunks;
             util::SimplexNoise moistureSimplex;
-            util::SimplexNoise heightSimplex;
             GLubyte distanceView;  /**< Current distanceView. */
         
             [[nodiscard]] std::vector<glm::ivec3> generateKeys();
@@ -38,18 +37,19 @@ namespace mastercraft::game {
             [[nodiscard]] cube::CubeType getBiome(GLubyte height, GLubyte moisture);
         
             [[nodiscard]] cube::SuperChunk *loadOrCreate(glm::ivec3 position);
-            
-            [[nodiscard]] cube::SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
-        
-        public:
-        
-            ChunkManager() = default;
+
+    public:
+        util::SimplexNoise heightSimplex;
+
+        ChunkManager() = default;
         
             void updateDrawDistance(GLubyte distance);
         
             void update();
             
             void render();
+
+        [[nodiscard]] cube::SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
     };
 }
 
