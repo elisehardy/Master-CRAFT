@@ -24,6 +24,8 @@ namespace mastercraft::cube {
         CubeFace() = default;
         
         [[nodiscard]] static CubeFace face(GLubyte x, GLubyte y, GLubyte z, CubeType type);
+        [[nodiscard]] static CubeFace face(GLubyte x, GLubyte y, GLubyte z,
+            GLfloat sizex, GLfloat sizey, GLfloat sizez, CubeType type);
         
         [[nodiscard]] static CubeFace top(GLubyte x, GLubyte y, GLubyte z, CubeType type);
         

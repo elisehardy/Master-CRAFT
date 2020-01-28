@@ -6,11 +6,12 @@
 
 #include <mastercraft/cube/CubeType.hpp>
 #include <mastercraft/cube/CubeDirection.hpp>
+#include <mastercraft/util/INonCopyable.hpp>
 
 
 namespace mastercraft::cube {
     
-    class Chunk {
+    class Chunk : public util::INonCopyable {
         public:
             static constexpr GLubyte X = 16;
             static constexpr GLubyte Y = 16;

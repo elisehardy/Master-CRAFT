@@ -41,7 +41,7 @@ namespace mastercraft::game {
         glCullFace(GL_BACK);
         glEnable(GL_DEPTH_TEST);
     
-        util::Image *atlas = util::Image::loadPNG("../assets/textures/atlas2.png", 192, 32);
+        util::Image *atlas = util::Image::loadPNG("../assets/textures/atlas.png", 192, 32);
         this->shaderManager->cubeShader = std::make_unique<shader::ShaderTexture>(
             "../shader/3D.vs.glsl", "../shader/3D.fs.glsl", atlas
         );

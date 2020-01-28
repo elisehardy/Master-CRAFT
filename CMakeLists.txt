@@ -10,7 +10,6 @@ SET(OPENGL_LIBRARIES /usr/lib/x86_64-linux-gnu/libGL.so.1)
 
 
 ############################## 3RD PARTIES LIBS ################################
-
 FIND_PACKAGE(SDL2 REQUIRED)
 FIND_PACKAGE(OpenGL REQUIRED)
 FIND_PACKAGE(GLEW REQUIRED)

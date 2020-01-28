@@ -9,7 +9,9 @@ namespace mastercraft::cube {
         SAND,
         DIRT,
         STONE,
-        SNOW
+        SNOW,
+        WOOD,
+        LEAVE
     };
 }
 

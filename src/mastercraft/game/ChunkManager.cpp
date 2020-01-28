@@ -36,8 +36,8 @@ namespace mastercraft::game {
         
         static constexpr GLubyte waterLevel = ConfigManager::GEN_MIN_HEIGHT + 3;
         static constexpr GLubyte sandLevel = waterLevel + 4;
-        static constexpr GLubyte stoneLevel = ConfigManager::GEN_MAX_HEIGHT - 5;
-        static constexpr GLubyte dirtLevel = sandLevel + (stoneLevel - sandLevel) * 0.6;
+        static constexpr GLubyte dirtLevel = sandLevel + 12;
+        static constexpr GLubyte stoneLevel = dirtLevel + 4;
         if (height <= waterLevel) {
             return cube::CubeType::WATER;
         }
