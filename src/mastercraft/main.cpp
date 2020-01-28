@@ -1,10 +1,13 @@
 #include <mastercraft/game/Game.hpp>
 
+
 using namespace mastercraft;
+using namespace std;
+
 
 int main(int argc, char **argv) {
     game::Game *game = game::Game::getInstance();
-    
+
     game->init();
     
     while (game->isRunning()) {
@@ -13,7 +16,29 @@ int main(int argc, char **argv) {
     }
     
     game->cleanup();
-    
+
+
+
+
+
+
     return EXIT_SUCCESS;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

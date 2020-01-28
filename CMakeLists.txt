@@ -18,14 +18,15 @@ SET(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/)
 SET(LIBS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/include)
 
 INCLUDE_DIRECTORIES(
-    SYSTEM
-    ${SDL2_INCLUDE_DIRS}
-    ${OPENGL_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIR}
-    ${LIBS_INCLUDE_DIR}
+        SYSTEM
+        ${SDL2_INCLUDE_DIRS}
+        ${OPENGL_INCLUDE_DIR}
+        ${GLEW_INCLUDE_DIR}
+        ${LIBS_INCLUDE_DIR}
+
 )
 INCLUDE_DIRECTORIES(
-    ${INCLUDE_DIR}
+        ${INCLUDE_DIR}
 )
 
 
@@ -38,6 +39,7 @@ SET(TARGET_NAME mastercraft)
 ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES})
 TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} tbb)
 TARGET_COMPILE_OPTIONS(
+<<<<<<< HEAD
     ${TARGET_NAME} PRIVATE
     -g
     -O3
@@ -45,10 +47,12 @@ TARGET_COMPILE_OPTIONS(
     -Weverything
     -Wfatal-errors
     -std=c++17
+
 )
 
 # Disable some warnings
 TARGET_COMPILE_OPTIONS(
+<<<<<<< HEAD
     ${TARGET_NAME} PRIVATE
     -Wno-unused-parameter
     -Wno-effc++
@@ -79,3 +83,16 @@ TARGET_COMPILE_OPTIONS(
     -Wno-unused-exception-parameter
     -Wno-c++98-c++11-compat-binary-literal
 )
+
+
+IF (CLANG_VERSION_MAJOR GREATER_EQUAL 9)
+    TARGET_COMPILE_OPTIONS(
+            ${TARGET_NAME} PRIVATE
+            -Wno-delete-non-abstract-non-virtual-dtor
+    )
+ELSE ()
+    TARGET_COMPILE_OPTIONS(
+            ${TARGET_NAME} PRIVATE
+            -Wno-delete-non-virtual-dtor
+    )
+ENDIF ()

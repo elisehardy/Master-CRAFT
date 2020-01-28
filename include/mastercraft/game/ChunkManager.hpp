@@ -57,11 +57,12 @@ namespace mastercraft::game {
             void generateKeys();
             
             [[nodiscard]] cube::CubeType getBiome(GLubyte height, GLubyte moisture);
-            
+
             [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::ivec3 &position) const;
             
             [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(GLint x, GLint y, GLint z) const;
             
+
             [[nodiscard]] cube::SuperChunk *createSuperChunk(glm::ivec3 position);
             
             [[nodiscard]] cube::SuperChunk *createSuperChunk(GLint x, GLint y, GLint z);
@@ -80,9 +81,12 @@ namespace mastercraft::game {
             
             void init();
             
+
             void update();
             
             void render();
+
+        [[nodiscard]] cube::SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
     };
 }
 

@@ -13,14 +13,14 @@ uniform vec3 uLightIntensity;
 
 
 vec3 ambientLight() {
-    float ambientStrength = 0.33;
-    return ambientStrength * vec3(1);;
+    float ambientStrength = 0.83;
+    return ambientStrength * vec3(0, 0, 1);;
 }
 
 vec3 diffuseLight(vec3 normal, vec3 lightDir) {
     vec3 norm = normalize(normal);
-    float diff = max(dot(norm, lightDir), 0.0);
-    return diff * vec3(1);
+    float diff = dot(norm, lightDir);
+    return diff * vec3(0, 0, 1)/2.0;
 }
 
 void main() {
