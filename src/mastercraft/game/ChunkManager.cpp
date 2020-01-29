@@ -96,6 +96,7 @@ namespace mastercraft::game {
                 height = this->heightNoise(
                     { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
                     ConfigManager::GEN_MAX_HEIGHT
+
                 );
                 height = this->heightNoise(
                     { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,

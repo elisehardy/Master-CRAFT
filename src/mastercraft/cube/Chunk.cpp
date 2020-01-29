@@ -207,7 +207,7 @@ namespace mastercraft::cube {
                 }
             }
         }
-        
+
         // Fill the VBO
         glBindBuffer(GL_ARRAY_BUFFER, this->vboAlpha);
         glBufferData(GL_ARRAY_BUFFER, sizeof(CubeFace) * this->countAlpha, drawnAlpha, GL_STATIC_DRAW);
