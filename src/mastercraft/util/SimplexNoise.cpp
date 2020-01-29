@@ -2,6 +2,7 @@
 #include <glm/ext.hpp>
 
 #include <mastercraft/util/SimplexNoise.hpp>
+#include <iostream>
 
 
 using Random = effolkronium::random_static;
@@ -9,16 +10,14 @@ using Random = effolkronium::random_static;
 namespace mastercraft::util {
     
     SimplexNoise::SimplexNoise() :
-        seed({ Random::get(0., 1.), Random::get(0., 1.) }) {
+        seed({ Random::get<float>(0., 1000.), Random::get<float>(0., 1000.) }) {
     }
     
-
     
     SimplexNoise::SimplexNoise(const glm::vec2 &t_seed) :
         seed(t_seed) {
     }
     
-
     
     GLfloat SimplexNoise::simplex(const glm::vec2 &p) {
         return static_cast<GLfloat>(glm::simplex(p) * 0.5 + 0.5);
@@ -42,7 +41,7 @@ namespace mastercraft::util {
             + e3 * SimplexNoise::simplex((seed + position) / 64.f)
         );
         value /= e1 + e2 + e3;
-    
+        
         value = std::pow(value, 4);
         return SimplexNoise::toRange(value, 0, 1, min, max);
     }

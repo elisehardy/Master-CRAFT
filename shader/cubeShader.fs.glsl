@@ -32,7 +32,7 @@ void main() {
 
     vec3 objectColor = texture(uTexture, vec2(texCoord.x, texCoord.y)).xyz;
     if (vType == 1) {
-        objectColor += vec3(0, 0, 1);
+        objectColor *= vec3(0.5, 0.5, 1);
     }
 
     vec3 result = ambientLight() + diffuseLight(vNormal, vec3(1, 1, -1));

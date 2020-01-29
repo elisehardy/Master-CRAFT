@@ -78,7 +78,7 @@ namespace mastercraft::game {
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
                 height = this->heightSimplex(
-                    position.x + x, position.z + z, ConfigManager::GEN_MIN_HEIGHT, ConfigManager::GEN_MAX_HEIGHT
+                    position.x + GLint(x), position.z + GLint(z), ConfigManager::GEN_MIN_HEIGHT, ConfigManager::GEN_MAX_HEIGHT
                 );
                 //                moisture = this->heightSimplex(position.x + x, position.z + z, 0, 255);
                 moisture = 0;
