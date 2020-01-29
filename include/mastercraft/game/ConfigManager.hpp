@@ -28,7 +28,7 @@ namespace mastercraft::game {
             static constexpr GLubyte GEN_MIN_HEIGHT = 32; /**< Minimum height when procedurally generating a chunk. */
             static constexpr GLubyte GEN_MAX_HEIGHT = 98; /**< Maximum height when procedurally generating a chunk. */
             static constexpr GLubyte GEN_INTERVAL_HEIGHT = GEN_MAX_HEIGHT - GEN_MIN_HEIGHT;
-        
+            
             static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
             
         private:
@@ -37,10 +37,12 @@ namespace mastercraft::game {
             
             GLfloat mouseSensitivity = 0.10; /**< Sensitivity of the mouse, default to 0.5. */
             
-            GLfloat fov = 70;          /**< Field of view, default to 70. */
-            GLubyte drawDistance = 20;  /**< Draw distance as the radius of SuperChunk rendered. */
-            GLubyte framerate = 0;     /**< Framerate real value, default to 0 (uncapped). */
+            GLfloat fov = 70;           /**< Field of view, default to 70. */
+            GLubyte distanceView = 15;  /**< Draw distance as the radius of SuperChunk rendered. */
+            GLubyte framerate = 0;      /**< Framerate real value, default to 0 (uncapped). */
             Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
+            
+            GLuint tickRate = 20; /**< Number of tick per seconds */
             
             GLboolean faceCulling = true;      /**< Whether face culling is enabled. */
             GLboolean occlusionCulling = true; /**< Whether occlusion culling is enabled. */
@@ -50,6 +52,8 @@ namespace mastercraft::game {
         public:
             
             ConfigManager() = default;
+            
+            void init();
             
             [[nodiscard]] const GLubyte *getOpenGlVersion() const;
             
@@ -71,9 +75,13 @@ namespace mastercraft::game {
             
             void setFov(GLfloat fov);
             
-            [[nodiscard]] GLubyte getDrawDistance() const;
+            [[nodiscard]] GLubyte getDistanceView() const;
             
-            void setDrawDistance(GLubyte drawDistance);
+            void setDistanceView(GLubyte distanceView);
+        
+            [[nodiscard]] GLuint getTickRate() const;
+            
+            void setTickRate(GLuint tickRate);
             
             [[nodiscard]] GLboolean getFaceCulling() const;
             

@@ -11,6 +11,7 @@
 #include <mastercraft/game/ShaderManager.hpp>
 #include <mastercraft/game/WindowManager.hpp>
 #include <mastercraft/game/ChunkManager.hpp>
+#include <chrono>
 
 
 // Here to avoid circular inclusion.
@@ -36,6 +37,7 @@ namespace mastercraft::game {
             std::unique_ptr<InputManager> inputManager;
             std::unique_ptr<ChunkManager> chunkManager;
             std::unique_ptr<Camera> camera;
+            std::chrono::steady_clock::time_point lastTick;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             
             
@@ -63,20 +65,12 @@ namespace mastercraft::game {
             void cleanup();
             
             /**
-             * Push a new State on the stack.
+             * Check whether the game should be updated, so that the game loop runs at a fixed rate of
+             * 'ConfigManager::tickRate' ticks per second.
              *
-             * @param state State being pushed on the stack.
-             *
-             * @return true
+             * @return true if a tick happened.
              */
-            bool pushState(state::State *state);
-            
-            /**
-             * Remove the current State above the stack
-             *
-             * @return true
-             */
-            bool popState();
+            bool tick();
             
             /**
              * Update the State at the top of the stack. Stops the game if no

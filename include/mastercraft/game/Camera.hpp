@@ -26,6 +26,8 @@ namespace mastercraft::game {
             
             Camera();
             
+            void init();
+            
             void moveLeft(float delta);
             
             void moveForward(float delta);

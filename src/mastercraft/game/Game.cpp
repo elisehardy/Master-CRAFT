@@ -11,12 +11,7 @@ namespace mastercraft::game {
     
     Game::Game() :
         running(true) {
-        this->windowManager = std::make_unique<WindowManager>("Mastercraft");
-        this->shaderManager = std::make_unique<ShaderManager>();
-        this->configManager = std::make_unique<ConfigManager>();
-        this->inputManager = std::make_unique<InputManager>();
-        this->chunkManager = std::make_unique<ChunkManager>();
-        this->camera = std::make_unique<Camera>();
+        
     }
     
     
@@ -27,46 +22,43 @@ namespace mastercraft::game {
     
     
     void Game::init() {
+        this->windowManager = std::make_unique<WindowManager>("Mastercraft");
+        
         GLenum glewInitError = glewInit();
         if (GLEW_OK != glewInitError) {
             std::cerr << glewGetErrorString(glewInitError) << std::endl;
             exit(EXIT_FAILURE);
         }
     
-        SDL_SetRelativeMouseMode(SDL_TRUE);
+        util::Image *atlas = util::Image::loadPNG("../assets/block/atlas.png", 192, 256);
         
-        this->configManager->setOpenGlVersion(glGetString(GL_VERSION));
-        this->configManager->setGlewVersion(glewGetString(GLEW_VERSION));
-        this->configManager->setFaceCulling(true);
-        glCullFace(GL_BACK);
-        glEnable(GL_DEPTH_TEST);
-    
-        util::Image *atlas = util::Image::loadPNG("../assets/textures/atlas.png", 192, 32);
-        this->shaderManager->cubeShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/3D.vs.glsl", "../shader/3D.fs.glsl", atlas
-        );
-        this->shaderManager->cubeShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
-        this->shaderManager->cubeShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
-        this->shaderManager->cubeShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
-        this->shaderManager->cubeShader->addUniform("uChunkPosition", shader::UNIFORM_3_F);
+        this->shaderManager = std::make_unique<ShaderManager>();
+        this->configManager = std::make_unique<ConfigManager>();
+        this->inputManager = std::make_unique<InputManager>();
+        this->chunkManager = std::make_unique<ChunkManager>(atlas, this->configManager->getDistanceView());
+        this->camera = std::make_unique<Camera>();
         
-        this->chunkManager->updateDrawDistance(this->configManager->getDrawDistance());
+        this->configManager->init();
+        this->shaderManager->init();
+        this->camera->init();
         
-        SDL_DisplayMode display = this->windowManager->getDisplayMode();
-        this->camera->setProjectionMatrix(this->configManager->getFov(), display.w, display.h);
+        this->lastTick = std::chrono::steady_clock::now();
     }
     
     
     void Game::cleanup() {
     }
+
     
-    
-    bool Game::pushState(state::State *state) {
-        return false;
-    }
-    
-    
-    bool Game::popState() {
+    bool Game::tick() {
+        std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+        double duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - this->lastTick).count();
+        
+        if (duration > 1. / this->configManager->getTickRate() * 1000) {
+            this->lastTick = std::chrono::steady_clock::now();
+            return true;
+        }
+        
         return false;
     }
     
@@ -88,7 +80,7 @@ namespace mastercraft::game {
                 case SDL_MOUSEWHEEL:
                     this->inputManager->handleMouseWheel(event.wheel);
                     break;
-                    
+                
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:
                     this->inputManager->handleKeyboard(event.key);
@@ -107,22 +99,15 @@ namespace mastercraft::game {
         this->inputManager->handleHeldMouseButton();
         this->inputManager->handleHeldKey();
         
-        this->chunkManager->update();
+        if (this->tick()) {
+            this->chunkManager->update();
+        }
     }
     
     
     void Game::render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        glm::mat4 globalMVMatrix = this->camera->getViewMatrix();
-        
-        this->shaderManager->cubeShader->use();
-        this->shaderManager->cubeShader->loadUniform("uMV", glm::value_ptr(globalMVMatrix));
-        this->shaderManager->cubeShader
-            ->loadUniform("uMVP", glm::value_ptr(this->camera->getProjMatrix() * globalMVMatrix));
-        this->shaderManager->cubeShader
-            ->loadUniform("uNormal", glm::value_ptr(glm::transpose(glm::inverse(globalMVMatrix))));
-        this->shaderManager->cubeShader->bindTexture();
         this->chunkManager->render();
         this->shaderManager->cubeShader->unbindTexture();
         

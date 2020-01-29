@@ -9,7 +9,7 @@
 #include <mastercraft/util/Image.hpp>
 
 
-namespace mastercraft::texture {
+namespace mastercraft::shader {
     
     class Texture : public util::INonCopyable {
         private:
@@ -17,9 +17,11 @@ namespace mastercraft::texture {
         
         public:
             
-            explicit Texture(const std::unique_ptr<util::Image> &tex);
+            Texture() = default;
             
-            void bind() const;
+            explicit Texture(const util::Image *texture);
+            
+            [[nodiscard]] GLuint getTextureId() const;
     };
 }
 

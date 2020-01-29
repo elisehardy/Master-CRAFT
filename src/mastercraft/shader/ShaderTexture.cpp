@@ -1,27 +1,17 @@
 #include <mastercraft/shader/ShaderTexture.hpp>
-#include <mastercraft/util/Image.hpp>
 
 
 namespace mastercraft::shader {
     
-    ShaderTexture::ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile,
-                                 const util::Image *texture) :
+    ShaderTexture::ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile) :
         Shader(vsFile, fsFile) {
-        this->uTexture = glGetUniformLocation(this->program.getGLId(), "uTexture");
-        
-        glGenTextures(1, &this->textureId);
-        glBindTexture(GL_TEXTURE_2D, this->textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->getWidth(), texture->getHeight(), 0, GL_RGBA, GL_FLOAT,
-                     texture->getPixels());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glBindTexture(GL_TEXTURE_2D, 0);
+         this->uTexture = glGetUniformLocation(this->program.getGLId(), "uTexture");
     }
     
     
-    void ShaderTexture::bindTexture() const {
+    void ShaderTexture::bindTexture(const Texture &texture) const {
         glUniform1i(this->uTexture, 0);
-        glBindTexture(GL_TEXTURE_2D, this->textureId);
+        glBindTexture(GL_TEXTURE_2D, texture.getTextureId());
     }
     
     

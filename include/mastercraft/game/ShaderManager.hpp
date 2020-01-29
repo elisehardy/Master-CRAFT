@@ -7,10 +7,13 @@
 namespace mastercraft::game {
     
     struct ShaderManager : public util::INonCopyable {
-        std::shared_ptr<shader::ShaderTexture> cubeShader;
+        std::unique_ptr<shader::ShaderTexture> cubeShader;
+        std::unique_ptr<shader::ShaderTexture> entityShader;
         
         
         ShaderManager() = default;
+        
+        void init();
     };
 }
 

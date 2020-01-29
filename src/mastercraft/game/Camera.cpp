@@ -13,6 +13,13 @@ namespace mastercraft::game {
     }
     
     
+    void Camera::init() {
+        Game *game = Game::getInstance();
+        SDL_DisplayMode display = game->windowManager->getDisplayMode();
+        this->setProjectionMatrix(game->configManager->getFov(), display.w, display.h);
+    }
+    
+    
     void Camera::computeDirectionVectors() {
         this->frontVector = { cos(this->pitch) * sin(this->yaw), sin(this->pitch), cos(this->pitch) * cos(this->yaw) };
         this->leftVector = { sin(this->yaw + M_PI_2), 0.f, cos(this->yaw + M_PI_2) };

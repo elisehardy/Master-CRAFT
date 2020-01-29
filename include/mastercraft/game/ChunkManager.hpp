@@ -8,6 +8,8 @@
 #include <mastercraft/util/INonCopyable.hpp>
 #include <mastercraft/util/SimplexNoise.hpp>
 #include <mastercraft/cube/SuperChunk.hpp>
+#include <mastercraft/entity/IEntity.hpp>
+#include <mastercraft/shader/ShaderTexture.hpp>
 
 
 namespace mastercraft::game {
@@ -29,24 +31,34 @@ namespace mastercraft::game {
         
         private:
             std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash, Ivec3Hash> chunks;
+            std::vector<std::unique_ptr<entity::IEntity>> entities;
             util::SimplexNoise moistureSimplex;
             util::SimplexNoise heightSimplex;
+            shader::Texture cubeTexture;
             GLubyte distanceView;  /**< Current distanceView. */
-        
+            GLuint textureVerticalOffset;
+            GLuint tick;
+            
+            [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::vec3 &position);
+            
             [[nodiscard]] std::vector<glm::ivec3> generateKeys();
             
             [[nodiscard]] cube::CubeType getBiome(GLubyte height, GLubyte moisture);
-        
-            [[nodiscard]] cube::SuperChunk *loadOrCreate(glm::ivec3 position);
             
-            [[nodiscard]] cube::SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
+            [[nodiscard]] cube::SuperChunk *createSuperChunk(glm::ivec3 position);
+            
+            [[nodiscard]] cube::SuperChunk *createSuperChunk(GLuint x, GLuint y, GLuint z);
+            
+            [[nodiscard]] entity::IEntity *createEntity(glm::ivec3 position);
+            
+            [[nodiscard]] entity::IEntity *createEntity(GLuint x, GLuint y, GLuint z);
         
         public:
-        
-            ChunkManager() = default;
-        
-            void updateDrawDistance(GLubyte distance);
-        
+            
+            ChunkManager(const util::Image *t_cubeTexture, GLubyte distanceView);
+            
+            void updateDistanceView(GLubyte distance);
+            
             void update();
             
             void render();

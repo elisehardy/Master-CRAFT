@@ -7,6 +7,16 @@
 
 namespace mastercraft::game {
     
+    void ConfigManager::init() {
+        this->setOpenGlVersion(glGetString(GL_VERSION));
+        this->setGlewVersion(glewGetString(GLEW_VERSION));
+        this->setFaceCulling(true);
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        glCullFace(GL_BACK);
+        glEnable(GL_DEPTH_TEST);
+    }
+    
+    
     const GLubyte *ConfigManager::getOpenGlVersion() const {
         return OpenGLVersion;
     }
@@ -88,13 +98,23 @@ namespace mastercraft::game {
     }
     
     
-    GLubyte ConfigManager::getDrawDistance() const {
-        return drawDistance;
+    GLubyte ConfigManager::getDistanceView() const {
+        return distanceView;
     }
     
     
-    void ConfigManager::setDrawDistance(GLubyte drawDistance) {
-        this->drawDistance = drawDistance;
+    void ConfigManager::setDistanceView(GLubyte distanceView) {
+        this->distanceView = distanceView;
+    }
+    
+    
+    GLuint ConfigManager::getTickRate() const {
+        return tickRate;
+    }
+    
+    
+    void ConfigManager::setTickRate(GLuint tickRate) {
+        this->tickRate = tickRate;
     }
     
     

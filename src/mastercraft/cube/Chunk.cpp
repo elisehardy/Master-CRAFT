@@ -7,8 +7,8 @@
 namespace mastercraft::cube {
     
     Chunk::Chunk() {
-        glGenBuffers(1, &vbo);
-        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &this->vbo);
+        glGenVertexArrays(1, &this->vao);
     }
     
     

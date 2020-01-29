@@ -65,7 +65,7 @@ namespace mastercraft::cube {
         }
         
         glm::vec3 position;
-        auto shader = game::Game::getInstance()->shaderManager->cubeShader;
+        game::Game *game = game::Game::getInstance();
         for (GLubyte x = 0; x < CHUNK_X; x++) {
             for (GLubyte y = 0; y < CHUNK_Y; y++) {
                 for (GLubyte z = 0; z < CHUNK_Z; z++) {
@@ -74,7 +74,7 @@ namespace mastercraft::cube {
                         y * Chunk::Y + this->position.y,
                         z * Chunk::Z + this->position.z
                     );
-                    shader->loadUniform("uChunkPosition", glm::value_ptr(position));
+                    game->shaderManager->cubeShader->loadUniform("uChunkPosition", glm::value_ptr(position));
                     this->chunks[x][y][z].render();
                 }
             }

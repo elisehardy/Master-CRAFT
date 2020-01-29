@@ -2,7 +2,6 @@
 #include <glm/ext.hpp>
 
 #include <mastercraft/util/SimplexNoise.hpp>
-#include <iostream>
 
 
 using Random = effolkronium::random_static;
