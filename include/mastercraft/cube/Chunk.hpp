@@ -22,8 +22,8 @@ namespace mastercraft::cube {
             static constexpr GLuint VERTEX_ATTR_POSITION = 0;
             static constexpr GLuint VERTEX_ATTR_NORMAL = 1;
             static constexpr GLuint VERTEX_ATTR_TEXTURE = 2;
-            static constexpr GLuint VERTEX_ATTR_TYPE = 3;
-            
+            static constexpr GLuint VERTEX_ATTR_DATA = 3;
+        
             CubeType cubes[X][Y][Z];
             GLboolean modified;
             GLuint count;
@@ -37,7 +37,7 @@ namespace mastercraft::cube {
             Chunk();
         
             ~Chunk();
-            
+        
             CubeType get(GLubyte x, GLubyte y, GLubyte z);
             
             void set(GLubyte x, GLubyte y, GLubyte z, CubeType type);

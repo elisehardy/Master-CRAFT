@@ -18,11 +18,11 @@ namespace mastercraft::cube {
         bvec3 vertex;
         bvec3 normal;
         bvec2 texture;
-        CubeType type;
+        GLubyte data;
         
         CubeVertex() = default;
         
-        CubeVertex(bvec3 vertex, bvec3 normal, bvec2 texture, CubeType type = CubeType::AIR);
+        CubeVertex(bvec3 vertex, bvec3 normal, bvec2 texture, GLubyte data = CubeType::AIR);
     };
 }
 #endif // MASTERCRAFT_CUBEVERTEX_HPP

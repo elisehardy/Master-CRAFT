@@ -7,6 +7,7 @@
 #include <mastercraft/game/Game.hpp>
 #include <mastercraft/entity/Slime.hpp>
 #include <glm/ext.hpp>
+#include <mastercraft/cube/ColumnGenerator.hpp>
 
 
 using Random = effolkronium::random_static;
@@ -14,7 +15,7 @@ using Random = effolkronium::random_static;
 namespace mastercraft::game {
     
     ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
-        cubeTexture(shader::Texture(t_cubeTexture)), distanceView(t_distanceView), textureVerticalOffset(0), tick(0) {
+        distanceView(t_distanceView), textureVerticalOffset(0), tick(0), cubeTexture(shader::Texture(t_cubeTexture)) {
     }
     
     
@@ -46,15 +47,14 @@ namespace mastercraft::game {
     }
     
     
-    cube::CubeType ChunkManager::getBiome(GLubyte height, GLubyte moisture) {
+    cube::CubeType ChunkManager::getBiome(GLubyte height) {
         assert(height >= ConfigManager::GEN_MIN_HEIGHT);
         assert(height <= ConfigManager::GEN_MAX_HEIGHT);
         
-        static constexpr GLubyte waterLevel = ConfigManager::GEN_MIN_HEIGHT + 3;
-        static constexpr GLubyte sandLevel = waterLevel + 4;
-        static constexpr GLubyte dirtLevel = sandLevel + 12;
-        static constexpr GLubyte stoneLevel = dirtLevel + 4;
-        if (height <= waterLevel) {
+        static constexpr GLubyte sandLevel = ConfigManager::GEN_WATER_LEVEL + 3;
+        static constexpr GLubyte dirtLevel = sandLevel + 15;
+        static constexpr GLubyte stoneLevel = dirtLevel + 5;
+        if (height <= ConfigManager::GEN_WATER_LEVEL) {
             return cube::CubeType::WATER;
         }
         if (height <= sandLevel) {
@@ -72,24 +72,19 @@ namespace mastercraft::game {
     
     cube::SuperChunk *ChunkManager::createSuperChunk(glm::ivec3 position) {
         auto *chunk = new cube::SuperChunk(position);
-        GLubyte height, moisture;
+        GLubyte height;
         cube::CubeType biome;
         
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
                 height = this->heightSimplex(
-                    position.x + GLint(x), position.z + GLint(z), ConfigManager::GEN_MIN_HEIGHT, ConfigManager::GEN_MAX_HEIGHT
+                    position.x + GLint(x), position.z + GLint(z), ConfigManager::GEN_MIN_HEIGHT,
+                    ConfigManager::GEN_MAX_HEIGHT
                 );
-                //                moisture = this->heightSimplex(position.x + x, position.z + z, 0, 255);
-                moisture = 0;
-                biome = ChunkManager::getBiome(height, moisture);
+                biome = ChunkManager::getBiome(height);
+                auto column = cube::ColumnGenerator::generateColumn(height, biome);
                 for (GLuint y = 0; y < cube::SuperChunk::Y; y++) {
-                    if (y <= height) {
-                        chunk->set(x, y, z, biome);
-                    }
-                    else {
-                        chunk->set(x, y, z, cube::CubeType::AIR);
-                    }
+                    chunk->set(x, y, z, column[y]);
                 }
             }
         }
@@ -168,31 +163,48 @@ namespace mastercraft::game {
     }
     
     
+    void ChunkManager::init() {
+        this->cubeShader = std::make_unique<shader::ShaderTexture>(
+            "../shader/cubeShader.vs.glsl", "../shader/cubeShader.fs.glsl"
+        );
+        this->cubeShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
+        this->cubeShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
+        this->cubeShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
+        this->cubeShader->addUniform("uChunkPosition", shader::UNIFORM_3_F);
+        this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
+    
+        this->entityShader = std::make_unique<shader::ShaderTexture>(
+            "../shader/entityShader.vs.glsl", "../shader/entityShader.fs.glsl"
+        );
+        this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
+        this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
+        this->entityShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
+    }
+    
+    
     void ChunkManager::render() {
         Game *game = Game::getInstance();
-        glm::mat4 globalMVMatrix = game->camera->getViewMatrix();
+        glm::mat4 MVMatrix = game->camera->getViewMatrix();
+        glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
+        glm::mat4 normalMatrix = glm::transpose(glm::inverse(MVMatrix));
         
-        game->shaderManager->cubeShader->use();
-        game->shaderManager->cubeShader->loadUniform("uTextureVerticalOffset", &this->textureVerticalOffset);
-        game->shaderManager->cubeShader->loadUniform("uMV", glm::value_ptr(globalMVMatrix));
-        game->shaderManager->cubeShader
-            ->loadUniform("uMVP", glm::value_ptr(game->camera->getProjMatrix() * globalMVMatrix));
-        game->shaderManager->cubeShader
-            ->loadUniform("uNormal", glm::value_ptr(glm::transpose(glm::inverse(globalMVMatrix))));
-        game->shaderManager->cubeShader->bindTexture(this->cubeTexture);
-        for (auto &entry : this->chunks) {
-            entry.second->render();
-        }
-        game->shaderManager->cubeShader->unbindTexture();
+        this->cubeShader->use();
+        this->cubeShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
+        this->cubeShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
+        this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
+        this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
+        this->cubeShader->bindTexture(this->cubeTexture);
+        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry){ entry.second->render();});
+        this->cubeShader->unbindTexture();
+        this->cubeShader->stop();
         
-        game->shaderManager->entityShader->use();
-        game->shaderManager->entityShader->loadUniform("uMV", glm::value_ptr(globalMVMatrix));
-        game->shaderManager->entityShader
-            ->loadUniform("uMVP", glm::value_ptr(game->camera->getProjMatrix() * globalMVMatrix));
-        game->shaderManager->entityShader
-            ->loadUniform("uNormal", glm::value_ptr(glm::transpose(glm::inverse(globalMVMatrix))));
+        this->entityShader->use();
+        this->entityShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
+        this->entityShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
+        this->entityShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         for (const auto &entity : this->entities) {
             entity->render();
         }
+        this->entityShader->stop();
     }
 }

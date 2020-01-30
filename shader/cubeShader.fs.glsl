@@ -3,38 +3,63 @@
 in vec3 vPosition;
 in vec3 vNormal;
 in vec2 vTexture;
+flat in int vAnimated;
 flat in int vType;
+flat in int vFace;
+
+uniform vec3 uCamera;
+uniform vec3 uLightColor;
+uniform vec3 uLightPosition;
+uniform int uVerticalOffset;
+uniform sampler2D uTexture;
 
 out vec3 fFragColor;
 
-uniform sampler2D uTexture;
-uniform int uTextureVerticalOffset;
 
-vec3 ambientLight() {
-    float ambientStrength = 0.33;
-    return ambientStrength * vec3(1);;
+/**
+ * Compute the color of the fragment according to uTexture.
+ *
+ * @param fragTexPosition Texture's coordinate of the fragment.
+ * @param fragType Type of the block, at most only the first 4 bits must be present.
+ * @param verticalOffset Current vertical offset, use by certain animated texture.
+ *
+ * @return The computed color.
+ */
+vec3 computeTextureColor(vec2 fragTexPosition, int fragType, int verticalOffset) {
+    vec2 textureCoordinates = vec2((fragTexPosition.x + float(fragType)) / 6., 0);
+
+    if (vAnimated != 0) {
+        textureCoordinates.y = (fragTexPosition.y + float(verticalOffset)) / 64.;
+    } else {
+        textureCoordinates.y = (fragTexPosition.y + float(vFace)) / 32.;
+    }
+
+    return texture(uTexture, textureCoordinates).xyz;
 }
 
-vec3 diffuseLight(vec3 normal, vec3 lightDir) {
-    vec3 norm = normalize(normal);
-    float diff = max(dot(norm, lightDir), .3);
-    return diff * vec3(1);
+/**
+ * Compute the diffuse lighting of the fragment.
+ *
+ * @param fragNormal Normal of the fragment.
+ * @param lightDirection Direction of the light source.
+ * @param lightColor Color of the light.
+ *
+ * @return The computed diffuse lighting.
+ */
+vec3 computeDiffuseLighting(vec3 fragNormal, vec3 lightDirection, vec3 lightColor) {
+    vec3 diffuse = vec3(max(dot(fragNormal, lightDirection), 0.0));
+    return diffuse * lightColor;
 }
+
 
 void main() {
-    vec2 texCoord = vec2((vTexture.x + float(vType)) / 6., 0);
+    vec3 lightColor = vec3(1);
+    vec3 lightPosition = vec3(1000, 1000, 1000);
+    vec3 lightDirection = normalize(lightPosition - vPosition);
 
-    if (vType == 1) {
-        texCoord.y = (vTexture.y + float(uTextureVerticalOffset)) / 64.;
-    } else {
-        texCoord.y = vTexture.y / 64.;
-    }
+    vec3 textureColor = computeTextureColor(vTexture, vType, uVerticalOffset);
+    vec3 diffuse = computeDiffuseLighting(vNormal, lightDirection, lightColor);
+    vec3 ambient = vec3(0.4);
 
-    vec3 objectColor = texture(uTexture, vec2(texCoord.x, texCoord.y)).xyz;
-    if (vType == 1) {
-        objectColor *= vec3(0.5, 0.5, 1);
-    }
-
-    vec3 result = ambientLight() + diffuseLight(vNormal, vec3(1, 1, -1));
-    fFragColor = result * objectColor;
+    fFragColor = (diffuse + ambient) * textureColor;
 }

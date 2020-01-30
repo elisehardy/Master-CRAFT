@@ -46,7 +46,7 @@ namespace glimac {
             
             bool compile();
             
-            const std::string getInfoLog() const;
+            std::string getInfoLog() const;
         
         private:
             Shader(const Shader &);

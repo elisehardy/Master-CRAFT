@@ -14,13 +14,8 @@ namespace mastercraft::util {
     }
     
     
-    SimplexNoise::SimplexNoise(const glm::vec2 &t_seed) :
-        seed(t_seed) {
-    }
-    
-    
     GLfloat SimplexNoise::simplex(const glm::vec2 &p) {
-        return static_cast<GLfloat>(glm::simplex(p) * 0.5 + 0.5);
+        return (glm::simplex(p) + 1) * 0.5f;
     }
     
     
@@ -33,16 +28,16 @@ namespace mastercraft::util {
     
     
     GLfloat SimplexNoise::operator()(const glm::vec2 &position, GLfloat min, GLfloat max) {
-        GLfloat e1 = 0.75, e2 = 0.20, e3 = 0.10;
-        
+        GLfloat e1 = 1.f, e2 = 0.25f, e3 = 0.15f;
+        glm::vec2 n = (seed + position)/ 256.f;
         GLfloat value = (
-            e1 * SimplexNoise::simplex((seed + position) / 256.f)
-            + e2 * SimplexNoise::simplex((seed + position) / 128.f)
-            + e3 * SimplexNoise::simplex((seed + position) / 64.f)
+            e1 * SimplexNoise::simplex(n)
+            + e2 * SimplexNoise::simplex(n * 2.f)
+            + e3 * SimplexNoise::simplex(n * 4.f)
         );
         value /= e1 + e2 + e3;
-        
-        value = std::pow(value, 4);
+        value = std::pow(value, 3);
+
         return SimplexNoise::toRange(value, 0, 1, min, max);
     }
     

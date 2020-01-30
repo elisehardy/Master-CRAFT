@@ -11,8 +11,7 @@ namespace mastercraft::game {
     
     WindowManager::WindowManager(const char *title, uint32_t flags) {
         if (0 != SDL_Init(SDL_INIT_VIDEO)) {
-            std::cerr << SDL_GetError() << std::endl;
-            return;
+            throw std::runtime_error(SDL_GetError());
         }
         
         this->window = SDL_CreateWindow(
@@ -20,14 +19,12 @@ namespace mastercraft::game {
             SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
         );
         if (this->window == nullptr) {
-            std::cerr << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
+            throw std::runtime_error(SDL_GetError());
         }
         
         this->context = SDL_GL_CreateContext(this->window);
         if (this->context == nullptr) {
-            std::cerr << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
+            throw std::runtime_error(SDL_GetError());
         }
     }
     
@@ -76,8 +73,7 @@ namespace mastercraft::game {
         SDL_DisplayMode mode;
         
         if (SDL_GetDesktopDisplayMode(0, &mode)) {
-            std::cerr << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
+            throw std::runtime_error(SDL_GetError());
         }
         
         return mode;

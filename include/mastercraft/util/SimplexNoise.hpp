@@ -37,8 +37,6 @@ namespace mastercraft::util {
             
             SimplexNoise();
             
-            explicit SimplexNoise(const glm::vec2 &seed);
-        
             GLfloat operator()(const glm::vec2 &position, GLfloat min = 0, GLfloat max = 0);
         
             GLfloat operator()(GLfloat x, GLfloat y, GLfloat min = 0, GLfloat max = 0);

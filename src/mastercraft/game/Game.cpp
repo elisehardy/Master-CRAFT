@@ -26,20 +26,19 @@ namespace mastercraft::game {
         
         GLenum glewInitError = glewInit();
         if (GLEW_OK != glewInitError) {
-            std::cerr << glewGetErrorString(glewInitError) << std::endl;
-            exit(EXIT_FAILURE);
+            throw std::runtime_error(reinterpret_cast<const char *>(glewGetErrorString(glewInitError)));
         }
     
         util::Image *atlas = util::Image::loadPNG("../assets/block/atlas.png", 192, 256);
         
-        this->shaderManager = std::make_unique<ShaderManager>();
         this->configManager = std::make_unique<ConfigManager>();
         this->inputManager = std::make_unique<InputManager>();
-        this->chunkManager = std::make_unique<ChunkManager>(atlas, this->configManager->getDistanceView());
         this->camera = std::make_unique<Camera>();
+        this->chunkManager = std::make_unique<ChunkManager>(atlas, this->configManager->getDistanceView());
+        this->sun = std::make_unique<entity::Sun>(0, 300, 0);
         
+        this->chunkManager->init();
         this->configManager->init();
-        this->shaderManager->init();
         this->camera->init();
         
         this->lastTick = std::chrono::steady_clock::now();
@@ -98,18 +97,23 @@ namespace mastercraft::game {
         
         this->inputManager->handleHeldMouseButton();
         this->inputManager->handleHeldKey();
-        
+    
+    
         if (this->tick()) {
             this->chunkManager->update();
         }
+        this->sun->update();
     }
     
     
     void Game::render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+        glDisable(GL_DEPTH_TEST);
+        this->sun->render();
+        glEnable(GL_DEPTH_TEST);
         
         this->chunkManager->render();
-        this->shaderManager->cubeShader->unbindTexture();
         
         this->windowManager->refresh();
     }

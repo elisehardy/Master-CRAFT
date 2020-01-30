@@ -17,8 +17,8 @@ namespace mastercraft::util {
         
         GLuint error = lodepng::decode(raw, width, height, path);
         if (error) {
-            std::cerr << "Error: Could not load image '" << path << "': " << lodepng_error_text(error) << std::endl;
-            exit(EXIT_FAILURE);
+            std::string msg = "Error: Could not load image '" + path + "': " + lodepng_error_text(error);
+            throw std::runtime_error(msg);
         }
         
         float scale = 1.f / 255.f;

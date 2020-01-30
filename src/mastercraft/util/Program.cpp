@@ -48,30 +48,8 @@ static glimac::FilePath addVersion(const glimac::FilePath &shaderPath) {
 
 namespace mastercraft::util {
     
-    Program::Program() :
-        m_nGLId(glCreateProgram()) {
-    }
-    
-    
-    Program::~Program() {
-        glDeleteProgram(this->m_nGLId);
-    }
-    
-    
-    Program::Program(Program &&rvalue) noexcept:
-        m_nGLId(rvalue.m_nGLId) {
-        rvalue.m_nGLId = 0;
-    }
-    
-    
-    Program &Program::operator=(Program &&rvalue) noexcept {
-        this->m_nGLId = rvalue.m_nGLId;
-        rvalue.m_nGLId = 0;
-        return *this;
-    }
-    
-    
-    Program Program::loadProgram(const glimac::FilePath &vsPath, const glimac::FilePath &fsPath) {
+    Program::Program(const glimac::FilePath &vsPath, const glimac::FilePath &fsPath) {
+        this->id = glCreateProgram();
         glimac::Shader vs = glimac::loadShader(GL_VERTEX_SHADER, addVersion(vsPath).c_str());
         glimac::Shader fs = glimac::loadShader(GL_FRAGMENT_SHADER, addVersion(fsPath).c_str());
         
@@ -86,49 +64,60 @@ namespace mastercraft::util {
                                      + fs.getInfoLog());
         }
         
-        Program program = Program();
-        program.attachShader(vs);
-        program.attachShader(fs);
+        this->attachShader(vs);
+        this->attachShader(fs);
         
-        if (!program.link()) {
-            throw std::runtime_error(
-                "Link error (for files " + vsPath.str() + " and " + fsPath.str() + "): " + program.getInfoLog());
+        if (!this->link()) {
+            throw std::runtime_error("Link error (for files " + vsPath.str() + " and " + fsPath.str() + "): " + this->getInfoLog());
         }
-        
-        return program;
     }
     
     
-    GLuint Program::getGLId() const {
-        return this->m_nGLId;
+    Program::~Program() {
+        glDeleteProgram(this->id);
+    }
+    
+    
+    
+    GLuint Program::getId() const {
+        return this->id;
     }
     
     
     std::string Program::getInfoLog() const {
+        std::string logString;
         GLint length;
-        glGetProgramiv(this->m_nGLId, GL_INFO_LOG_LENGTH, &length);
-        char *log = new char[length];
-        glGetProgramInfoLog(this->m_nGLId, length, nullptr, log);
-        std::string logString(log);
+        char *log;
+        
+        glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &length);
+        log = new char[length];
+        glGetProgramInfoLog(this->id, length, nullptr, log);
+        logString = log;
         delete[] log;
+        
         return logString;
     }
     
     
     void Program::attachShader(const glimac::Shader &shader) {
-        glAttachShader(this->m_nGLId, shader.getGLId());
+        glAttachShader(this->id, shader.getGLId());
     }
     
     
     bool Program::link() {
-        glLinkProgram(this->m_nGLId);
         GLint status;
-        glGetProgramiv(this->m_nGLId, GL_LINK_STATUS, &status);
+        glLinkProgram(this->id);
+        glGetProgramiv(this->id, GL_LINK_STATUS, &status);
         return status == GL_TRUE;
     }
     
     
     void Program::use() const {
-        glUseProgram(this->m_nGLId);
+        glUseProgram(this->id);
+    }
+    
+    
+    void Program::stop() const {
+        glUseProgram(0);
     }
 }

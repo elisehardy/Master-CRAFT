@@ -13,7 +13,6 @@ namespace mastercraft::game {
         this->setFaceCulling(true);
         SDL_SetRelativeMouseMode(SDL_TRUE);
         glCullFace(GL_BACK);
-        glEnable(GL_DEPTH_TEST);
     }
     
     

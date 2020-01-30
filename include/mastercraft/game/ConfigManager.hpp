@@ -28,6 +28,7 @@ namespace mastercraft::game {
             static constexpr GLubyte GEN_MIN_HEIGHT = 32; /**< Minimum height when procedurally generating a chunk. */
             static constexpr GLubyte GEN_MAX_HEIGHT = 98; /**< Maximum height when procedurally generating a chunk. */
             static constexpr GLubyte GEN_INTERVAL_HEIGHT = GEN_MAX_HEIGHT - GEN_MIN_HEIGHT;
+            static constexpr GLubyte GEN_WATER_LEVEL = GEN_MIN_HEIGHT + 4;
             
             static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
         
@@ -38,7 +39,7 @@ namespace mastercraft::game {
             GLfloat mouseSensitivity = 0.10; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;          /**< Field of view, default to 70. */
-            GLubyte distanceView = 7;  /**< Draw distance as the radius of SuperChunk rendered. */
+            GLubyte distanceView = 10;  /**< Draw distance as the radius of SuperChunk rendered. */
             GLubyte framerate = 0;     /**< Framerate real value, default to 0 (uncapped). */
             Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
             

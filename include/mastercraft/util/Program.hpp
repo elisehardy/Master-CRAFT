@@ -6,38 +6,32 @@
 #include <glimac/Shader.hpp>
 #include <glimac/FilePath.hpp>
 
+#include <mastercraft/util/INonCopyable.hpp>
+
 
 namespace mastercraft::util {
     
-    class Program {
+    class Program : public INonCopyable {
         private:
-            GLuint m_nGLId;
-        
-            Program(const Program &);
+            GLuint id;
             
-            Program &operator=(const Program &);
-        
-            Program(Program &&rvalue) noexcept;
-        
             [[nodiscard]] std::string getInfoLog() const;
-        
+            
             void attachShader(const glimac::Shader &shader);
-        
+            
             bool link();
         
         public:
-        
-            Program();
-        
-            ~Program();
-        
-            Program &operator=(Program &&rvalue) noexcept;
-        
-            static Program loadProgram(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile);
             
-            [[nodiscard]] GLuint getGLId() const;
-        
+            Program(const glimac::FilePath &vsPath, const glimac::FilePath &fsPath);
+            
+            ~Program();
+            
+            [[nodiscard]] GLuint getId() const;
+            
             void use() const;
+            
+            void stop() const;
     };
 }
 

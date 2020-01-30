@@ -74,7 +74,7 @@ namespace mastercraft::cube {
                         y * Chunk::Y + this->position.y,
                         z * Chunk::Z + this->position.z
                     );
-                    game->shaderManager->cubeShader->loadUniform("uChunkPosition", glm::value_ptr(position));
+                    game->chunkManager->cubeShader->loadUniform("uChunkPosition", glm::value_ptr(position));
                     this->chunks[x][y][z].render();
                 }
             }

@@ -39,7 +39,7 @@ namespace mastercraft::cube {
             SuperChunk(GLuint x, GLuint y, GLuint z);
             
             ~SuperChunk() = default;
-            
+        
             CubeType get(GLuint x, GLuint y, GLuint z);
             
             void set(GLuint x, GLuint y, GLuint z, CubeType type);

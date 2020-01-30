@@ -77,4 +77,5 @@ TARGET_COMPILE_OPTIONS(
     -Wno-unknown-warning-option
     -Wno-conversion
     -Wno-unused-exception-parameter
+    -Wno-c++98-c++11-compat-binary-literal
 )

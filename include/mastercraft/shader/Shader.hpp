@@ -16,7 +16,7 @@ namespace mastercraft::shader {
     class Shader : public util::INonCopyable {
         protected:
             std::unordered_map<std::string, std::shared_ptr<IUniform>> uniforms;
-            util::Program program;
+            std::unique_ptr<util::Program> program;
         
         public:
             
@@ -29,6 +29,8 @@ namespace mastercraft::shader {
             void loadUniform(const std::string &name, const void* value);
             
             void use() const;
+            
+            void stop() const;
     };
 }
 

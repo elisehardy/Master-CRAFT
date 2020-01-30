@@ -64,7 +64,7 @@ namespace mastercraft::cube {
         if (!modified) {
             return this->count;
         }
-    
+        
         this->count = 0;
         
         CubeFace drawn[FACE_COUNT];
@@ -75,22 +75,22 @@ namespace mastercraft::cube {
                     type = this->cubes[x][y][z];
                     if (type != CubeType::AIR) {
                         if (!occluded(x, y, z, CubeDirection::FACE)) {
-                            drawn[this->count++] = CubeFace::face(x, y, z, type);
+                            drawn[this->count++] = CubeFace::face(x, y, z, type | CubeDirection::FACE);
                         }
                         if (!occluded(x, y, z, CubeDirection::TOP)) {
-                            drawn[this->count++] = CubeFace::top(x, y, z, type);
+                            drawn[this->count++] = CubeFace::top(x, y, z, type | CubeDirection::TOP);
                         }
                         if (!occluded(x, y, z, CubeDirection::BACK)) {
-                            drawn[this->count++] = CubeFace::back(x, y, z, type);
+                            drawn[this->count++] = CubeFace::back(x, y, z, type | CubeDirection::BACK);
                         }
                         if (!occluded(x, y, z, CubeDirection::BOTTOM)) {
-                            drawn[this->count++] = CubeFace::bottom(x, y, z, type);
+                            drawn[this->count++] = CubeFace::bottom(x, y, z, type | CubeDirection::BOTTOM);
                         }
                         if (!occluded(x, y, z, CubeDirection::LEFT)) {
-                            drawn[this->count++] = CubeFace::left(x, y, z, type);
+                            drawn[this->count++] = CubeFace::left(x, y, z, type | CubeDirection::LEFT);
                         }
                         if (!occluded(x, y, z, CubeDirection::RIGHT)) {
-                            drawn[this->count++] = CubeFace::right(x, y, z, type);
+                            drawn[this->count++] = CubeFace::right(x, y, z, type | CubeDirection::RIGHT);
                         }
                     }
                 }
@@ -104,11 +104,11 @@ namespace mastercraft::cube {
         
         // Set the VAO
         glBindVertexArray(this->vao);
+        glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
         glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
         glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
         glEnableVertexAttribArray(VERTEX_ATTR_TEXTURE);
-        glEnableVertexAttribArray(VERTEX_ATTR_TYPE);
-        glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+        glEnableVertexAttribArray(VERTEX_ATTR_DATA);
         glVertexAttribPointer(
             VERTEX_ATTR_POSITION, 3, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
             (const GLvoid *) (offsetof(cube::CubeVertex, vertex))
@@ -122,8 +122,8 @@ namespace mastercraft::cube {
             (const GLvoid *) (offsetof(cube::CubeVertex, texture))
         );
         glVertexAttribIPointer(
-            VERTEX_ATTR_TYPE, 1, GL_BYTE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, type))
+            VERTEX_ATTR_DATA, 1, GL_BYTE, sizeof(cube::CubeVertex),
+            (const GLvoid *) (offsetof(cube::CubeVertex, data))
         );
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);

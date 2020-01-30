@@ -3,21 +3,16 @@
 
 #include <stack>
 #include <cstdint>
+#include <chrono>
 
 #include <mastercraft/util/ISingleton.hpp>
 #include <mastercraft/game/ConfigManager.hpp>
 #include <mastercraft/game/Camera.hpp>
 #include <mastercraft/game/InputManager.hpp>
-#include <mastercraft/game/ShaderManager.hpp>
 #include <mastercraft/game/WindowManager.hpp>
 #include <mastercraft/game/ChunkManager.hpp>
-#include <chrono>
+#include <mastercraft/entity/Sun.hpp>
 
-
-// Here to avoid circular inclusion.
-namespace mastercraft::state {
-    class State;
-}
 
 namespace mastercraft::game {
     
@@ -30,14 +25,13 @@ namespace mastercraft::game {
             Game();
         
         public:
-            std::stack<state::State *> states = {}; /**< Stack containing the current States of the game. */
+            std::chrono::steady_clock::time_point lastTick;
             std::unique_ptr<WindowManager> windowManager;
-            std::unique_ptr<ShaderManager> shaderManager;
             std::unique_ptr<ConfigManager> configManager;
             std::unique_ptr<InputManager> inputManager;
             std::unique_ptr<ChunkManager> chunkManager;
+            std::unique_ptr<entity::Sun> sun;
             std::unique_ptr<Camera> camera;
-            std::chrono::steady_clock::time_point lastTick;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             
             
@@ -84,7 +78,7 @@ namespace mastercraft::game {
              * Draw the State at the top of the stack.
              */
             void render();
-        
+            
             /**
              * Stops the game.
              *

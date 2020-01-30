@@ -9,14 +9,14 @@
 namespace glimac {
     
     bool Shader::compile() {
-        glCompileShader(m_nGLId);
         GLint status;
+        glCompileShader(m_nGLId);
         glGetShaderiv(m_nGLId, GL_COMPILE_STATUS, &status);
         return status == GL_TRUE;
     }
     
     
-    const std::string Shader::getInfoLog() const {
+    std::string Shader::getInfoLog() const {
         GLint length;
         glGetShaderiv(m_nGLId, GL_INFO_LOG_LENGTH, &length);
         char *log = new char[length];

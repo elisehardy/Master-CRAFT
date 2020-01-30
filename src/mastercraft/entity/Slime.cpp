@@ -42,10 +42,10 @@ namespace mastercraft::entity {
         
         // Set the VAO
         glBindVertexArray(this->vao);
+        glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
         glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
         glEnableVertexAttribArray(VERTEX_ATTR_NORMAL);
         glEnableVertexAttribArray(VERTEX_ATTR_TEXTURE);
-        glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
         glVertexAttribPointer(
             VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(EntityVertex),
             (const GLvoid *) (offsetof(EntityVertex, vertex))
@@ -68,9 +68,9 @@ namespace mastercraft::entity {
     GLuint Slime::render() {
         game::Game *game = game::Game::getInstance();
         glBindVertexArray(this->vao);
-        game->shaderManager->entityShader->bindTexture(this->texture);
+        game->chunkManager->entityShader->bindTexture(this->texture);
         glDrawArrays(GL_TRIANGLES, 0, this->vertices.size());
-        game->shaderManager->entityShader->unbindTexture();
+        game->chunkManager->entityShader->unbindTexture();
         glBindVertexArray(0);
         
         return 1;
