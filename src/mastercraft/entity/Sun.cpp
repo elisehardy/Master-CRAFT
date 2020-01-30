@@ -10,7 +10,7 @@
 namespace mastercraft::entity {
     
     Sun::Sun(const glm::vec3 &t_position) :
-        shader(std::make_unique<shader::Shader>("../shader/sunShader.vs.glsl", "../shader/sunShader.fs.glsl")),
+        shader(std::make_unique<shader::Shader>("../shader/sun.vs.glsl", "../shader/sun.fs.glsl")),
         position(t_position) {
         this->shader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
         glGenBuffers(1, &this->vbo);

@@ -67,8 +67,7 @@ namespace mastercraft::game {
             bool tick();
             
             /**
-             * Update the State at the top of the stack. Stops the game if no
-             * State is in the stack.
+             * Update the game.
              *
              * @param event An instance of Event containing the inputs of the user.
              */

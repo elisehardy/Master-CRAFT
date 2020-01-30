@@ -165,7 +165,7 @@ namespace mastercraft::game {
     
     void ChunkManager::init() {
         this->cubeShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/cubeShader.vs.glsl", "../shader/cubeShader.fs.glsl"
+            "../shader/cube.vs.glsl", "../shader/cube.fs.glsl"
         );
         this->cubeShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
         this->cubeShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
@@ -174,7 +174,7 @@ namespace mastercraft::game {
         this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
     
         this->entityShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/entityShader.vs.glsl", "../shader/entityShader.fs.glsl"
+            "../shader/entity.vs.glsl", "../shader/entity.fs.glsl"
         );
         this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
