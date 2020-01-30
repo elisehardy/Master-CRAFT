@@ -15,7 +15,7 @@
 
 
 namespace mastercraft::game {
-    
+
     typedef util::Noise<glm::vec2, float, glm::simplex> Noise2D;
     typedef util::Noise<glm::vec3, float, glm::perlin> Noise3D;
     
@@ -30,12 +30,13 @@ namespace mastercraft::game {
                 return v1.y < v2.y;
             }
             return v1.x < v2.x;
+
         }
     };
-    
-    
-    
+
+
     class ChunkManager : public util::INonCopyable {
+<<<<<<< HEAD
         
         private:
             std::map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Less> chunks;
@@ -85,6 +86,31 @@ namespace mastercraft::game {
             void update();
             
             void render();
+
+    private:
+        std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash, Ivec3Hash> chunks;
+        std::vector<std::unique_ptr<mastercraft::entity::IEntity>> entities;
+        util::SimplexNoise moistureSimplex;
+        shader::Texture cubeTexture;
+
+        GLubyte distanceView;  /**< Current distanceView. */
+        GLuint textureVerticalOffset;
+        GLuint tick;
+
+        [[nodiscard]] std::vector<glm::ivec3> generateKeys();
+
+        [[nodiscard]] cube::CubeType getBiome(GLubyte height, GLubyte moisture);
+
+        [[nodiscard]] cube::SuperChunk *createSuperChunk(glm::ivec3 position);
+
+        [[nodiscard]] cube::SuperChunk *createSuperChunk(GLuint x, GLuint y, GLuint z);
+
+        [[nodiscard]] entity::IEntity *createEntity(glm::ivec3 position);
+
+        [[nodiscard]] entity::IEntity *createEntity(GLuint x, GLuint y, GLuint z);
+
+    public:
+
 
         [[nodiscard]] cube::SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
     };

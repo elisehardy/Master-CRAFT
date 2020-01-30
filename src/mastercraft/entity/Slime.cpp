@@ -2,6 +2,8 @@
 #include <mastercraft/util/OBJ.hpp>
 #include <iostream>
 #include <mastercraft/game/Game.hpp>
+#include <mastercraft/util/AStarNew.hpp>
+
 
 
 namespace mastercraft::entity {
@@ -29,6 +31,25 @@ namespace mastercraft::entity {
     
     
     GLuint Slime::update() {
+        if(this->position == this->destination){
+            auto v = entity::Slime::generateDest(position.x, position.x+16, position.z, position.z+16);
+
+
+            auto pathGenerate = util::cell::aStarSearch( this->position, v);
+
+            while(pathGenerate.empty()){
+                v = entity::Slime::generateDest(position.x, position.x+16, position.z, position.z+16);
+                pathGenerate = util::cell::aStarSearch(this->position, v);
+
+            }
+            this->path = pathGenerate;
+        }
+        if(this->position != this->destination){
+            this->position = this->path.top();
+        }
+
+
+
         std::vector<EntityVertex> vertices;
         
         for (const EntityVertex &vertex: this->vertices) {
@@ -60,6 +81,8 @@ namespace mastercraft::entity {
         );
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
+
+        this->path.pop();
         
         return 1;
     }
@@ -75,4 +98,14 @@ namespace mastercraft::entity {
         
         return 1;
     }
+
+    glm::vec3 Slime::generateDest(int maxX, int minX, int maxY, int minY){
+        game::Game *game = game::Game::getInstance();
+        auto x = rand()%(maxX-minX+1) + minX;
+        auto y = rand()%(maxY-minY+1) + minY;
+        auto z = game->chunkManager->heightSimplex(
+                x, y, game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT);
+        return glm::vec3(x, y, z);
+    }
+
 }

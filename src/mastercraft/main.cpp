@@ -17,11 +17,6 @@ int main(int argc, char **argv) {
     
     game->cleanup();
 
-
-
-
-
-
     return EXIT_SUCCESS;
 }
 

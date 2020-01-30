@@ -34,7 +34,10 @@ namespace mastercraft::entity {
             GLuint update() final;
             
             GLuint render() final;
-    };
+
+           static  glm::vec3 generateDest(int maxX, int minX, int maxY, int minY);
+
+        };
 }
 
 #endif //MASTERCRAFT_SLIME_HPP

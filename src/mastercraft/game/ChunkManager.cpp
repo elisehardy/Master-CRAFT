@@ -30,6 +30,7 @@ namespace mastercraft::game {
     
     
     glm::ivec3 ChunkManager::getSuperChunkCoordinates(const glm::ivec3 &position) const {
+
         return glm::ivec3(
             std::floor(position.x / cube::SuperChunk::X) * cube::SuperChunk::X,
             std::floor(position.y / cube::SuperChunk::Y) * cube::SuperChunk::Y,
@@ -60,6 +61,7 @@ namespace mastercraft::game {
         
         this->keys = keys;
     }
+
     
     
     cube::CubeType ChunkManager::getBiome(GLubyte height, GLubyte moisture) {
@@ -167,8 +169,9 @@ namespace mastercraft::game {
     entity::IEntity *ChunkManager::createEntity(glm::ivec3 position) {
         GLint x = Random::get<GLint>(position.x, position.x + cube::SuperChunk::X);
         GLint z = Random::get<GLint>(position.z, position.z + cube::SuperChunk::Z);
-        
-        return new entity::Slime(x, 100, z);
+
+        return new entity::Slime(x, this->heightSimplex(
+                x , z , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT), z);
     }
     
     
@@ -277,5 +280,11 @@ namespace mastercraft::game {
             entity->render();
         }
         this->entityShader->stop();
+    }
+
+    cube::CubeType ChunkManager::get(GLint x, GLint y, GLint z) const {
+        glm::ivec3 superChunk = this->getSuperChunkCoordinates({x, y, z});
+
+        return this->chunks.at(superChunk)->get(x - superChunk.x, y - superChunk.y, z - superChunk.z);
     }
 }

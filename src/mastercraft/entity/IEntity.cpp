@@ -11,4 +11,9 @@ namespace mastercraft::entity {
     glm::vec3 IEntity::getPosition() const {
         return this->position;
     }
+
+  /*  void IEntity::setPath(std::stack<util::triplet<int, int, int>> pathGenerate){
+        this->path = pathGenerate;
+    }*/
+
 }

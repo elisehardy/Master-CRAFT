@@ -1,5 +1,5 @@
-
 #include <mastercraft/util/AStarNew.hpp>
+#include <mastercraft/game/Game.hpp>
 #include <utility>
 
 using namespace mastercraft::util;
@@ -12,11 +12,13 @@ bool cell::isIntoWorld(int x, int y){
     return (x >= 0) && (y >= 0) && (x < ROW) && (y < COL);
 }
 
-bool cell::isUnBlocked(cube::SuperChunk *chunk, int x, int y, int posZ){
-    if (chunk->get(x, posZ+1, y) == cube::CubeType::AIR){
+bool cell::isUnBlocked(int x, int y, int posZ){
+    game::Game *game = game::Game::getInstance();
+
+    if (game->chunkManager->get(x, posZ+1, y) == cube::CubeType::AIR){
         return true;
     }
-    if(chunk->get(x,posZ+2, y) == cube::CubeType::AIR){
+    if(game->chunkManager->get(x,posZ+2, y) == cube::CubeType::AIR){
         return true;
     }
     else {
@@ -24,64 +26,66 @@ bool cell::isUnBlocked(cube::SuperChunk *chunk, int x, int y, int posZ){
     }
 }
 
-bool cell::isDestination(int x, int y, triplet<int, int, int> dest){
-    return (x == dest.first && y == dest.second);
+bool cell::isDestination(int x, int y, glm::vec3 dest){
+    return (abs(x - dest.x)<0.0001 && abs(y - dest.z))<0.0001;
 }
 
-double cell::CalculateHeuristic(int x, int y, triplet<int, int, int> dest){
-    return abs(x - dest.first) + abs(y - dest.second);
+double cell::CalculateHeuristic(int x, int y, glm::vec3 dest){
+    return abs(x - dest.x) + abs(y - dest.y);
 }
 
-void cell::tracePath(cell cellDetails[][COL], triplet<int, int, int> dest){
+std::stack<glm::vec3> cell::tracePath(cell cellDetails[][COL], glm::vec3 dest){
     printf ("\nThe Path is ");
-    int row = dest.first;
-    int col = dest.second;
-    int height = dest.third;
+    int row = dest.x;
+    int col = dest.z;
+    int height = dest.y;
 
-    std::stack<triplet<int, int, int>> Path;
+    std::stack<glm::vec3> Path;
 
     while (!(cellDetails[row][col].parent_i == row
              && cellDetails[row][col].parent_j == col ))
     {
-        Path.push (triplet<int, int, int>(row, col, height));
+        Path.push (glm::vec3(row, height, col));
         row = cellDetails[row][col].parent_i;
         col = cellDetails[row][col].parent_j;
         height = cellDetails[row][col].parent_h;
     }
 
-    Path.push (triplet<int, int, int>(row, col, height));
-    while (!Path.empty())
+    Path.push (glm::vec3(row, height, col));
+    return Path;
+  /*  while (!Path.empty())
     {
         triplet<int,int,int> p = Path.top();
         Path.pop();
         printf("-> (%d,%d,%d) ",p.first,p.second, p.third);
     }
 
-    return;
+    return;*/
 }
 
 
-void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int, int> src, triplet<int, int, int> dest)
+std::stack<glm::vec3> cell::aStarSearch(glm::vec3 src, glm::vec3 dest)
 {
-    if (!(cell::isIntoWorld (src.first, src.second))){
+    game::Game *game = game::Game::getInstance();
+    if (!(cell::isIntoWorld (src.x, src.z))){
         printf ("Source is invalid\n");
-        return;
+        return std::stack<glm::vec3>();
     }
 
-    if (!(cell::isIntoWorld (dest.first, dest.second))){
+    if (!(cell::isIntoWorld (dest.x, dest.z))){
         printf ("Destination is invalid\n");
-        return;
+        return std::stack<glm::vec3>();
     }
 
-    if (!(cell::isUnBlocked(chunk, src.first, src.second, src.third)) ||
-        !(cell::isUnBlocked(chunk, dest.first, dest.second, dest.third))){
+    if (!(cell::isUnBlocked(src.x, src.y, src.z)) ||
+        !(cell::isUnBlocked(dest.x, dest.y, dest.z))){
         printf ("Source or the destination is blocked\n");
-        return;
+        return std::stack<glm::vec3>();
     }
 
-    if (cell::isDestination(src.first, src.second, dest)){
+    if (cell::isDestination(src.x, src.z, dest)){
         printf ("We are already at the destination\n");
-        return;
+        return std::stack<glm::vec3>();
     }
 
     bool closedList[ROW][COL];
@@ -102,7 +106,7 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
         }
     }
 
-    i = src.first, j = src.second, k = src.third;
+    i = src.x, j = src.z, k = src.y;
     cellDetails[i][j].f = 0.0;
     cellDetails[i][j].g = 0.0;
     cellDetails[i][j].h = 0.0;
@@ -111,7 +115,7 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
     cellDetails[i][j].parent_h = k;
 
     std::set<ptriplet> openList;
-    openList.insert(ptriplet (0.0, triplet<int, int, int>(i, j, k)));
+    openList.insert(ptriplet (0.0, glm::vec3(i, k, j)));
     bool foundDest = false;
 
     while (!openList.empty())
@@ -120,9 +124,9 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
 
         openList.erase(openList.begin());
 
-        i = p.second.first;
-        j = p.second.second;
-        k = p.second.third;
+        i = p.second.x;
+        j = p.second.z;
+        k = p.second.y;
         closedList[i][j] = true;
 
         double gNew, hNew, fNew;
@@ -136,18 +140,18 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i-1][j].parent_j = j;
                 cellDetails[i-1][j].parent_h = k;
                 printf ("The destination cell is found\n");
-                cell::tracePath (cellDetails, dest);
-                return;
+                auto path = cell::tracePath (cellDetails, dest);
+                return path;
             }
             else if (!(closedList[i-1][j]) &&
-                     cell::isUnBlocked(chunk, i-1, j, k)){
+                     cell::isUnBlocked(i-1, j, k)){
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = cell::CalculateHeuristic (i-1, j, dest);
                 fNew = gNew + hNew;
                 if (cell::compare(cellDetails[i-1][j].f , FLT_MAX) ||
                     cellDetails[i-1][j].f > fNew){
-                    openList.insert( ptriplet(fNew,triplet<int, int, int>(i-1, j, game->chunkManager->heightSimplex(
-                                                       i-1 , j , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT))));
+                    openList.insert( ptriplet(fNew,glm::vec3(i-1, j, float(game->chunkManager->heightSimplex(
+                                                       i-1 , j , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)))));
 
                     cellDetails[i-1][j].f = fNew;
                     cellDetails[i-1][j].g = gNew;
@@ -167,20 +171,20 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i+1][j].parent_j = j;
                 cellDetails[i+1][j].parent_h = k;
                 printf("The destination cell is found\n");
-                cell::tracePath(cellDetails, dest);
-                return;
+                auto path = cell::tracePath(cellDetails, dest);
+                return path;
             }
             else if (!(closedList[i+1][j]) &&
-                     cell::isUnBlocked(chunk, i+1, j, k)){
+                     cell::isUnBlocked(i+1, j, k)){
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = cell::CalculateHeuristic(i+1, j, dest);
                 fNew = gNew + hNew;
 
                 if (cell::compare(cellDetails[i+1][j].f, FLT_MAX) ||
                     cellDetails[i+1][j].f > fNew){
-                    openList.insert( ptriplet (fNew, triplet<int, int ,int> (i+1, j, game->chunkManager->heightSimplex(
+                    openList.insert( ptriplet (fNew, glm::vec3 (i+1, j, float(game->chunkManager->heightSimplex(
                             i+1 , j , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT
-                    ))));
+                    )))));
                     cellDetails[i+1][j].f = fNew;
                     cellDetails[i+1][j].g = gNew;
                     cellDetails[i+1][j].h = hNew;
@@ -201,19 +205,19 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i][j+1].parent_j = j;
                 cellDetails[i][j+1].parent_h = k;
                 printf("The destination cell is found\n");
-                cell::tracePath(cellDetails, dest);
-                return;
+                auto path = cell::tracePath(cellDetails, dest);
+                return path;
             }
             else if (!(closedList[i][j+1]) &&
-                     cell::isUnBlocked (chunk, i, j+1, k)){
+                     cell::isUnBlocked (i, j+1, k)){
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = cell::CalculateHeuristic (i, j+1, dest);
                 fNew = gNew + hNew;
 
                 if (cell::compare(cellDetails[i][j+1].f , FLT_MAX) ||
                     cellDetails[i][j+1].f > fNew){
-                    openList.insert( ptriplet(fNew,triplet<int, int, int> (i, j+1, game->chunkManager->heightSimplex(
-                                                       i , j+1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT))));
+                    openList.insert( ptriplet(fNew,glm::vec3 (i, j+1, float(game->chunkManager->heightSimplex(
+                                                       i , j+1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)))));
 
                     cellDetails[i][j+1].f = fNew;
                     cellDetails[i][j+1].g = gNew;
@@ -235,19 +239,19 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i][j-1].parent_j = j;
                 cellDetails[i][j-1].parent_h = k;
                 printf("The destination cell is found\n");
-                cell::tracePath(cellDetails, dest);
-                return;
+                auto path = cell::tracePath(cellDetails, dest);
+                return path;
             }
             else if (!(closedList[i][j-1]) &&
-                     cell::isUnBlocked(chunk, i, j-1, k)){
+                     cell::isUnBlocked(i, j-1, k)){
                 gNew = cellDetails[i][j].g + 1.0;
                 hNew = cell::CalculateHeuristic(i, j-1, dest);
                 fNew = gNew + hNew;
 
                 if (cell::compare(cellDetails[i][j-1].f , FLT_MAX) ||
                     cellDetails[i][j-1].f > fNew){
-                    openList.insert( ptriplet (fNew,triplet<int, int, int>(i, j-1 ,game->chunkManager->heightSimplex(
-                                                        i , j-1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT))));
+                    openList.insert( ptriplet (fNew,glm::vec3(i, j-1 ,float(game->chunkManager->heightSimplex(
+                                                        i , j-1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)))));
 
                     cellDetails[i][j-1].f = fNew;
                     cellDetails[i][j-1].g = gNew;
@@ -269,13 +273,13 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i-1][j+1].parent_j = j;
                 cellDetails[i-1][j+1].parent_h = k;
                 printf ("The destination cell is found\n");
-                cell::tracePath (cellDetails, dest);
-                return;
+                auto path = cell::tracePath (cellDetails, dest);
+                return path;
             }
 
 
             else if (!(closedList[i-1][j+1]) &&
-                     cell::isUnBlocked(chunk, i-1, j+1, k)){
+                     cell::isUnBlocked(i-1, j+1, k)){
                 gNew = cellDetails[i][j].g + 1.414;
                 hNew = cell::CalculateHeuristic(i-1, j+1, dest);
                 fNew = gNew + hNew;
@@ -283,8 +287,8 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
 
                 if (cell::compare(cellDetails[i-1][j+1].f , FLT_MAX) ||
                     cellDetails[i-1][j+1].f > fNew){
-                    openList.insert( ptriplet (fNew,triplet<int, int, int>(i-1, j+1,game->chunkManager->heightSimplex(
-                                                        i-1 , j+1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT))));
+                    openList.insert( ptriplet (fNew,glm::vec3(i-1, j+1,float(game->chunkManager->heightSimplex(
+                                                        i-1 , j+1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)))));
 
                     cellDetails[i-1][j+1].f = fNew;
                     cellDetails[i-1][j+1].g = gNew;
@@ -306,19 +310,19 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i-1][j-1].parent_j = j;
                 cellDetails[i-1][j-1].parent_h = k;
                 printf ("The destination cell is found\n");
-                cell::tracePath (cellDetails, dest);
-                return;
+                auto path = cell::tracePath (cellDetails, dest);
+                return path;
             }
             else if (!(closedList[i-1][j-1]) &&
-                     cell::isUnBlocked(chunk, i-1, j-1, k)){
+                     cell::isUnBlocked(i-1, j-1, k)){
                 gNew = cellDetails[i][j].g + 1.414;
                 hNew = cell::CalculateHeuristic(i-1, j-1, dest);
                 fNew = gNew + hNew;
 
                 if (cell::compare(cellDetails[i-1][j-1].f , FLT_MAX) ||
                     cellDetails[i-1][j-1].f > fNew){
-                    openList.insert( ptriplet (fNew, triplet<int, int, int> (i-1, j-1, game->chunkManager->heightSimplex(
-                            i-1 , j-1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT))));
+                    openList.insert( ptriplet (fNew, glm::vec3 (i-1, j-1, float(game->chunkManager->heightSimplex(
+                            i-1 , j-1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)))));
 
                     cellDetails[i-1][j-1].f = fNew;
                     cellDetails[i-1][j-1].g = gNew;
@@ -341,19 +345,19 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i+1][j+1].parent_h = k;
 
                 printf ("The destination cell is found\n");
-                cell::tracePath (cellDetails, dest);
-                return;
+                auto path = cell::tracePath (cellDetails, dest);
+                return path;
             }
             else if (!(closedList[i+1][j+1]) &&
-                     cell::isUnBlocked(chunk, i+1, j+1, k)){
+                     cell::isUnBlocked(i+1, j+1, k)){
                 gNew = cellDetails[i][j].g + 1.414;
                 hNew = cell::CalculateHeuristic(i+1, j+1, dest);
                 fNew = gNew + hNew;
 
                 if (cell::compare(cellDetails[i+1][j+1].f , FLT_MAX) ||
                     cellDetails[i+1][j+1].f > fNew){
-                    openList.insert(ptriplet(fNew,triplet<int, int, int> (i+1, j+1, game->chunkManager->heightSimplex(
-                                                      i+1 , j+1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT))));
+                    openList.insert(ptriplet(fNew,glm::vec3 (i+1, j+1, float(game->chunkManager->heightSimplex(
+                                                      i+1 , j+1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)))));
 
                     cellDetails[i+1][j+1].f = fNew;
                     cellDetails[i+1][j+1].g = gNew;
@@ -376,19 +380,19 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
                 cellDetails[i+1][j-1].parent_h = k;
 
                 printf("The destination cell is found\n");
-                cell::tracePath(cellDetails, dest);
-                return;
+                auto path = cell::tracePath(cellDetails, dest);
+                return path;
             }
             else if (!(closedList[i+1][j-1]) &&
-                     cell::isUnBlocked(chunk, i+1, j-1, k)){
+                     cell::isUnBlocked(i+1, j-1, k)){
                 gNew = cellDetails[i][j].g + 1.414;
                 hNew = cell::CalculateHeuristic(i+1, j-1, dest);
                 fNew = gNew + hNew;
 
                 if (cell::compare(cellDetails[i+1][j-1].f , FLT_MAX) ||
                     cellDetails[i+1][j-1].f > fNew){
-                    openList.insert(ptriplet(fNew,triplet<int, int,int>(i+1, j-1, game->chunkManager->heightSimplex(
-                                                      i+1 , j-1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT))));
+                    openList.insert(ptriplet(fNew,glm::vec3(i+1, j-1, float(game->chunkManager->heightSimplex(
+                                                      i+1 , j-1 , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)))));
 
                     cellDetails[i+1][j-1].f = fNew;
                     cellDetails[i+1][j-1].g = gNew;
@@ -405,6 +409,5 @@ void cell::aStarSearch(game::Game *game,cube::SuperChunk*chunk, triplet<int, int
     if (foundDest == false)
         printf("Failed to find the Destination Cell\n");
 
-    return;
+    return std::stack<glm::vec3>();
 }
-
