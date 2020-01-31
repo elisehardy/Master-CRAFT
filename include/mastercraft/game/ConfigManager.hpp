@@ -44,6 +44,7 @@ namespace mastercraft::game {
             Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
             
             GLuint tickRate = 20; /**< Number of tick per seconds */
+            GLboolean day = true; /**< Indicate if it's currently day or night */
             
             GLboolean faceCulling = true;      /**< Whether face culling is enabled. */
             GLboolean occlusionCulling = true; /**< Whether occlusion culling is enabled. */
@@ -83,6 +84,12 @@ namespace mastercraft::game {
             [[nodiscard]] GLuint getTickRate() const;
             
             void setTickRate(GLuint tickRate);
+        
+            [[nodiscard]] GLboolean isDay() const;
+        
+            void setDay(GLboolean faceCulling);
+        
+            void switchDay();
             
             [[nodiscard]] GLboolean getFaceCulling() const;
             

@@ -78,7 +78,7 @@ namespace mastercraft::game {
     
     void Camera::setProjectionMatrix(float fov, int width, int height) {
         this->projMatrix = glm::perspective(
-            glm::radians(fov), static_cast<float>(width) / static_cast<float>(height), 0.1f, 256.f * cube::SuperChunk::X
+            glm::radians(fov), static_cast<float>(width) / static_cast<float>(height), 0.1f, 256.f * 32.f
         );
     }
     

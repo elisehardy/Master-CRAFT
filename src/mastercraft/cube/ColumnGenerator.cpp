@@ -3,8 +3,8 @@
 
 namespace mastercraft::cube {
     
-    std::array<cube::CubeType, cube::SuperChunk::Y> ColumnGenerator::waterColumn(GLubyte height) {
-        std::array<cube::CubeType, cube::SuperChunk::Y> column = {};
+    ColumnGenerator::Column ColumnGenerator::waterColumn(GLubyte height) {
+        Column column = {};
         column.fill(cube::CubeType::AIR);
         
         for (GLuint y = 0; y <= game::ConfigManager::GEN_WATER_LEVEL + 1; y++) {
@@ -23,8 +23,8 @@ namespace mastercraft::cube {
     }
     
     
-    std::array<cube::CubeType, cube::SuperChunk::Y> ColumnGenerator::sandColumn(GLubyte height) {
-        std::array<cube::CubeType, cube::SuperChunk::Y> column = {};
+    ColumnGenerator::Column ColumnGenerator::sandColumn(GLubyte height) {
+        Column column = {};
         column.fill(cube::CubeType::AIR);
         
         for (GLuint y = 0; y <= height; y++) {
@@ -40,8 +40,8 @@ namespace mastercraft::cube {
     }
     
     
-    std::array<cube::CubeType, cube::SuperChunk::Y> ColumnGenerator::dirtColumn(GLubyte height) {
-        std::array<cube::CubeType, cube::SuperChunk::Y> column = {};
+    ColumnGenerator::Column ColumnGenerator::dirtColumn(GLubyte height) {
+        Column column = {};
         column.fill(cube::CubeType::AIR);
         
         for (GLuint y = 0; y <= height; y++) {
@@ -57,8 +57,8 @@ namespace mastercraft::cube {
     }
     
     
-    std::array<cube::CubeType, cube::SuperChunk::Y> ColumnGenerator::stoneColumn(GLubyte height) {
-        std::array<cube::CubeType, cube::SuperChunk::Y> column = {};
+    ColumnGenerator::Column ColumnGenerator::stoneColumn(GLubyte height) {
+        Column column = {};
         column.fill(cube::CubeType::AIR);
         
         for (GLuint y = 0; y <= height; y++) {
@@ -69,8 +69,8 @@ namespace mastercraft::cube {
     }
     
     
-    std::array<cube::CubeType, cube::SuperChunk::Y> ColumnGenerator::snowColumn(GLubyte height) {
-        std::array<cube::CubeType, cube::SuperChunk::Y> column = {};
+    ColumnGenerator::Column ColumnGenerator::snowColumn(GLubyte height) {
+        Column column = {};
         column.fill(cube::CubeType::AIR);
         
         for (GLuint y = 0; y <= height; y++) {
@@ -86,9 +86,8 @@ namespace mastercraft::cube {
     }
     
     
-    std::array<cube::CubeType, cube::SuperChunk::Y> ColumnGenerator::generateColumn(GLubyte height,
-                                                                                    cube::CubeType type) {
-        std::array<cube::CubeType, cube::SuperChunk::Y> column {};
+    ColumnGenerator::Column ColumnGenerator::generateColumn(GLubyte height, cube::CubeType type) {
+        Column column {};
         
         switch (type) {
             case cube::CubeType::AIR:
@@ -110,8 +109,8 @@ namespace mastercraft::cube {
                 column = snowColumn(height);
                 break;
             case cube::CubeType::WOOD:
-            case cube::CubeType::LEAVE:
-                column.fill(cube::CubeType::AIR);
+            case cube::CubeType::LEAF:
+                throw std::runtime_error("Cannot generate column for biome of type '" + std::to_string(type) + "'.");
         }
         
         return column;

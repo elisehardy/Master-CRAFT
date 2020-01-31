@@ -15,11 +15,11 @@ using Random = effolkronium::random_static;
 namespace mastercraft::game {
     
     ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
-        distanceView(t_distanceView), textureVerticalOffset(0), tick(0), cubeTexture(shader::Texture(t_cubeTexture)) {
+        textureVerticalOffset(0), distanceView(t_distanceView), tick(0), cubeTexture(shader::Texture(t_cubeTexture)) {
     }
     
     
-    glm::ivec3 ChunkManager::getSuperChunkCoordinates(const glm::vec3 &position) {
+    glm::ivec3 ChunkManager::getSuperChunkCoordinates(const glm::vec3 &position) const {
         return glm::ivec3(
             std::floor(position.x / cube::SuperChunk::X) * cube::SuperChunk::X,
             std::floor(position.y / cube::SuperChunk::Y) * cube::SuperChunk::Y,
@@ -28,7 +28,7 @@ namespace mastercraft::game {
     }
     
     
-    std::vector<glm::ivec3> ChunkManager::generateKeys() {
+    void ChunkManager::generateKeys() {
         glm::vec3 camera = Game::getInstance()->camera->getPosition();
         glm::ivec3 position = getSuperChunkCoordinates(camera);
         
@@ -43,7 +43,7 @@ namespace mastercraft::game {
             }
         }
         
-        return keys;
+        this->keys = keys;
     }
     
     
@@ -115,19 +115,53 @@ namespace mastercraft::game {
         this->distanceView = distance;
     }
     
+
+        std::vector<glm::ivec3> ChunkManager::getKeys() const {
+            return this->keys;
+        }
+
+
+        cube::CubeType ChunkManager::get(GLint x, GLint y, GLint z) const {
+            glm::ivec3 superChunk = this->getSuperChunkCoordinates({x, y, z});
+            
+            if (this->chunks.count(superChunk)) {
+                return this->chunks.at(superChunk)->get(x - superChunk.x, y - superChunk.y, z - superChunk.z);
+            }
+            return cube::CubeType::DIRT;
+        }
+    
+    
+    void ChunkManager::init() {
+        this->cubeShader = std::make_unique<shader::ShaderTexture>(
+            "../shader/cube.vs.glsl", "../shader/cube.fs.glsl"
+        );
+        this->cubeShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
+        this->cubeShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
+        this->cubeShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
+        this->cubeShader->addUniform("uChunkPosition", shader::UNIFORM_3_F);
+        this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
+        
+        this->entityShader = std::make_unique<shader::ShaderTexture>(
+            "../shader/entity.vs.glsl", "../shader/entity.fs.glsl"
+        );
+        this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
+        this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
+        this->entityShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
+    }
+    
     
     void ChunkManager::update() {
-        if (++this->tick >= 4) {
+        if (++this->tick >= 2) {
             this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 64;
             this->tick = 0;
         }
         
-        auto keys = generateKeys();
+        generateKeys();
         
         // Delete superChunk outside distanceView
         std::vector<glm::ivec3> toErase;
         for (const auto &entry : this->chunks) {
-            if (!std::count(keys.begin(), keys.end(), entry.first)) {
+            if (!std::count(this->keys.begin(), this->keys.end(), entry.first)) {
                 toErase.push_back(entry.first);
             }
         }
@@ -135,13 +169,12 @@ namespace mastercraft::game {
             this->chunks.erase(key);
         }
         
-        // Add new superChunk that entered distanceView and update every superChunk
-        for (const auto &key : keys) {
+        // Add new superChunk that entered distanceView
+        for (const auto &key : this->keys) {
             if (!this->chunks.count(key)) {
                 this->chunks.emplace(key, this->createSuperChunk(key));
                 this->entities.emplace_back(this->createEntity(key));
             }
-            this->chunks[key]->update();
         }
         
         // Delete entity on superChunk outside distanceView
@@ -156,29 +189,14 @@ namespace mastercraft::game {
             this->entities.erase(this->entities.begin() + index);
         }
         
+        // Update superChunks
+        for (const auto &key : this->keys) {
+            this->chunks[key]->update();
+        }
         // Update entities
         for (const auto &entity : this->entities) {
             entity->update();
         }
-    }
-    
-    
-    void ChunkManager::init() {
-        this->cubeShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/cube.vs.glsl", "../shader/cube.fs.glsl"
-        );
-        this->cubeShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
-        this->cubeShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
-        this->cubeShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
-        this->cubeShader->addUniform("uChunkPosition", shader::UNIFORM_3_F);
-        this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
-    
-        this->entityShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/entity.vs.glsl", "../shader/entity.fs.glsl"
-        );
-        this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
-        this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
-        this->entityShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
     }
     
     
@@ -194,7 +212,8 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->bindTexture(this->cubeTexture);
-        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry){ entry.second->render();});
+        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry){ entry.second->render(false);});
+        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry){ entry.second->render(true);});
         this->cubeShader->unbindTexture();
         this->cubeShader->stop();
         

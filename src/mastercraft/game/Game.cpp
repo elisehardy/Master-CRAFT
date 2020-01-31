@@ -29,19 +29,22 @@ namespace mastercraft::game {
             throw std::runtime_error(reinterpret_cast<const char *>(glewGetErrorString(glewInitError)));
         }
     
-        util::Image *atlas = util::Image::loadPNG("../assets/block/atlas.png", 192, 256);
+        util::Image *atlas = util::Image::loadPNG("../assets/block/atlas.png", 3072, 16384);
         
         this->configManager = std::make_unique<ConfigManager>();
         this->inputManager = std::make_unique<InputManager>();
         this->camera = std::make_unique<Camera>();
         this->chunkManager = std::make_unique<ChunkManager>(atlas, this->configManager->getDistanceView());
-        this->sun = std::make_unique<entity::Sun>(0, 300, 0);
-        
+        this->skybox = std::make_unique<entity::Skybox>();
+        this->sun = std::make_unique<entity::Sun>(1, 0, 0);
         this->chunkManager->init();
         this->configManager->init();
         this->camera->init();
         
         this->lastTick = std::chrono::steady_clock::now();
+        
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     
     
@@ -103,6 +106,7 @@ namespace mastercraft::game {
             this->chunkManager->update();
         }
         this->sun->update();
+        this->skybox->update();
     }
     
     
@@ -110,6 +114,7 @@ namespace mastercraft::game {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
         glDisable(GL_DEPTH_TEST);
+        this->skybox->render();
         this->sun->render();
         glEnable(GL_DEPTH_TEST);
         

@@ -11,6 +11,7 @@
 #include <mastercraft/game/InputManager.hpp>
 #include <mastercraft/game/WindowManager.hpp>
 #include <mastercraft/game/ChunkManager.hpp>
+#include <mastercraft/entity/Skybox.hpp>
 #include <mastercraft/entity/Sun.hpp>
 
 
@@ -30,6 +31,7 @@ namespace mastercraft::game {
             std::unique_ptr<ConfigManager> configManager;
             std::unique_ptr<InputManager> inputManager;
             std::unique_ptr<ChunkManager> chunkManager;
+            std::unique_ptr<entity::Skybox> skybox;
             std::unique_ptr<entity::Sun> sun;
             std::unique_ptr<Camera> camera;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */

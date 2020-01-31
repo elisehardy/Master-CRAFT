@@ -7,6 +7,7 @@
 #include <mastercraft/cube/CubeType.hpp>
 #include <mastercraft/cube/CubeDirection.hpp>
 #include <mastercraft/util/INonCopyable.hpp>
+#include <vector>
 
 
 namespace mastercraft::cube {
@@ -24,27 +25,37 @@ namespace mastercraft::cube {
             static constexpr GLuint VERTEX_ATTR_TEXTURE = 2;
             static constexpr GLuint VERTEX_ATTR_DATA = 3;
         
-            CubeType cubes[X][Y][Z];
-            GLboolean modified;
-            GLuint count;
-            GLuint vbo;
-            GLuint vao;
+            CubeType cubes[X][Y][Z] {};
+            glm::ivec3 position = glm::ivec3(0);
+            GLboolean modified = true;
+            GLuint countAlpha = 0;
+            GLuint vboAlpha = 0;
+            GLuint vaoAlpha = 0;
+            GLuint count = 0;
+            GLuint vbo = 0;
+            GLuint vao = 0;
+        
+            [[nodiscard]] static bool onBorder(GLubyte x, GLubyte y, GLubyte z);
             
-            [[nodiscard]] bool occluded(GLubyte x, GLubyte y, GLubyte z, CubeDirection direction) const;
+            [[nodiscard]] bool occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const;
         
         public:
             
             Chunk();
-        
+            
             ~Chunk();
         
             CubeType get(GLubyte x, GLubyte y, GLubyte z);
             
             void set(GLubyte x, GLubyte y, GLubyte z, CubeType type);
+        
+            void setPosition(const glm::ivec3 &position);
+            
+            void setPosition(GLint x, GLint y, GLint z);
             
             GLuint update();
             
-            GLuint render();
+            GLuint render(bool alpha);
     };
 }
 

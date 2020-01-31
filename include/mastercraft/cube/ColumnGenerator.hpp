@@ -11,18 +11,22 @@
 
 namespace mastercraft::cube {
     
+    
+    
     class ColumnGenerator {
         
         private:
-            static std::array<cube::CubeType, cube::SuperChunk::Y> waterColumn(GLubyte height);
+            typedef std::array<cube::CubeType, cube::SuperChunk::Y> Column;
             
-            static std::array<cube::CubeType, cube::SuperChunk::Y> sandColumn(GLubyte height);
+            static Column waterColumn(GLubyte height);
             
-            static std::array<cube::CubeType, cube::SuperChunk::Y> dirtColumn(GLubyte height);
+            static Column sandColumn(GLubyte height);
             
-            static std::array<cube::CubeType, cube::SuperChunk::Y> stoneColumn(GLubyte height);
+            static Column dirtColumn(GLubyte height);
             
-            static std::array<cube::CubeType, cube::SuperChunk::Y> snowColumn(GLubyte height);
+            static Column stoneColumn(GLubyte height);
+            
+            static Column snowColumn(GLubyte height);
         
         public:
             

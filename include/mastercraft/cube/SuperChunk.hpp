@@ -46,7 +46,7 @@ namespace mastercraft::cube {
             
             GLuint update();
             
-            GLuint render();
+            GLuint render(bool alpha);
     };
 }
 

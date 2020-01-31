@@ -3,7 +3,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <mastercraft/entity/Sun.hpp>
-#include <mastercraft/util/OBJ.hpp>
 #include <mastercraft/game/Game.hpp>
 
 
@@ -30,13 +29,11 @@ namespace mastercraft::entity {
     
     
     GLuint Sun::update() {
-        glm::vec3 camera = game::Game::getInstance()->camera->getPosition();
         glm::vec3 vertices[36];
         
-        this->position = camera + glm::vec3(0, 0, 20);
         
         for (GLuint i = 0; i < 36; i++) {
-            vertices[i] = (this->vertices[i] *5.f + this->position);
+            vertices[i] = (this->vertices[i] * 0.05f + this->position);
         }
         
         // Fill the VBO
@@ -58,7 +55,7 @@ namespace mastercraft::entity {
     
     GLuint Sun::render() {
         game::Game *game = game::Game::getInstance();
-        glm::mat4 MVMatrix = game->camera->getViewMatrix();
+        glm::mat4 MVMatrix = glm::mat4(glm::mat3(game->camera->getViewMatrix())); // Remove translation from the MV
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
         
         this->shader->use();

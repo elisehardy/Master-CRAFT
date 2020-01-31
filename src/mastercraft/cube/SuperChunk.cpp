@@ -10,11 +10,21 @@ namespace mastercraft::cube {
     
     SuperChunk::SuperChunk(glm::ivec3 t_position) :
         position(t_position) {
+        
+        for (GLint x = 0; x < CHUNK_X; x++) {
+            for (GLint y = 0; y < CHUNK_Y; y++) {
+                for (GLint z = 0; z < CHUNK_Z; z++) {
+                    this->chunks[x][y][z].setPosition(
+                        t_position.x + (x * Chunk::X), t_position.y + (y * Chunk::Y), t_position.z + (z * Chunk::Z)
+                    );
+                }
+            }
+        }
     }
     
     
     SuperChunk::SuperChunk(GLuint x, GLuint y, GLuint z) :
-        position(glm::ivec3(x, y, z)) {
+        SuperChunk(glm::ivec3(x, y, z)) {
     }
     
     
@@ -57,7 +67,7 @@ namespace mastercraft::cube {
     }
     
     
-    GLuint SuperChunk::render() {
+    GLuint SuperChunk::render(bool alpha) {
         assert(!modified);
         
         if (this->count == 0) {
@@ -75,7 +85,7 @@ namespace mastercraft::cube {
                         z * Chunk::Z + this->position.z
                     );
                     game->chunkManager->cubeShader->loadUniform("uChunkPosition", glm::value_ptr(position));
-                    this->chunks[x][y][z].render();
+                    this->chunks[x][y][z].render(alpha);
                 }
             }
         }

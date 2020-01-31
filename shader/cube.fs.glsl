@@ -3,7 +3,7 @@
 in vec3 vPosition;
 in vec3 vNormal;
 in vec2 vTexture;
-flat in int vAnimated;
+flat in int vAlpha;
 flat in int vType;
 flat in int vFace;
 
@@ -13,7 +13,7 @@ uniform vec3 uLightPosition;
 uniform int uVerticalOffset;
 uniform sampler2D uTexture;
 
-out vec3 fFragColor;
+out vec4 fFragColor;
 
 
 /**
@@ -25,16 +25,16 @@ out vec3 fFragColor;
  *
  * @return The computed color.
  */
-vec3 computeTextureColor(vec2 fragTexPosition, int fragType, int verticalOffset) {
+vec4 computeTextureColor(vec2 fragTexPosition, int fragType, int verticalOffset) {
     vec2 textureCoordinates = vec2((fragTexPosition.x + float(fragType)) / 6., 0);
 
-    if (vAnimated != 0) {
+    if (vAlpha != 0) {
         textureCoordinates.y = (fragTexPosition.y + float(verticalOffset)) / 64.;
     } else {
         textureCoordinates.y = (fragTexPosition.y + float(vFace)) / 32.;
     }
 
-    return texture(uTexture, textureCoordinates).xyz;
+    return texture(uTexture, textureCoordinates);
 }
 
 /**
@@ -57,9 +57,9 @@ void main() {
     vec3 lightPosition = vec3(1000, 1000, 1000);
     vec3 lightDirection = normalize(lightPosition - vPosition);
 
-    vec3 textureColor = computeTextureColor(vTexture, vType, uVerticalOffset);
-    vec3 diffuse = computeDiffuseLighting(vNormal, lightDirection, lightColor);
+    vec4 textureColor = computeTextureColor(vTexture, vType, uVerticalOffset);
+    vec3 diffuse = vec3(computeDiffuseLighting(vNormal, lightDirection, lightColor));
     vec3 ambient = vec3(0.4);
 
-    fFragColor = (diffuse + ambient) * textureColor;
+    fFragColor = vec4(diffuse + ambient, 1) * textureColor;
 }

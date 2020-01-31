@@ -34,8 +34,9 @@ namespace mastercraft::game {
             std::vector<std::unique_ptr<entity::IEntity>> entities;
             util::SimplexNoise moistureSimplex;
             util::SimplexNoise heightSimplex;
-            GLubyte distanceView;
+            std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
+            GLubyte distanceView;
             GLuint tick;
         
         public:
@@ -45,9 +46,9 @@ namespace mastercraft::game {
         
         private:
             
-            [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::vec3 &position);
+            [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::vec3 &position) const;
             
-            [[nodiscard]] std::vector<glm::ivec3> generateKeys();
+            void generateKeys();
             
             [[nodiscard]] cube::CubeType getBiome(GLubyte height);
             
@@ -64,6 +65,10 @@ namespace mastercraft::game {
             ChunkManager(const util::Image *t_cubeTexture, GLubyte distanceView);
             
             void updateDistanceView(GLubyte distance);
+        
+            [[nodiscard]] std::vector<glm::ivec3> getKeys() const;
+        
+            [[nodiscard]] cube::CubeType get(GLint x, GLint y, GLint z) const;
             
             void init();
             

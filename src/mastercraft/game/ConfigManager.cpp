@@ -12,7 +12,6 @@ namespace mastercraft::game {
         this->setGlewVersion(glewGetString(GLEW_VERSION));
         this->setFaceCulling(true);
         SDL_SetRelativeMouseMode(SDL_TRUE);
-        glCullFace(GL_BACK);
     }
     
     
@@ -114,6 +113,21 @@ namespace mastercraft::game {
     
     void ConfigManager::setTickRate(GLuint tickRate) {
         this->tickRate = tickRate;
+    }
+    
+    
+    GLboolean ConfigManager::isDay() const {
+        return day;
+    }
+    
+    
+    void ConfigManager::setDay(GLboolean day) {
+        this->day = day;
+    }
+    
+    
+    void ConfigManager::switchDay() {
+        this->day = !this->day;
     }
     
     

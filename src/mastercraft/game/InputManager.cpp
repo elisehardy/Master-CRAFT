@@ -35,6 +35,7 @@ namespace mastercraft::game {
         if (InputManager::isKeyPressed(SDL_SCANCODE_ESCAPE)) {
               game->stop();
         }
+        
         if (InputManager::isKeyPressed(SDL_SCANCODE_W) || InputManager::isKeyPressed(SDL_SCANCODE_UP)) {
             game->camera->moveForward(0.6);
         }
@@ -52,6 +53,11 @@ namespace mastercraft::game {
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_SPACE)) {
             game->camera->moveUp(0.6);
+        }
+        
+        
+        if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {
+            game->configManager->switchDay();
         }
     }
     

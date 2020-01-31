@@ -7,22 +7,23 @@
 #include <mastercraft/cube/CubeType.hpp>
 
 
+namespace glm {
+    typedef glm::tvec3<GLbyte> cvec3;
+    typedef glm::tvec2<GLbyte> cvec2;
+}
+
+
 namespace mastercraft::cube {
     
-    typedef glm::tvec3<GLbyte> bvec3;
-    typedef glm::tvec2<GLbyte> bvec2;
-    
-    
-    
     struct CubeVertex {
-        bvec3 vertex;
-        bvec3 normal;
-        bvec2 texture;
+        glm::cvec3 vertex;
+        glm::cvec3 normal;
+        glm::cvec2 texture;
         GLubyte data;
         
         CubeVertex() = default;
         
-        CubeVertex(bvec3 vertex, bvec3 normal, bvec2 texture, GLubyte data = CubeType::AIR);
+        CubeVertex(glm::cvec3 vertex, glm::cvec3 normal, glm::cvec2 texture, GLubyte data = CubeType::AIR);
     };
 }
 #endif // MASTERCRAFT_CUBEVERTEX_HPP

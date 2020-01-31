@@ -3,17 +3,17 @@
 
 namespace mastercraft::cube {
     
-    static constexpr GLubyte ANIMATED = 0b10000000;
+    static constexpr GLubyte TRANSPARENT = 0b10000000;
     
     enum CubeType : GLubyte {
-        AIR = 0,
-        WATER = 1 | ANIMATED,
+        AIR = 0 | TRANSPARENT,
+        WATER = 1 | TRANSPARENT,
         SAND = 2,
         DIRT = 3,
         STONE = 4,
         SNOW = 5,
         WOOD = 6,
-        LEAVE
+        LEAF
     };
 }
 
