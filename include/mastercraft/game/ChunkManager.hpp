@@ -37,7 +37,6 @@ namespace mastercraft::game {
             std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
             GLubyte distanceView;
-            GLuint tick;
         
         public:
             std::unique_ptr<shader::ShaderTexture> entityShader;

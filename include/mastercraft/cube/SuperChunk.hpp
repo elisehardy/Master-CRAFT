@@ -14,7 +14,7 @@ namespace mastercraft::cube {
     class SuperChunk : public util::INonCopyable {
         public:
             static constexpr GLubyte CHUNK_X = 1;
-            static constexpr GLubyte CHUNK_Y = 8;
+            static constexpr GLubyte CHUNK_Y = 18;
             static constexpr GLubyte CHUNK_Z = 1;
             static constexpr GLuint CHUNK_SIZE = CHUNK_X * CHUNK_Y * CHUNK_Z;
             static constexpr GLuint X = Chunk::X * CHUNK_X;

@@ -15,7 +15,7 @@ using Random = effolkronium::random_static;
 namespace mastercraft::game {
     
     ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
-        textureVerticalOffset(0), distanceView(t_distanceView), tick(0), cubeTexture(shader::Texture(t_cubeTexture)) {
+        textureVerticalOffset(0), distanceView(t_distanceView), cubeTexture(shader::Texture(t_cubeTexture)) {
     }
     
     
@@ -54,6 +54,7 @@ namespace mastercraft::game {
         static constexpr GLubyte sandLevel = ConfigManager::GEN_WATER_LEVEL + 3;
         static constexpr GLubyte dirtLevel = sandLevel + 15;
         static constexpr GLubyte stoneLevel = dirtLevel + 5;
+        
         if (height <= ConfigManager::GEN_WATER_LEVEL) {
             return cube::CubeType::WATER;
         }
@@ -89,6 +90,21 @@ namespace mastercraft::game {
             }
         }
         
+        glm::vec3 point;
+        for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
+            for (GLuint y = 0; y < ConfigManager::GEN_MIN_HEIGHT + 10; y++) {
+                for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
+                    cube::CubeType type = chunk->get(x, y, z);
+                    if (type != cube::CubeType::SAND && type != cube::CubeType::WATER) {
+                        point = { position.x + GLint(x), position.y + GLint(y), position.z + GLint(z) };
+                        if (this->moistureSimplex(point) > 0.30f - y * 0.0005f) {
+                            chunk->set(x, y, z, cube::CubeType::AIR);
+                        }
+                    }
+                }
+            }
+        }
+        
         return chunk;
     }
     
@@ -115,20 +131,20 @@ namespace mastercraft::game {
         this->distanceView = distance;
     }
     
-
-        std::vector<glm::ivec3> ChunkManager::getKeys() const {
-            return this->keys;
+    
+    std::vector<glm::ivec3> ChunkManager::getKeys() const {
+        return this->keys;
+    }
+    
+    
+    cube::CubeType ChunkManager::get(GLint x, GLint y, GLint z) const {
+        glm::ivec3 superChunk = this->getSuperChunkCoordinates({ x, y, z });
+        
+        if (this->chunks.count(superChunk)) {
+            return this->chunks.at(superChunk)->get(x - superChunk.x, y - superChunk.y, z - superChunk.z);
         }
-
-
-        cube::CubeType ChunkManager::get(GLint x, GLint y, GLint z) const {
-            glm::ivec3 superChunk = this->getSuperChunkCoordinates({x, y, z});
-            
-            if (this->chunks.count(superChunk)) {
-                return this->chunks.at(superChunk)->get(x - superChunk.x, y - superChunk.y, z - superChunk.z);
-            }
-            return cube::CubeType::DIRT;
-        }
+        return cube::CubeType::DIRT;
+    }
     
     
     void ChunkManager::init() {
@@ -151,10 +167,7 @@ namespace mastercraft::game {
     
     
     void ChunkManager::update() {
-        if (++this->tick >= 2) {
-            this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 64;
-            this->tick = 0;
-        }
+        this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 64;
         
         generateKeys();
         
@@ -212,8 +225,8 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->bindTexture(this->cubeTexture);
-        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry){ entry.second->render(false);});
-        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry){ entry.second->render(true);});
+        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(false); });
+        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(true); });
         this->cubeShader->unbindTexture();
         this->cubeShader->stop();
         

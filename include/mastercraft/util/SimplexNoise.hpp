@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 
 
 namespace mastercraft::util {
@@ -19,6 +20,8 @@ namespace mastercraft::util {
              * @return Result of glm::simplex() narrowed to [0, 1] as a float.
              */
             static GLfloat simplex(const glm::vec2 &p);
+            
+            static GLfloat simplex(const glm::vec3 &p);
             
             /**
              * Convert a value from a range to another range, maintaining the same ratio.
@@ -37,9 +40,13 @@ namespace mastercraft::util {
             
             SimplexNoise();
             
-            GLfloat operator()(const glm::vec2 &position, GLfloat min = 0, GLfloat max = 0);
+            GLfloat operator()(const glm::vec2 &position, GLint min = 0, GLint max = 0);
+            
+            GLfloat operator()(GLfloat x, GLfloat y, GLint min = 0, GLint max = 0);
         
-            GLfloat operator()(GLfloat x, GLfloat y, GLfloat min = 0, GLfloat max = 0);
+            GLfloat operator()(GLfloat x, GLfloat y, GLfloat z);
+            
+            GLfloat operator()(const glm::vec3 &position);
     };
 }
 

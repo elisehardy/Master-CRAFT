@@ -40,7 +40,7 @@ namespace mastercraft::cube {
             y += this->position.y;
             z += this->position.z;
             
-            if (type & CubeType::WATER) {
+            if (type == CubeType::WATER) {
                 switch (direction) {
                     case CubeDirection::FACE:
                         return game->chunkManager->get(x, y, z + 1) != CubeType::AIR;

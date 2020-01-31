@@ -22,7 +22,7 @@ namespace mastercraft::game {
     
     void Camera::computeDirectionVectors() {
         this->frontVector = { cos(this->pitch) * sin(this->yaw), sin(this->pitch), cos(this->pitch) * cos(this->yaw) };
-        this->leftVector = { sin(this->yaw + M_PI_2), 0.f, cos(this->yaw + M_PI_2) };
+        this->leftVector = { sin(this->yaw + M_PI_2f32), 0.f, cos(this->yaw + M_PI_2f32) };
         this->upVector = glm::cross(this->frontVector, this->leftVector);
     }
     

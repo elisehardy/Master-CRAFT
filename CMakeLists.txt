@@ -54,7 +54,7 @@ TARGET_COMPILE_OPTIONS(
     -Wno-effc++
     -Wno-shadow
     -Wno-c++98-compat
-    -Wno-sign-conversion
+#    -Wno-sign-conversion
     -Wno-padded
     -Wno-global-constructors
     -Wno-weak-vtables
@@ -67,8 +67,8 @@ TARGET_COMPILE_OPTIONS(
     -Wno-documentation-unknown-command
     -Wno-documentation
     -Wno-undefined-reinterpret-cast
-    -Wno-implicit-float-conversion
-    -Wno-double-promotion
+#    -Wno-implicit-float-conversion
+#    -Wno-double-promotion
     -Wno-old-style-cast
     -Wno-reserved-id-macro
     -Wno-shorten-64-to-32

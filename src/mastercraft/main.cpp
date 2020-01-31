@@ -4,6 +4,7 @@ using namespace mastercraft;
 
 int main(int argc, char **argv) {
     game::Game *game = game::Game::getInstance();
+    
     game->init();
     
     while (game->isRunning()) {
