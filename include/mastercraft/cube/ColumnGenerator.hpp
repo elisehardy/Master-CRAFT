@@ -32,7 +32,7 @@ namespace mastercraft::cube {
             
             ColumnGenerator() = delete;
             
-            static std::array<cube::CubeType, cube::SuperChunk::Y> generateColumn(GLubyte height, cube::CubeType type);
+            static std::array<cube::CubeType, cube::SuperChunk::Y> generate(GLubyte height, cube::CubeType type);
     };
 }
 

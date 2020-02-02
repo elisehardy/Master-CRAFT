@@ -36,11 +36,11 @@ FILE(GLOB_RECURSE SHADER_FILES ${CMAKE_SOURCE_DIR}/shader/*.glsl)
 
 SET(TARGET_NAME mastercraft)
 ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES})
-TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
+TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} tbb)
 TARGET_COMPILE_OPTIONS(
     ${TARGET_NAME} PRIVATE
     -g
-    -O2
+    -O3
     -Werror
     -Weverything
     -Wfatal-errors
@@ -54,7 +54,7 @@ TARGET_COMPILE_OPTIONS(
     -Wno-effc++
     -Wno-shadow
     -Wno-c++98-compat
-#    -Wno-sign-conversion
+    -Wno-sign-conversion
     -Wno-padded
     -Wno-global-constructors
     -Wno-weak-vtables

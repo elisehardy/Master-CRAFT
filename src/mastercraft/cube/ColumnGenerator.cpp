@@ -86,7 +86,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::generateColumn(GLubyte height, cube::CubeType type) {
+    ColumnGenerator::Column ColumnGenerator::generate(GLubyte height, cube::CubeType type) {
         Column column {};
         
         switch (type) {

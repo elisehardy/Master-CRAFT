@@ -1,12 +1,13 @@
 #include <algorithm>
 #include <iostream>
+#include <execution>
 
 #include <effolkronium/random.hpp>
+#include <glm/ext.hpp>
 
 #include <mastercraft/game/ChunkManager.hpp>
 #include <mastercraft/game/Game.hpp>
 #include <mastercraft/entity/Slime.hpp>
-#include <glm/ext.hpp>
 #include <mastercraft/cube/ColumnGenerator.hpp>
 
 
@@ -15,16 +16,30 @@ using Random = effolkronium::random_static;
 namespace mastercraft::game {
     
     ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
-        textureVerticalOffset(0), distanceView(t_distanceView), cubeTexture(shader::Texture(t_cubeTexture)) {
+        textureVerticalOffset(0), distanceView(t_distanceView),
+        heightNoise({ Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 256.f, 0.5f, 2.f),
+        moistureNoise(
+            { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 2, 1.f, 1 / 512.f, 0.5f, 2.f
+            ),
+        carvingNoise(
+            { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) },
+            3, 1.f, 1 / 64.f, 0.5f, 2.f
+        ),
+        cubeTexture(shader::Texture(t_cubeTexture)) {
     }
     
     
-    glm::ivec3 ChunkManager::getSuperChunkCoordinates(const glm::vec3 &position) const {
+    glm::ivec3 ChunkManager::getSuperChunkCoordinates(const glm::ivec3 &position) const {
         return glm::ivec3(
             std::floor(position.x / cube::SuperChunk::X) * cube::SuperChunk::X,
             std::floor(position.y / cube::SuperChunk::Y) * cube::SuperChunk::Y,
             std::floor(position.z / cube::SuperChunk::Z) * cube::SuperChunk::Z
         );
+    }
+    
+    
+    glm::ivec3 ChunkManager::getSuperChunkCoordinates(GLint x, GLint y, GLint z) const {
+        return getSuperChunkCoordinates({ x, y, z });
     }
     
     
@@ -47,7 +62,7 @@ namespace mastercraft::game {
     }
     
     
-    cube::CubeType ChunkManager::getBiome(GLubyte height) {
+    cube::CubeType ChunkManager::getBiome(GLubyte height, GLubyte moisture) {
         assert(height >= ConfigManager::GEN_MIN_HEIGHT);
         assert(height <= ConfigManager::GEN_MAX_HEIGHT);
         
@@ -73,43 +88,77 @@ namespace mastercraft::game {
     
     cube::SuperChunk *ChunkManager::createSuperChunk(glm::ivec3 position) {
         auto *chunk = new cube::SuperChunk(position);
-        GLubyte height;
+        GLubyte height, moisture;
         cube::CubeType biome;
         
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
-                height = this->heightSimplex(
-                    position.x + GLint(x), position.z + GLint(z), ConfigManager::GEN_MIN_HEIGHT,
+                height = this->heightNoise(
+                    { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
                     ConfigManager::GEN_MAX_HEIGHT
                 );
-                biome = ChunkManager::getBiome(height);
-                auto column = cube::ColumnGenerator::generateColumn(height, biome);
-                for (GLuint y = 0; y < cube::SuperChunk::Y; y++) {
-                    chunk->set(x, y, z, column[y]);
+                height = this->heightNoise(
+                    { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
+                    ConfigManager::GEN_MAX_HEIGHT
+                );
+                for (GLuint y = 0; y <= height; y++) {
+                    chunk->set(x, y, z, cube::CubeType::STONE);
+                }
+                for (GLuint y = height + 1; y < cube::SuperChunk::Y; y++) {
+                    chunk->set(x, y, z, cube::CubeType::AIR);
                 }
             }
         }
         
-        glm::vec3 point;
+        //        glm::vec3 point;
+        //        for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
+        //            for (GLuint y = ConfigManager::GEN_CARVING_HEIGHT; y < ConfigManager::GEN_MAX_HEIGHT; y++) {
+        //                for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
+        //                    point = { position.x + GLint(x), position.y + GLint(y), position.z + GLint(z) };
+        //                    if (this->noise3D(point) > 0.f) {
+        //                        chunk->set(x, y, z, cube::CubeType::AIR);
+        //                    }
+        //                }
+        //            }
+        //        }
+        
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
-            for (GLuint y = 0; y < ConfigManager::GEN_MIN_HEIGHT + 10; y++) {
-                for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
-                    cube::CubeType type = chunk->get(x, y, z);
-                    if (type != cube::CubeType::SAND && type != cube::CubeType::WATER) {
-                        point = { position.x + GLint(x), position.y + GLint(y), position.z + GLint(z) };
-                        if (this->moistureSimplex(point) > 0.30f - y * 0.0005f) {
-                            chunk->set(x, y, z, cube::CubeType::AIR);
+            for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
+                for (GLuint y = ConfigManager::GEN_MAX_HEIGHT; y >= ConfigManager::GEN_MIN_HEIGHT; y--) {
+                    if (chunk->get(x, y, z) != cube::CubeType::AIR) {
+    
+                        moisture = this->moistureNoise(
+                            { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
+                            ConfigManager::GEN_MAX_HEIGHT
+                        );
+                        biome = ChunkManager::getBiome(y, moisture);
+                        auto column = cube::ColumnGenerator::generate(y, biome);
+                        for (GLuint y2 = ConfigManager::GEN_MIN_HEIGHT; y2 <= ConfigManager::GEN_MAX_HEIGHT; y2++) {
+                            chunk->set(x, y2, z, column[y2]);
                         }
+                        
+                        break;
                     }
                 }
             }
         }
         
+        GLint startx = position.x - cube::SuperChunk::X;
+        GLint startz = position.z - cube::SuperChunk::Z;
+        GLint endx = position.x + cube::SuperChunk::X;
+        GLint endz = position.z + cube::SuperChunk::Z;
+        for (GLint x = startx; x <= endx; x += cube::SuperChunk::X) {
+            for (GLint z = startz; z <= endz; z += cube::SuperChunk::Z) {
+                if (this->chunks.count({ x, 0, z })) {
+                    this->chunks.at({ x, 0, z })->touch();
+                }
+            }
+        }
         return chunk;
     }
     
     
-    cube::SuperChunk *ChunkManager::createSuperChunk(GLuint x, GLuint y, GLuint z) {
+    cube::SuperChunk *ChunkManager::createSuperChunk(GLint x, GLint y, GLint z) {
         return createSuperChunk({ x, y, z });
     }
     
@@ -119,11 +168,6 @@ namespace mastercraft::game {
         GLint z = Random::get<GLint>(position.z, position.z + cube::SuperChunk::Z);
         
         return new entity::Slime(x, 100, z);
-    }
-    
-    
-    entity::IEntity *ChunkManager::createEntity(GLuint x, GLuint y, GLuint z) {
-        return createEntity({ x, y, z });
     }
     
     
@@ -137,13 +181,14 @@ namespace mastercraft::game {
     }
     
     
-    cube::CubeType ChunkManager::get(GLint x, GLint y, GLint z) const {
+    cube::CubeType ChunkManager::get(GLint x, GLint y, GLint z) {
         glm::ivec3 superChunk = this->getSuperChunkCoordinates({ x, y, z });
         
         if (this->chunks.count(superChunk)) {
             return this->chunks.at(superChunk)->get(x - superChunk.x, y - superChunk.y, z - superChunk.z);
         }
-        return cube::CubeType::DIRT;
+        
+        return cube::CubeType::STONE;
     }
     
     
@@ -183,33 +228,20 @@ namespace mastercraft::game {
         }
         
         // Add new superChunk that entered distanceView
-        for (const auto &key : this->keys) {
-            if (!this->chunks.count(key)) {
-                this->chunks.emplace(key, this->createSuperChunk(key));
-                this->entities.emplace_back(this->createEntity(key));
+        std::for_each(
+            this->keys.begin(), this->keys.end(),
+            [this](const auto &key) {
+                if (!this->chunks.count(key)) {
+                    this->chunks.emplace(key, this->createSuperChunk(key));
+                }
             }
-        }
-        
-        // Delete entity on superChunk outside distanceView
-        std::vector<GLuint> toErase2;
-        for (GLuint i = 0; i < this->entities.size(); i++) {
-            const auto &key = getSuperChunkCoordinates(this->entities[i]->getPosition());
-            if (!this->chunks.count(key)) {
-                toErase2.push_back(i - toErase2.size());
-            }
-        }
-        for (const auto &index : toErase2) {
-            this->entities.erase(this->entities.begin() + index);
-        }
+        );
         
         // Update superChunks
-        for (const auto &key : this->keys) {
-            this->chunks[key]->update();
-        }
-        // Update entities
-        for (const auto &entity : this->entities) {
-            entity->update();
-        }
+        std::for_each(
+            std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
+            [](const auto &entry) { entry.second->update(); }
+        );
     }
     
     
@@ -225,8 +257,14 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->bindTexture(this->cubeTexture);
-        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(false); });
-        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(true); });
+        std::for_each(
+            std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
+            [](const auto &entry) { entry.second->render(false); }
+        );
+        std::for_each(
+            std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
+            [](const auto &entry) { entry.second->render(true); }
+        );
         this->cubeShader->unbindTexture();
         this->cubeShader->stop();
         

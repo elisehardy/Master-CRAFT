@@ -52,7 +52,9 @@ namespace mastercraft::cube {
             void setPosition(const glm::ivec3 &position);
             
             void setPosition(GLint x, GLint y, GLint z);
-            
+        
+            void touch();
+        
             GLuint update();
             
             GLuint render(bool alpha);

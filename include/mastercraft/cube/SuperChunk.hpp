@@ -12,9 +12,10 @@
 namespace mastercraft::cube {
     
     class SuperChunk : public util::INonCopyable {
+        
         public:
             static constexpr GLubyte CHUNK_X = 1;
-            static constexpr GLubyte CHUNK_Y = 18;
+            static constexpr GLubyte CHUNK_Y = 16;
             static constexpr GLubyte CHUNK_Z = 1;
             static constexpr GLuint CHUNK_SIZE = CHUNK_X * CHUNK_Y * CHUNK_Z;
             static constexpr GLuint X = Chunk::X * CHUNK_X;
@@ -22,7 +23,7 @@ namespace mastercraft::cube {
             static constexpr GLuint Z = Chunk::Z * CHUNK_Z;
             static constexpr GLuint SIZE = CHUNK_SIZE * Chunk::SIZE;
             
-            static_assert(game::ConfigManager::GEN_MAX_HEIGHT < Y);
+            static_assert(game::ConfigManager::GEN_MAX_HEIGHT <= Y);
         
         private:
             Chunk chunks[CHUNK_X][CHUNK_Y][CHUNK_Z];
@@ -39,10 +40,12 @@ namespace mastercraft::cube {
             SuperChunk(GLuint x, GLuint y, GLuint z);
             
             ~SuperChunk() = default;
-        
+            
             CubeType get(GLuint x, GLuint y, GLuint z);
             
             void set(GLuint x, GLuint y, GLuint z, CubeType type);
+            
+            void touch();
             
             GLuint update();
             
