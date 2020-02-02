@@ -3,8 +3,9 @@
 #include <iostream>
 #include <mastercraft/game/Game.hpp>
 #include <mastercraft/util/AStarNew.hpp>
+#include <effolkronium/random.hpp>
 
-
+using Random = effolkronium::random_static;
 
 namespace mastercraft::entity {
     
@@ -17,10 +18,25 @@ namespace mastercraft::entity {
     
     
     Slime::Slime(GLfloat x, GLfloat y, GLfloat z) :
-        IEntity(util::Image::loadPNG("../assets/entity/slime/slime.png", 250, 253), { x, y, z }, 0) {
+        IEntity(util::Image::loadPNG("../assets/entity/slime/slime.png", 250, 253), { x, y, z }, 0){
         this->vertices = util::OBJ::Load("../assets/entity/slime/slime.obj");
         glGenBuffers(1, &this->vbo);
-        glGenVertexArrays(1, &this->vao);
+        glGenVertexArrays(1, &this->vao); /*if(this->position == this->destination){
+            std::cout << "=======" << std::endl;
+            //int max = 0;
+
+            auto v = entity::Slime::generateDest();
+            while(!(util::cell::sameChunk(v, this->position))){
+                std::cout << "nope" << std::endl;
+                v = entity::Slime::generateDest();
+
+            }
+
+            std::cout << "this->position " << this->position.x << " " << this->position.y << " " << this->position.z << std::endl;
+            std::cout << "dest " << v.x << " " << v.y << " " << v.z << std::endl;
+
+            auto pathGenerate = util::cell::aStarSearch( this->position, v);
+        }*/
     }
     
     
@@ -31,22 +47,58 @@ namespace mastercraft::entity {
     
     
     GLuint Slime::update() {
-        if(this->position == this->destination){
-            auto v = entity::Slime::generateDest(position.x, position.x+16, position.z, position.z+16);
 
+        if(cout != 0){
+            if(flag == 1 && (Slime::canHop() != -1)){
+                this->position = walk();
+                cout--;
+            }else{
+                dir = Random::get(-2,2);
+                cout --;
+            }
+        }else{
+            flag = Random::get(0,1);
+            if(flag){
+                cout = Random::get(0,12);
+            }
+            else{
+                cout = Random::get(0, 3);
+            }
+
+        }
+
+       /* if(this->position == this->destination){
+            std::cout << "=======" << std::endl;
+            //int max = 0;
+
+            auto v = entity::Slime::generateDest();
+            while(!(util::cell::sameChunk(v, this->position))){
+                std::cout << "nope" << std::endl;
+                v = entity::Slime::generateDest();
+
+            }
+            std::cout << "ssssssssssssssssss" << std::endl;
+
+            std::cout << "thi->position " << this->position.x << " " << this->position.y << " " << this->position.z << std::endl;
+            std::cout << " v " << v.x << " " << v.y << " " << v.z << std::endl;
 
             auto pathGenerate = util::cell::aStarSearch( this->position, v);
 
-            while(pathGenerate.empty()){
-                v = entity::Slime::generateDest(position.x, position.x+16, position.z, position.z+16);
+            *//*while(pathGenerate.empty() && max < 200){
+                v = entity::Slime::generateDest();
                 pathGenerate = util::cell::aStarSearch(this->position, v);
-
+                max ++;
             }
-            this->path = pathGenerate;
-        }
-        if(this->position != this->destination){
-            this->position = this->path.top();
-        }
+            this->path = pathGenerate;*//*
+        }*/
+      /*  if(this->position != this->destination) {
+            std::cout << "difff" << std::endl;
+
+            if (!this->path.empty()) {
+                this->position = glm::vec3(this->path.top().x, this->path.top().y,
+                                           this->path.top().z);
+            }
+        }*/
 
 
 
@@ -82,7 +134,7 @@ namespace mastercraft::entity {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-        this->path.pop();
+        //this->path.pop();
         
         return 1;
     }
@@ -99,13 +151,96 @@ namespace mastercraft::entity {
         return 1;
     }
 
-    glm::vec3 Slime::generateDest(int maxX, int minX, int maxY, int minY){
+    glm::vec3 Slime::generateDest(){
         game::Game *game = game::Game::getInstance();
-        auto x = rand()%(maxX-minX+1) + minX;
-        auto y = rand()%(maxY-minY+1) + minY;
-        auto z = game->chunkManager->heightSimplex(
-                x, y, game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT);
+        auto coord = game->chunkManager->getSuperChunkCoordinates(this->position);
+        auto x = Random::get(coord.x, coord.x+15);
+        auto z = Random::get(coord.z, coord.z+15);
+        auto y = game->chunkManager->heightSimplex(
+                x, z, game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT);
         return glm::vec3(x, y, z);
     }
 
+    glm::vec3 Slime::walk(){
+        game::Game *game = game::Game::getInstance();
+
+        switch (this->dir) {
+            case 1:{
+                return glm::vec3(this->position.x + 1, game->chunkManager->heightSimplex(
+                        this->position.x+1, this->position.z, game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z);
+            }
+            case -1:{
+                return glm::vec3(this->position.x - 1, game->chunkManager->heightSimplex(
+                        this->position.x-1, this->position.z, game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z);
+            }
+            case 2:{
+                return glm::vec3(this->position.x , game->chunkManager->heightSimplex(
+                        this->position.x, this->position.z+1, game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z+1);
+            }
+            case -2:{
+                return glm::vec3(this->position.x, game->chunkManager->heightSimplex(
+                        this->position.x, this->position.z-1, game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z-1);
+            }
+            default:{
+                return this->position;
+            }
+        }
+    }
+
+    int Slime::canHop(){
+        game::Game *game = game::Game::getInstance();
+        switch (this->dir) {
+            case 1:{
+                int h = abs(game->chunkManager->heightSimplex(
+                        this->position.x+1, this->position.z,
+                        game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2) {
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            case -1:{
+                int h = abs(game->chunkManager->heightSimplex(
+                        this->position.x-1, this->position.z,
+                        game::ConfigManager::GEN_MIN_HEIGHT,
+                game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2){
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            case 2:{
+                int h = abs(game->chunkManager->heightSimplex(
+                        this->position.x, this->position.z+1,
+                        game::ConfigManager::GEN_MIN_HEIGHT,
+                game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2){
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            case -2:{
+                int h = abs(game->chunkManager->heightSimplex(
+                        this->position.x, this->position.z-1,
+                        game::ConfigManager::GEN_MIN_HEIGHT,
+                game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2){
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            default:{
+                return -1;
+            }
+        }
+    }
 }

@@ -22,7 +22,10 @@ namespace mastercraft::entity {
             std::vector<EntityVertex> vertices;
             GLuint vbo;
             GLuint vao;
-        
+            int flag=0;
+            int cout = 0;
+            int dir = 0;
+
         public:
             
             explicit Slime(const glm::vec3 &position);
@@ -35,7 +38,10 @@ namespace mastercraft::entity {
             
             GLuint render() final;
 
-           static  glm::vec3 generateDest(int maxX, int minX, int maxY, int minY);
+            glm::vec3 generateDest();
+
+            glm::vec3 walk();
+            int canHop();
 
         };
 }

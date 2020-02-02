@@ -27,9 +27,10 @@ namespace mastercraft::game {
         ),
         cubeTexture(shader::Texture(t_cubeTexture)) {
     }
-    
+
     
     glm::ivec3 ChunkManager::getSuperChunkCoordinates(const glm::ivec3 &position) const {
+
 
         return glm::ivec3(
             std::floor(position.x / cube::SuperChunk::X) * cube::SuperChunk::X,
@@ -37,7 +38,7 @@ namespace mastercraft::game {
             std::floor(position.z / cube::SuperChunk::Z) * cube::SuperChunk::Z
         );
     }
-    
+
     
     glm::ivec3 ChunkManager::getSuperChunkCoordinates(GLint x, GLint y, GLint z) const {
         return getSuperChunkCoordinates({ x, y, z });
@@ -45,9 +46,10 @@ namespace mastercraft::game {
     
     
     void ChunkManager::generateKeys() {
+
         glm::vec3 camera = Game::getInstance()->camera->getPosition();
         glm::ivec3 position = getSuperChunkCoordinates(camera);
-        
+
         GLint startx = position.x - distanceView * cube::SuperChunk::X;
         GLint startz = position.z - distanceView * cube::SuperChunk::Z;
         GLint endx = position.x + distanceView * cube::SuperChunk::X;
@@ -58,21 +60,22 @@ namespace mastercraft::game {
                 keys.emplace_back(x, 0, z);
             }
         }
-        
+
         this->keys = keys;
+
     }
 
-    
-    
+
     cube::CubeType ChunkManager::getBiome(GLubyte height, GLubyte moisture) {
         assert(height >= ConfigManager::GEN_MIN_HEIGHT);
         assert(height <= ConfigManager::GEN_MAX_HEIGHT);
-        
+
         static constexpr GLubyte sandLevel = ConfigManager::GEN_WATER_LEVEL + 3;
         static constexpr GLubyte dirtLevel = sandLevel + 15;
         static constexpr GLubyte stoneLevel = dirtLevel + 5;
         
         if (height <= ConfigManager::GEN_WATER_LEVEL) {
+
             return cube::CubeType::WATER;
         }
         if (height <= sandLevel) {
@@ -86,13 +89,13 @@ namespace mastercraft::game {
         }
         return cube::CubeType::SNOW;
     }
-    
-    
+
+
     cube::SuperChunk *ChunkManager::createSuperChunk(glm::ivec3 position) {
         auto *chunk = new cube::SuperChunk(position);
         GLubyte height, moisture;
         cube::CubeType biome;
-        
+
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
                 height = this->heightNoise(
@@ -145,7 +148,7 @@ namespace mastercraft::game {
                 }
             }
         }
-        
+
         GLint startx = position.x - cube::SuperChunk::X;
         GLint startz = position.z - cube::SuperChunk::Z;
         GLint endx = position.x + cube::SuperChunk::X;
@@ -162,10 +165,11 @@ namespace mastercraft::game {
     
     
     cube::SuperChunk *ChunkManager::createSuperChunk(GLint x, GLint y, GLint z) {
+
         return createSuperChunk({ x, y, z });
     }
-    
-    
+
+
     entity::IEntity *ChunkManager::createEntity(glm::ivec3 position) {
         GLint x = Random::get<GLint>(position.x, position.x + cube::SuperChunk::X);
         GLint z = Random::get<GLint>(position.z, position.z + cube::SuperChunk::Z);
@@ -173,7 +177,7 @@ namespace mastercraft::game {
         return new entity::Slime(x, this->heightSimplex(
                 x , z , game::ConfigManager::GEN_MIN_HEIGHT, game::ConfigManager::GEN_MAX_HEIGHT), z);
     }
-    
+
     
     void ChunkManager::updateDistanceView(GLubyte distance) {
         this->distanceView = distance;
@@ -220,6 +224,7 @@ namespace mastercraft::game {
         
         generateKeys();
         
+
         // Delete superChunk outside distanceView
         std::vector<glm::ivec3> toErase;
         for (const auto &entry : this->chunks) {
@@ -230,7 +235,7 @@ namespace mastercraft::game {
         for (const auto &key : toErase) {
             this->chunks.erase(key);
         }
-        
+
         // Add new superChunk that entered distanceView
         std::for_each(
             this->keys.begin(), this->keys.end(),
@@ -246,9 +251,9 @@ namespace mastercraft::game {
             std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
             [](const auto &entry) { entry.second->update(); }
         );
+
     }
-    
-    
+
     void ChunkManager::render() {
         Game *game = Game::getInstance();
         glm::mat4 MVMatrix = game->camera->getViewMatrix();
@@ -276,6 +281,7 @@ namespace mastercraft::game {
         this->entityShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
         this->entityShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->entityShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
+
         for (const auto &entity : this->entities) {
             entity->render();
         }

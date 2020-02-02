@@ -19,7 +19,7 @@ namespace mastercraft::entity {
             glm::vec3 position;
             glm::vec3 destination;
             GLfloat rotation;
-            std::stack<glm::vec3> path;
+            std::stack<glm::dvec4> path;
             
         public:
             IEntity(const util::Image *t_texture, const glm::vec3 &position, GLfloat rotation);
@@ -32,7 +32,7 @@ namespace mastercraft::entity {
             
             [[nodiscard]] glm::vec3 getPosition() const;
 
-            void setPath(std::stack<util::triplet<int, int, int>> pathGenerate);
+
     };
 }
 

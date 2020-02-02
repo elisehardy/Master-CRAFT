@@ -53,6 +53,7 @@ TARGET_COMPILE_OPTIONS(
 # Disable some warnings
 TARGET_COMPILE_OPTIONS(
 <<<<<<< HEAD
+<<<<<<< HEAD
     ${TARGET_NAME} PRIVATE
     -Wno-unused-parameter
     -Wno-effc++
@@ -82,6 +83,39 @@ TARGET_COMPILE_OPTIONS(
     -Wno-conversion
     -Wno-unused-exception-parameter
     -Wno-c++98-c++11-compat-binary-literal
+=======
+        ${TARGET_NAME} PRIVATE
+        -std=c++17
+        -Wno-unused-parameter
+        -Wno-effc++
+        -Wno-shadow
+        -Wno-c++98-compat
+        -Wno-sign-conversion
+        -Wno-padded
+        -Wno-global-constructors
+        -Wno-weak-vtables
+        -Wno-exit-time-destructors
+        -Wno-c++11-narrowing
+        -Wno-unneeded-internal-declaration
+        -Wno-float-conversion
+        -Wno-unused-template
+        -Wno-documentation-unknown-command
+        -Wno-documentation
+        -Wno-undefined-reinterpret-cast
+        -Wno-implicit-float-conversion
+        -Wno-double-promotion
+        -Wno-old-style-cast
+        -Wno-reserved-id-macro
+        -Wno-shorten-64-to-32
+        -Wno-cast-qual
+        -Wno-disabled-macro-expansion
+        -Wno-comma
+        -Wno-unknown-warning-option
+        -Wno-conversion
+        -Wno-deprecated
+        -Wno-unused-exception-parameter
+        -Wno-unused-variable
+>>>>>>> move slime
 )
 
 
