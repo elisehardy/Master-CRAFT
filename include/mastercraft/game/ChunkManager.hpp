@@ -44,7 +44,7 @@ namespace mastercraft::game {
             GLuint textureVerticalOffset;
             GLubyte distanceView;
             Noise2D heightNoise;
-            Noise2D moistureNoise;
+            Noise2D temperatureNoise;
             Noise3D carvingNoise;
         
         public:
@@ -56,7 +56,7 @@ namespace mastercraft::game {
             
             void generateKeys();
             
-            [[nodiscard]] cube::CubeType getBiome(GLubyte height, GLubyte moisture);
+            [[nodiscard]] cube::CubeType getBiome(GLubyte height, float temperature);
             
             [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::ivec3 &position) const;
             

@@ -5,7 +5,7 @@
 
 namespace mastercraft::cube {
     
-    CubeFace cube::CubeFace::face(GLubyte x, GLubyte y, GLubyte z, GLubyte data) {
+    CubeFace cube::CubeFace::face(GLubyte x, GLubyte y, GLubyte z, GLushort data) {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
@@ -22,7 +22,7 @@ namespace mastercraft::cube {
     }
     
     
-    CubeFace CubeFace::top(GLubyte x, GLubyte y, GLubyte z, GLubyte data) {
+    CubeFace CubeFace::top(GLubyte x, GLubyte y, GLubyte z, GLushort data) {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
@@ -39,7 +39,7 @@ namespace mastercraft::cube {
     }
     
     
-    CubeFace CubeFace::back(GLubyte x, GLubyte y, GLubyte z, GLubyte data) {
+    CubeFace CubeFace::back(GLubyte x, GLubyte y, GLubyte z, GLushort data) {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
@@ -56,7 +56,7 @@ namespace mastercraft::cube {
     }
     
     
-    CubeFace CubeFace::bottom(GLubyte x, GLubyte y, GLubyte z, GLubyte data) {
+    CubeFace CubeFace::bottom(GLubyte x, GLubyte y, GLubyte z, GLushort data) {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
@@ -73,7 +73,7 @@ namespace mastercraft::cube {
     }
     
     
-    CubeFace CubeFace::left(GLubyte x, GLubyte y, GLubyte z, GLubyte data) {
+    CubeFace CubeFace::left(GLubyte x, GLubyte y, GLubyte z, GLushort data) {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
@@ -90,7 +90,7 @@ namespace mastercraft::cube {
     }
     
     
-    CubeFace CubeFace::right(GLubyte x, GLubyte y, GLubyte z, GLubyte data) {
+    CubeFace CubeFace::right(GLubyte x, GLubyte y, GLubyte z, GLushort data) {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {

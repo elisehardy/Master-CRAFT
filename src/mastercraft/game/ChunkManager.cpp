@@ -9,6 +9,7 @@
 #include <mastercraft/game/Game.hpp>
 #include <mastercraft/entity/Slime.hpp>
 #include <mastercraft/cube/ColumnGenerator.hpp>
+#include <mastercraft/cube/TreeGenerator.hpp>
 
 
 using Random = effolkronium::random_static;
@@ -18,9 +19,9 @@ namespace mastercraft::game {
     ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
         textureVerticalOffset(0), distanceView(t_distanceView),
         heightNoise({ Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 256.f, 0.5f, 2.f),
-        moistureNoise(
-            { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 2, 1.f, 1 / 512.f, 0.5f, 2.f
-            ),
+        temperatureNoise(
+            { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 512.f, 0.5f, 2.f
+        ),
         carvingNoise(
             { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) },
             3, 1.f, 1 / 64.f, 0.5f, 2.f
@@ -62,41 +63,84 @@ namespace mastercraft::game {
     }
     
     
-    cube::CubeType ChunkManager::getBiome(GLubyte height, GLubyte moisture) {
+    cube::CubeType ChunkManager::getBiome(GLubyte height, float temperature) {
         assert(height >= ConfigManager::GEN_MIN_HEIGHT);
         assert(height <= ConfigManager::GEN_MAX_HEIGHT);
         
         static constexpr GLubyte sandLevel = ConfigManager::GEN_WATER_LEVEL + 3;
-        static constexpr GLubyte dirtLevel = sandLevel + 15;
-        static constexpr GLubyte stoneLevel = dirtLevel + 5;
+        static constexpr GLubyte dirtLevel = sandLevel + 18;
+        static constexpr GLubyte stoneLevel = dirtLevel + 4;
         
+        if (temperature < -0.30f) { // Snow biome
+            if (height <= ConfigManager::GEN_WATER_LEVEL) {
+                return cube::CubeType::ICE;
+            }
+            if (height <= sandLevel) {
+                return cube::CubeType::SNOW;
+            }
+            if (height <= dirtLevel) {
+                return cube::CubeType::DIRT_SNOW;
+            }
+            if (height <= stoneLevel) {
+                return cube::CubeType::STONE_SNOW;
+            }
+            return cube::CubeType::SNOW;
+        }
+        else if (temperature < -0.125f || (temperature > 0.125f && temperature < 0.30f)) { // Plain biome
+            if (height <= ConfigManager::GEN_WATER_LEVEL) {
+                return cube::CubeType::WATER;
+            }
+            if (height <= sandLevel) {
+                return cube::CubeType::SAND_BEACH;
+            }
+            if (height <= dirtLevel) {
+                return cube::CubeType::DIRT_PLAIN;
+            }
+            if (height <= stoneLevel) {
+                return cube::CubeType::STONE;
+            }
+            return cube::CubeType::STONE_SNOW;
+        }
+        else if (temperature < 0.125f) { // Jungle biome
+            if (height <= ConfigManager::GEN_WATER_LEVEL) {
+                return cube::CubeType::WATER;
+            }
+            if (height <= sandLevel) {
+                return cube::CubeType::DIRT_JUNGLE;
+            }
+            if (height <= dirtLevel) {
+                return cube::CubeType::DIRT_JUNGLE;
+            }
+            if (height <= stoneLevel) {
+                return cube::CubeType::STONE;
+            }
+            return cube::CubeType::STONE;
+        }
+        // Desert biome
         if (height <= ConfigManager::GEN_WATER_LEVEL) {
             return cube::CubeType::WATER;
         }
         if (height <= sandLevel) {
-            return cube::CubeType::SAND;
+            return cube::CubeType::SAND_BEACH;
         }
         if (height <= dirtLevel) {
-            return cube::CubeType::DIRT;
+            return cube::CubeType::SAND_DESERT;
         }
         if (height <= stoneLevel) {
-            return cube::CubeType::STONE;
+            return cube::CubeType::SAND_DESERT;
         }
-        return cube::CubeType::SNOW;
+        return cube::CubeType::STONE;
     }
     
     
     cube::SuperChunk *ChunkManager::createSuperChunk(glm::ivec3 position) {
         auto *chunk = new cube::SuperChunk(position);
-        GLubyte height, moisture;
         cube::CubeType biome;
+        float temperature;
+        GLubyte height;
         
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
-                height = this->heightNoise(
-                    { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
-                    ConfigManager::GEN_MAX_HEIGHT
-                );
                 height = this->heightNoise(
                     { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
                     ConfigManager::GEN_MAX_HEIGHT
@@ -126,16 +170,19 @@ namespace mastercraft::game {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
                 for (GLuint y = ConfigManager::GEN_MAX_HEIGHT; y >= ConfigManager::GEN_MIN_HEIGHT; y--) {
                     if (chunk->get(x, y, z) != cube::CubeType::AIR) {
-    
-                        moisture = this->moistureNoise(
-                            { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
-                            ConfigManager::GEN_MAX_HEIGHT
-                        );
-                        biome = ChunkManager::getBiome(y, moisture);
+                        
+                        temperature = this->temperatureNoise({ position.x + GLint(x), position.z + GLint(z) });
+                        biome = ChunkManager::getBiome(y, temperature);
                         auto column = cube::ColumnGenerator::generate(y, biome);
                         for (GLuint y2 = ConfigManager::GEN_MIN_HEIGHT; y2 <= ConfigManager::GEN_MAX_HEIGHT; y2++) {
                             chunk->set(x, y2, z, column[y2]);
                         }
+                        
+                        auto tree = cube::TreeGenerator::generate({ x, y, z }, biome);
+                        std::for_each(
+                            tree.begin(), tree.end(),
+                            [&chunk](const auto &e) { chunk->set(e.first.x, e.first.y, e.first.z, e.second); }
+                        );
                         
                         break;
                     }
@@ -261,10 +308,12 @@ namespace mastercraft::game {
             std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
             [](const auto &entry) { entry.second->render(false); }
         );
+        glDisable(GL_CULL_FACE);
         std::for_each(
             std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
             [](const auto &entry) { entry.second->render(true); }
         );
+        glEnable(GL_CULL_FACE);
         this->cubeShader->unbindTexture();
         this->cubeShader->stop();
         

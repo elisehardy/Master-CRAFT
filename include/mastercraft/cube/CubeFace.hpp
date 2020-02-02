@@ -23,17 +23,17 @@ namespace mastercraft::cube {
         
         CubeFace() = default;
         
-        [[nodiscard]] static CubeFace face(GLubyte x, GLubyte y, GLubyte z, GLubyte type);
+        [[nodiscard]] static CubeFace face(GLubyte x, GLubyte y, GLubyte z, GLushort data);
         
-        [[nodiscard]] static CubeFace top(GLubyte x, GLubyte y, GLubyte z, GLubyte type);
+        [[nodiscard]] static CubeFace top(GLubyte x, GLubyte y, GLubyte z, GLushort data);
         
-        [[nodiscard]] static CubeFace back(GLubyte x, GLubyte y, GLubyte z, GLubyte type);
+        [[nodiscard]] static CubeFace back(GLubyte x, GLubyte y, GLubyte z, GLushort data);
         
-        [[nodiscard]] static CubeFace bottom(GLubyte x, GLubyte y, GLubyte z, GLubyte type);
+        [[nodiscard]] static CubeFace bottom(GLubyte x, GLubyte y, GLubyte z, GLushort data);
         
-        [[nodiscard]] static CubeFace left(GLubyte x, GLubyte y, GLubyte z, GLubyte type);
+        [[nodiscard]] static CubeFace left(GLubyte x, GLubyte y, GLubyte z, GLushort data);
         
-        [[nodiscard]] static CubeFace right(GLubyte x, GLubyte y, GLubyte z, GLubyte type);
+        [[nodiscard]] static CubeFace right(GLubyte x, GLubyte y, GLubyte z, GLushort data);
     };
 }
 

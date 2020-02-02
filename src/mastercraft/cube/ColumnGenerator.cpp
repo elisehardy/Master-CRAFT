@@ -12,7 +12,7 @@ namespace mastercraft::cube {
                 column[y] = cube::CubeType::STONE;
             }
             else if (y < height) {
-                column[y] = cube::CubeType::SAND;
+                column[y] = cube::CubeType::SAND_BEACH;
             }
             else {
                 column[y] = cube::CubeType::WATER;
@@ -23,7 +23,30 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::sandColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::iceColumn(GLubyte height) {
+        Column column = {};
+        column.fill(cube::CubeType::AIR);
+    
+        for (GLuint y = 0; y <= game::ConfigManager::GEN_WATER_LEVEL + 1; y++) {
+            if (y < height - 3) {
+                column[y] = cube::CubeType::STONE;
+            }
+            else if (y < height) {
+                column[y] = cube::CubeType::SNOW;
+            }
+            else if (y == game::ConfigManager::GEN_WATER_LEVEL + 1) {
+                column[y] = cube::CubeType::ICE;
+            }
+            else {
+                column[y] = cube::CubeType::WATER;
+            }
+        }
+    
+        return column;
+    }
+    
+    
+    ColumnGenerator::Column ColumnGenerator::sandBeachColumn(GLubyte height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -32,7 +55,7 @@ namespace mastercraft::cube {
                 column[y] = cube::CubeType::STONE;
             }
             else {
-                column[y] = cube::CubeType::SAND;
+                column[y] = cube::CubeType::SAND_BEACH;
             }
         }
         
@@ -40,16 +63,33 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::dirtColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::sandDesertColumn(GLubyte height) {
+        Column column = {};
+        column.fill(cube::CubeType::AIR);
+    
+        for (GLuint y = 0; y <= height; y++) {
+            if (y < height - 5) {
+                column[y] = cube::CubeType::STONE;
+            }
+            else {
+                column[y] = cube::CubeType::SAND_DESERT;
+            }
+        }
+    
+        return column;
+    }
+    
+    
+    ColumnGenerator::Column ColumnGenerator::snowColumn(GLubyte height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
         for (GLuint y = 0; y <= height; y++) {
-            if (y < height - 2) {
+            if (y < height - 3) {
                 column[y] = cube::CubeType::STONE;
             }
             else {
-                column[y] = cube::CubeType::DIRT;
+                column[y] = cube::CubeType::SNOW;
             }
         }
         
@@ -69,16 +109,65 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::snowColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::stoneSnowColumn(GLubyte height) {
+        Column column = {};
+        column.fill(cube::CubeType::AIR);
+    
+        for (GLuint y = 0; y <= height; y++) {
+            if (y < height - 2) {
+                column[y] = cube::CubeType::STONE;
+            }
+            else {
+                column[y] = cube::CubeType::STONE_SNOW;
+            }
+        }
+    
+        return column;
+    }
+    
+    
+    ColumnGenerator::Column ColumnGenerator::dirtPlainColumn(GLubyte height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
         for (GLuint y = 0; y <= height; y++) {
-            if (y < height - 1) {
+            if (y < height - 3) {
                 column[y] = cube::CubeType::STONE;
             }
             else {
-                column[y] = cube::CubeType::SNOW;
+                column[y] = cube::CubeType::DIRT_PLAIN;
+            }
+        }
+        
+        return column;
+    }
+    
+    ColumnGenerator::Column ColumnGenerator::dirtJungleColumn(GLubyte height) {
+        Column column = {};
+        column.fill(cube::CubeType::AIR);
+        
+        for (GLuint y = 0; y <= height; y++) {
+            if (y < height - 3) {
+                column[y] = cube::CubeType::STONE;
+            }
+            else {
+                column[y] = cube::CubeType::DIRT_JUNGLE;
+            }
+        }
+        
+        return column;
+    }
+    
+    ColumnGenerator::Column ColumnGenerator::dirtSnowColumn(GLubyte height) {
+        Column column = {};
+        column.fill(cube::CubeType::AIR);
+        
+        for (GLuint y = 0; y <= height; y++) {
+            if (y < height - 3) {
+                column[y] = cube::CubeType::STONE;
+            }
+            else {
+                column[y] = cube::CubeType::DIRT_SNOW;
             }
         }
         
@@ -87,32 +176,37 @@ namespace mastercraft::cube {
     
     
     ColumnGenerator::Column ColumnGenerator::generate(GLubyte height, cube::CubeType type) {
-        Column column {};
-        
         switch (type) {
-            case cube::CubeType::AIR:
-                column.fill(cube::CubeType::AIR);
-                break;
-            case cube::CubeType::WATER:
-                column = waterColumn(height);
-                break;
-            case cube::CubeType::SAND:
-                column = sandColumn(height);
-                break;
-            case cube::CubeType::DIRT:
-                column = dirtColumn(height);
-                break;
-            case cube::CubeType::STONE:
-                column = stoneColumn(height);
-                break;
-            case cube::CubeType::SNOW:
-                column = snowColumn(height);
-                break;
-            case cube::CubeType::WOOD:
-            case cube::CubeType::LEAF:
+            case WATER:
+                return waterColumn(height);
+            case ICE:
+                return iceColumn(height);
+            case SAND_BEACH:
+                return sandBeachColumn(height);
+            case SAND_DESERT:
+                return sandDesertColumn(height);
+            case SNOW:
+                return snowColumn(height);
+            case STONE:
+                return stoneColumn(height);
+            case STONE_SNOW:
+                return stoneSnowColumn(height);
+            case DIRT_PLAIN:
+                return dirtPlainColumn(height);
+            case DIRT_JUNGLE:
+                return dirtJungleColumn(height);
+            case DIRT_SNOW:
+                return dirtSnowColumn(height);
+            case AIR:
+            case WOOD_PLAIN:
+            case FLOWERS:
+            case WOOD_JUNGLE:
+            case WOOD_SNOW:
+            case CACTUS:
+            case LEAVES_PLAIN:
+            case LEAVES_JUNGLE:
+            case LEAVES_SNOW:
                 throw std::runtime_error("Cannot generate column for biome of type '" + std::to_string(type) + "'.");
         }
-        
-        return column;
     }
 }

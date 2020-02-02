@@ -153,6 +153,7 @@ namespace mastercraft::cube {
             for (GLubyte z = 0; z < Z; z++) {
                 for (GLshort y = Y - 1; y >= 0 ; y--) {
                     type = this->cubes[x][y][z];
+                    
                     if (type == CubeType::AIR) {
                         opaqueAbove = false;
                         continue;
@@ -261,7 +262,7 @@ namespace mastercraft::cube {
             (const GLvoid *) (offsetof(cube::CubeVertex, texture))
         );
         glVertexAttribIPointer(
-            VERTEX_ATTR_DATA, 1, GL_BYTE, sizeof(cube::CubeVertex),
+            VERTEX_ATTR_DATA, 1, GL_UNSIGNED_SHORT, sizeof(cube::CubeVertex),
             (const GLvoid *) (offsetof(cube::CubeVertex, data))
         );
         glBindBuffer(GL_ARRAY_BUFFER, 0);

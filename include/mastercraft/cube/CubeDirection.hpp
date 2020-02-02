@@ -3,13 +3,13 @@
 
 namespace mastercraft::cube {
     
-    enum CubeDirection : GLubyte {
-        TOP = 0 << 4,
-        FACE = 1 << 4,
-        RIGHT = 2 << 4,
-        BACK = 3 << 4,
-        LEFT = 4 << 4,
-        BOTTOM = 5 << 4
+    enum CubeDirection : GLushort {
+        TOP = 0 << 8,
+        FACE = 1 << 8,
+        RIGHT = 2 << 8,
+        BACK = 3 << 8,
+        LEFT = 4 << 8,
+        BOTTOM = 5 << 8
     };
 }
 

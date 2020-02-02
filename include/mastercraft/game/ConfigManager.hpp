@@ -29,7 +29,7 @@ namespace mastercraft::game {
             static constexpr GLubyte GEN_MAX_HEIGHT = 192; /**< Maximum height when procedurally generating a chunk. */
             static constexpr GLubyte GEN_CARVING_HEIGHT = GEN_MIN_HEIGHT +30;
             static constexpr GLubyte GEN_INTERVAL_HEIGHT = GEN_MAX_HEIGHT - GEN_MIN_HEIGHT;
-            static constexpr GLubyte GEN_WATER_LEVEL = GEN_MIN_HEIGHT + 20;
+            static constexpr GLubyte GEN_WATER_LEVEL = GEN_MIN_HEIGHT + 22;
             
             static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
         
