@@ -26,7 +26,7 @@ out vec4 fFragColor;
  * @return The computed color.
  */
 vec4 computeTextureColor(vec2 fragTexPosition, int fragType, int verticalOffset) {
-    vec2 textureCoordinates = vec2((fragTexPosition.x + float(fragType)) / 6., 0);
+    vec2 textureCoordinates = vec2((fragTexPosition.x + float(fragType)) / 13., 0);
 
     if (vAlpha != 0) {
         textureCoordinates.y = (fragTexPosition.y + float(verticalOffset)) / 64.;

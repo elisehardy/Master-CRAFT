@@ -12,8 +12,13 @@ namespace mastercraft::cube {
         DIRT = 3,
         STONE = 4,
         SNOW = 5,
-        WOOD = 6,
-        LEAF
+        JUNGLE_WOOD = 6,
+        CACTUS = 7 | TRANSPARENT,
+        OAK_WOOD = 8,
+        JUNGLE_DIRT = 9,
+        OAK_LEAVES = 10 | TRANSPARENT,
+        JUNGLE_LEAVES = 11 | TRANSPARENT,
+        DESERT_SAND = 12
     };
 }
 
