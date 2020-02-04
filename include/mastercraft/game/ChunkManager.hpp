@@ -43,7 +43,6 @@ namespace mastercraft::game {
             std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
             GLubyte distanceView;
-            Noise2D heightNoise;
             Noise2D temperatureNoise;
             Noise3D carvingNoise;
         
@@ -51,8 +50,10 @@ namespace mastercraft::game {
             std::unique_ptr<shader::ShaderTexture> entityShader;
             std::unique_ptr<shader::ShaderTexture> cubeShader;
             shader::Texture cubeTexture;
-        
-        private:
+            Noise2D heightNoise;
+
+
+    private:
             
             void generateKeys();
             

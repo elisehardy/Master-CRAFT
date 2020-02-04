@@ -9,6 +9,13 @@
 #include <mastercraft/entity/IEntity.hpp>
 #include "EntityVertex.hpp"
 
+enum SlimeDirection : int {
+    None = 0,
+    TOP = 1,
+    BOTTOM = -1,
+    RIGHT = 2,
+    LEFT = -2
+};
 
 namespace mastercraft::entity {
     
@@ -22,6 +29,9 @@ namespace mastercraft::entity {
             std::vector<EntityVertex> vertices;
             GLuint vbo;
             GLuint vao;
+            int flag = 0;
+            int cout = 0;
+            SlimeDirection dir = None;
         
         public:
             
@@ -34,6 +44,10 @@ namespace mastercraft::entity {
             GLuint update() final;
             
             GLuint render() final;
+
+            glm::vec3 walk();
+
+            int canHop();
     };
 }
 

@@ -2,6 +2,9 @@
 #include <mastercraft/util/OBJ.hpp>
 #include <iostream>
 #include <mastercraft/game/Game.hpp>
+#include <effolkronium/random.hpp>
+
+using Random = effolkronium::random_static;
 
 
 namespace mastercraft::entity {
@@ -29,6 +32,25 @@ namespace mastercraft::entity {
     
     
     GLuint Slime::update() {
+        if(cout != 0){
+            if(flag == 1 && (Slime::canHop() != -1)){
+                this->position = walk();
+                cout--;
+            }else{
+                dir = static_cast<SlimeDirection>(Random::get(-2,2));
+                this->rotation = dir*45;
+                cout --;
+            }
+        }else{
+            flag = Random::get(0,1);
+            if(flag){
+                cout = Random::get(0,12);
+            }
+            else{
+                cout = Random::get(0, 3);
+            }
+
+        }
         std::vector<EntityVertex> vertices;
         
         for (const EntityVertex &vertex: this->vertices) {
@@ -74,5 +96,88 @@ namespace mastercraft::entity {
         glBindVertexArray(0);
         
         return 1;
+    }
+
+    glm::vec3 Slime::walk(){
+        game::Game *game = game::Game::getInstance();
+
+        switch (this->dir) {
+            case TOP:{
+                return glm::vec3(this->position.x + 1, game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x+1, this->position.z),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z);
+            }
+            case BOTTOM:{
+                return glm::vec3(this->position.x - 1, game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x-1, this->position.z),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z);
+            }
+            case RIGHT:{
+                return glm::vec3(this->position.x , game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x, this->position.z+1),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z+1);
+            }
+            case LEFT:{
+                return glm::vec3(this->position.x, game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x, this->position.z-1),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT)+1, this->position.z-1);
+            }
+            case None:{
+                return this->position;
+            }
+        }
+    }
+
+    int Slime::canHop(){
+        game::Game *game = game::Game::getInstance();
+        switch (this->dir) {
+            case TOP:{
+                int h = abs(game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x+1, this->position.z),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2) {
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            case BOTTOM:{
+                int h = abs(game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x-1, this->position.z),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2){
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            case RIGHT:{
+                int h = abs(game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x, this->position.z+1),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2){
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            case LEFT:{
+                int h = abs(game->chunkManager->heightNoise(
+                        glm::vec2(this->position.x, this->position.z-1),-1, 1, game::ConfigManager::GEN_MIN_HEIGHT,
+                        game::ConfigManager::GEN_MAX_HEIGHT) - this->position.y);
+                if(h < 2){
+                    return 0;
+                }
+                else{
+                    return -1;
+                }
+            }
+            case None:{
+                return -1;
+            }
+        }
     }
 }

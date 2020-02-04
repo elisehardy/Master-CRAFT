@@ -17,15 +17,18 @@ namespace mastercraft::game {
     
     ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
         textureVerticalOffset(0), distanceView(t_distanceView),
-        heightNoise({ Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 256.f, 0.5f, 2.f),
         temperatureNoise(
             { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 512.f, 0.5f, 2.f
         ),
+
         carvingNoise(
             { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) },
             3, 1.f, 1 / 64.f, 0.5f, 2.f
         ),
-        cubeTexture(shader::Texture(t_cubeTexture)) {
+
+        cubeTexture(shader::Texture(t_cubeTexture)),
+        heightNoise({ Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 256.f, 0.5f, 2.f)
+    {
     }
     
     
@@ -210,10 +213,13 @@ namespace mastercraft::game {
     
     
     entity::IEntity *ChunkManager::createEntity(glm::ivec3 position) {
+        Game *game = Game::getInstance();
+
         GLint x = Random::get<GLint>(position.x, position.x + cube::SuperChunk::X);
         GLint z = Random::get<GLint>(position.z, position.z + cube::SuperChunk::Z);
-        
-        return new entity::Slime(x, 100, z);
+
+        return new entity::Slime(x, game->chunkManager->heightNoise(glm::vec2(x,z),-1, 1, ConfigManager::GEN_MIN_HEIGHT,
+                                                                    ConfigManager::GEN_MAX_HEIGHT)+1, z);
     }
     
     
@@ -279,6 +285,7 @@ namespace mastercraft::game {
             [this](const auto &key) {
                 if (!this->chunks.count(key)) {
                     this->chunks.emplace(key, this->createSuperChunk(key));
+                    this->entities.emplace_back(this->createEntity(key));
                 }
             }
         );
@@ -287,6 +294,12 @@ namespace mastercraft::game {
         std::for_each(this->chunks.begin(), this->chunks.end(),
             [](const auto &entry) { entry.second->update(); }
         );
+
+        for (const auto &entity : this->entities) {
+            entity->update();
+        }
+
+
     }
     
     
