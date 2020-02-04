@@ -39,6 +39,7 @@ namespace mastercraft::game {
 <<<<<<< HEAD
         
         private:
+<<<<<<< HEAD
             std::map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Less> chunks;
             std::vector<std::unique_ptr<entity::IEntity>> entities;
             std::vector<glm::ivec3> keys;
@@ -52,12 +53,18 @@ namespace mastercraft::game {
             std::unique_ptr<shader::ShaderTexture> entityShader;
             std::unique_ptr<shader::ShaderTexture> cubeShader;
             shader::Texture cubeTexture;
+=======
+            std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash, Ivec3Hash> chunks;
+            util::SimplexNoise moistureSimplex;
+            GLubyte distanceView;  /**< Current distanceView. */
+>>>>>>> b133593bc9f327543a60456083f197dded6d4a87
         
         private:
             
             void generateKeys();
             
             [[nodiscard]] cube::CubeType getBiome(GLubyte height, GLubyte moisture);
+<<<<<<< HEAD
 
             [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::ivec3 &position) const;
             
@@ -83,10 +90,23 @@ namespace mastercraft::game {
             void init();
             
 
+=======
+        
+            [[nodiscard]] cube::SuperChunk *loadOrCreate(glm::ivec3 position);
+
+    public:
+        util::SimplexNoise heightSimplex;
+
+        ChunkManager() = default;
+        
+            void updateDrawDistance(GLubyte distance);
+        
+>>>>>>> b133593bc9f327543a60456083f197dded6d4a87
             void update();
             
             void render();
 
+<<<<<<< HEAD
     private:
         std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash, Ivec3Hash> chunks;
         std::vector<std::unique_ptr<mastercraft::entity::IEntity>> entities;
@@ -114,6 +134,8 @@ namespace mastercraft::game {
 
 
 
+=======
+>>>>>>> b133593bc9f327543a60456083f197dded6d4a87
         [[nodiscard]] cube::SuperChunk *loadOrCreate(GLuint x, GLuint y, GLuint z);
     };
 }

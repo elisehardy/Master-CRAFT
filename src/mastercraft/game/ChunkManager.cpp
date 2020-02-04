@@ -98,10 +98,16 @@ namespace mastercraft::game {
 
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
+<<<<<<< HEAD
                 height = this->heightNoise(
                     { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
                     ConfigManager::GEN_MAX_HEIGHT
 
+=======
+
+                height = this->heightSimplex(
+                    position.x + int(x), position.z + int(z), ConfigManager::GEN_MIN_HEIGHT, ConfigManager::GEN_MAX_HEIGHT
+>>>>>>> b133593bc9f327543a60456083f197dded6d4a87
                 );
                 height = this->heightNoise(
                     { position.x + GLint(x), position.z + GLint(z) }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,

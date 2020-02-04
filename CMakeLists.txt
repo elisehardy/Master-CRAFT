@@ -40,6 +40,7 @@ ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES})
 TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} tbb)
 TARGET_COMPILE_OPTIONS(
 <<<<<<< HEAD
+<<<<<<< HEAD
     ${TARGET_NAME} PRIVATE
     -g
     -O3
@@ -48,10 +49,20 @@ TARGET_COMPILE_OPTIONS(
     -Wfatal-errors
     -std=c++17
 
+=======
+        ${TARGET_NAME} PRIVATE
+        -g
+        -O2
+        -Werror
+        -Weverything
+        -Wfatal-errors
+        -std=c++17
+>>>>>>> b133593bc9f327543a60456083f197dded6d4a87
 )
 
 # Disable some warnings
 TARGET_COMPILE_OPTIONS(
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     ${TARGET_NAME} PRIVATE
@@ -84,6 +95,8 @@ TARGET_COMPILE_OPTIONS(
     -Wno-unused-exception-parameter
     -Wno-c++98-c++11-compat-binary-literal
 =======
+=======
+>>>>>>> b133593bc9f327543a60456083f197dded6d4a87
         ${TARGET_NAME} PRIVATE
         -std=c++17
         -Wno-unused-parameter
@@ -114,8 +127,11 @@ TARGET_COMPILE_OPTIONS(
         -Wno-conversion
         -Wno-deprecated
         -Wno-unused-exception-parameter
+<<<<<<< HEAD
         -Wno-unused-variable
 >>>>>>> move slime
+=======
+>>>>>>> b133593bc9f327543a60456083f197dded6d4a87
 )
 
 
