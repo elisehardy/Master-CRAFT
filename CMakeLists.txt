@@ -18,14 +18,14 @@ SET(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/)
 SET(LIBS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/include)
 
 INCLUDE_DIRECTORIES(
-    SYSTEM
-    ${SDL2_INCLUDE_DIRS}
-    ${OPENGL_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIR}
-    ${LIBS_INCLUDE_DIR}
+        SYSTEM
+        ${SDL2_INCLUDE_DIRS}
+        ${OPENGL_INCLUDE_DIR}
+        ${GLEW_INCLUDE_DIR}
+        ${LIBS_INCLUDE_DIR}
 )
 INCLUDE_DIRECTORIES(
-    ${INCLUDE_DIR}
+        ${INCLUDE_DIR}
 )
 
 
@@ -38,44 +38,46 @@ SET(TARGET_NAME mastercraft)
 ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${SHADER_FILES})
 TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} tbb)
 TARGET_COMPILE_OPTIONS(
-    ${TARGET_NAME} PRIVATE
-    -g
-    -O3
-    -Werror
-    -Weverything
-    -Wfatal-errors
-    -std=c++17
+        ${TARGET_NAME} PRIVATE
+        -g
+        -O2
+        -Werror
+        -Weverything
+        -Wfatal-errors
+        -std=c++17
+        -std=c++1z
 )
 
 # Disable some warnings
 TARGET_COMPILE_OPTIONS(
-    ${TARGET_NAME} PRIVATE
-    -Wno-unused-parameter
-    -Wno-effc++
-    -Wno-shadow
-    -Wno-c++98-compat
-    -Wno-sign-conversion
-    -Wno-padded
-    -Wno-global-constructors
-    -Wno-weak-vtables
-    -Wno-delete-non-abstract-non-virtual-dtor
-    -Wno-exit-time-destructors
-    -Wno-c++11-narrowing
-    -Wno-unneeded-internal-declaration
-    -Wno-float-conversion
-    -Wno-unused-template
-    -Wno-documentation-unknown-command
-    -Wno-documentation
-    -Wno-undefined-reinterpret-cast
-#    -Wno-implicit-float-conversion
-#    -Wno-double-promotion
-    -Wno-old-style-cast
-    -Wno-reserved-id-macro
-    -Wno-shorten-64-to-32
-    -Wno-cast-qual
-    -Wno-disabled-macro-expansion
-    -Wno-unknown-warning-option
-    -Wno-conversion
-    -Wno-unused-exception-parameter
-    -Wno-c++98-c++11-compat-binary-literal
+        ${TARGET_NAME} PRIVATE
+        -Wno-unused-parameter
+        -Wno-effc++
+        -Wno-shadow
+        -Wno-c++98-compat
+        -Wno-sign-conversion
+        -Wno-padded
+        -Wno-global-constructors
+        -Wno-weak-vtables
+        -Wno-delete-non-abstract-non-virtual-dtor
+        -Wno-exit-time-destructors
+        -Wno-c++11-narrowing
+        -Wno-unneeded-internal-declaration
+        -Wno-float-conversion
+        -Wno-unused-template
+        -Wno-documentation-unknown-command
+        -Wno-documentation
+        -Wno-undefined-reinterpret-cast
+        #    -Wno-implicit-float-conversion
+        #    -Wno-double-promotion
+        -Wno-old-style-cast
+        -Wno-reserved-id-macro
+        -Wno-shorten-64-to-32
+        -Wno-cast-qual
+        -Wno-disabled-macro-expansion
+        -Wno-unknown-warning-option
+        -Wno-conversion
+        -Wno-unused-exception-parameter
+        -Wno-c++98-c++11-compat-binary-literal
+        -Wno-delete-non-virtual-dtor
 )

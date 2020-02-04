@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <execution>
 
 #include <effolkronium/random.hpp>
 #include <glm/ext.hpp>
@@ -285,8 +284,7 @@ namespace mastercraft::game {
         );
         
         // Update superChunks
-        std::for_each(
-            std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
+        std::for_each(this->chunks.begin(), this->chunks.end(),
             [](const auto &entry) { entry.second->update(); }
         );
     }
@@ -304,13 +302,11 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->bindTexture(this->cubeTexture);
-        std::for_each(
-            std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
+        std::for_each(this->chunks.begin(), this->chunks.end(),
             [](const auto &entry) { entry.second->render(false); }
         );
         glDisable(GL_CULL_FACE);
-        std::for_each(
-            std::execution::par_unseq, this->chunks.begin(), this->chunks.end(),
+        std::for_each(this->chunks.begin(), this->chunks.end(),
             [](const auto &entry) { entry.second->render(true); }
         );
         glEnable(GL_CULL_FACE);
