@@ -13,47 +13,6 @@ namespace mastercraft::entity {
         
         private:
             glm::vec3 vertices[36] = {
-//                                { -1.0f, 1.0f,  -1.0f, },
-//                                { -1.0f, -1.0f, -1.0f, },
-//                                { 1.0f,  -1.0f, -1.0f, },
-//                                { 1.0f,  -1.0f, -1.0f, },
-//                                { 1.0f,  1.0f,  -1.0f, },
-//                                { -1.0f, 1.0f,  -1.0f, },
-//
-//                                { -1.0f, -1.0f, 1.0f, },
-//                                { -1.0f, -1.0f, -1.0f, },
-//                                { -1.0f, 1.0f,  -1.0f, },
-//                                { -1.0f, 1.0f,  -1.0f, },
-//                                { -1.0f, 1.0f,  1.0f, },
-//                                { -1.0f, -1.0f, 1.0f, },
-//
-//                                { 1.0f,  -1.0f, -1.0f, },
-//                                { 1.0f,  -1.0f, 1.0f, },
-//                                { 1.0f,  1.0f,  1.0f, },
-//                                { 1.0f,  1.0f,  1.0f, },
-//                                { 1.0f,  1.0f,  -1.0f, },
-//                                { 1.0f,  -1.0f, -1.0f, },
-//
-//                                { -1.0f, -1.0f, 1.0f, },
-//                                { -1.0f, 1.0f,  1.0f, },
-//                                { 1.0f,  1.0f,  1.0f, },
-//                                { 1.0f,  1.0f,  1.0f, },
-//                                { 1.0f,  -1.0f, 1.0f, },
-//                                { -1.0f, -1.0f, 1.0f, },
-//
-//                                { -1.0f, 1.0f,  -1.0f, },
-//                                { 1.0f,  1.0f,  -1.0f, },
-//                                { 1.0f,  1.0f,  1.0f, },
-//                                { 1.0f,  1.0f,  1.0f, },
-//                                { -1.0f, 1.0f,  1.0f, },
-//                                { -1.0f, 1.0f,  -1.0f, },
-//
-//                                { -1.0f, -1.0f, -1.0f, },
-//                                { -1.0f, -1.0f, 1.0f, },
-//                                { 1.0f,  -1.0f, -1.0f, },
-//                                { 1.0f,  -1.0f, -1.0f, },
-//                                { -1.0f, -1.0f, 1.0f, },
-//                                { 1.0f,  -1.0f, 1.0f },
                 // face
                 { -1, -1, 1 },
                 { 1,  -1, 1 },
@@ -97,9 +56,9 @@ namespace mastercraft::entity {
                 { 1,  1,  1 },
                 { 1,  -1, 1 },
             };
-            std::unique_ptr<shader::ShaderCubemap> shader;
-            std::unique_ptr<shader::Cubemap> night;
-            std::unique_ptr<shader::Cubemap> day;
+            std::unique_ptr <shader::ShaderCubemap> shader;
+            std::unique_ptr <shader::Cubemap> night;
+            std::unique_ptr <shader::Cubemap> day;
             GLuint vbo;
             GLuint vao;
         

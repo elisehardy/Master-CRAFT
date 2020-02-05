@@ -3,14 +3,17 @@
 
 namespace mastercraft::cube {
     
+    static constexpr GLubyte BIT_FACE_OFFSET = 8;
+    
     enum CubeDirection : GLushort {
-        TOP = 0 << 8,
-        FACE = 1 << 8,
-        RIGHT = 2 << 8,
-        BACK = 3 << 8,
-        LEFT = 4 << 8,
-        BOTTOM = 5 << 8
+        TOP = 0u << BIT_FACE_OFFSET,
+        FACE = 1u << BIT_FACE_OFFSET,
+        RIGHT = 2u << BIT_FACE_OFFSET,
+        BACK = 3u << BIT_FACE_OFFSET,
+        LEFT = 4u << BIT_FACE_OFFSET,
+        BOTTOM = 5u << BIT_FACE_OFFSET
     };
 }
 
 #endif //MASTERCRAFT_CUBEDIRECTION_HPP
+

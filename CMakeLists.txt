@@ -40,7 +40,7 @@ TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLE
 TARGET_COMPILE_OPTIONS(
     ${TARGET_NAME} PRIVATE
     -g
-    -O3
+    -O2
     -Werror
     -Weverything
     -Wfatal-errors
@@ -51,10 +51,8 @@ TARGET_COMPILE_OPTIONS(
 TARGET_COMPILE_OPTIONS(
     ${TARGET_NAME} PRIVATE
     -Wno-unused-parameter
-    -Wno-effc++
     -Wno-shadow
     -Wno-c++98-compat
-    -Wno-sign-conversion
     -Wno-padded
     -Wno-global-constructors
     -Wno-weak-vtables
@@ -67,8 +65,6 @@ TARGET_COMPILE_OPTIONS(
     -Wno-documentation-unknown-command
     -Wno-documentation
     -Wno-undefined-reinterpret-cast
-#    -Wno-implicit-float-conversion
-#    -Wno-double-promotion
     -Wno-old-style-cast
     -Wno-reserved-id-macro
     -Wno-shorten-64-to-32

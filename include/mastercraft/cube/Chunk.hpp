@@ -39,6 +39,7 @@ namespace mastercraft::cube {
             
             [[nodiscard]] bool occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const;
         
+            [[nodiscard]] GLushort computeData(CubeType type, CubeDirection direction, bool opaqueAbove) const;
         public:
             
             Chunk();
@@ -48,8 +49,6 @@ namespace mastercraft::cube {
             CubeType get(GLubyte x, GLubyte y, GLubyte z);
             
             void set(GLubyte x, GLubyte y, GLubyte z, CubeType type);
-        
-            void setPosition(const glm::ivec3 &position);
             
             void setPosition(GLint x, GLint y, GLint z);
         

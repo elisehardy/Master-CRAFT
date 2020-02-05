@@ -25,6 +25,8 @@ namespace mastercraft::shader {
         
         public:
             
+            virtual ~IUniform() = default;
+            
             IUniform(GLuint program, const GLchar *name);
         
             virtual void load(const void *value) = 0;

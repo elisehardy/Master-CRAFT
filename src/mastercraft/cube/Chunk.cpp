@@ -35,11 +35,11 @@ namespace mastercraft::cube {
     bool Chunk::occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const {
         if (onBorder(x, y, z)) {
             game::Game *game = game::Game::getInstance();
-
+            
             x += this->position.x;
             y += this->position.y;
             z += this->position.z;
-
+            
             if (type == CubeType::WATER) {
                 switch (direction) {
                     case CubeDirection::FACE:
@@ -56,7 +56,7 @@ namespace mastercraft::cube {
                         return game->chunkManager->get(x + 1, y, z) != CubeType::AIR;
                 }
             }
-
+            
             switch (direction) {
                 case CubeDirection::FACE:
                     return !(game->chunkManager->get(x, y, z + 1) & TRANSPARENT);
@@ -107,6 +107,15 @@ namespace mastercraft::cube {
     }
     
     
+    GLushort Chunk::computeData(CubeType type, CubeDirection direction, bool opaqueAbove) {
+        if (type & TOP_OVERLAY && opaqueAbove) {
+            return type | CubeDirection::BOTTOM;
+        }
+        
+        return type | direction;
+    }
+    
+    
     CubeType Chunk::get(GLubyte x, GLubyte y, GLubyte z) {
         assert(x < X);
         assert(y < Y);
@@ -123,11 +132,6 @@ namespace mastercraft::cube {
         
         this->cubes[x][y][z] = type;
         this->modified = true;
-    }
-    
-    
-    void Chunk::setPosition(const glm::ivec3 &position) {
-        this->position = position;
     }
     
     
@@ -151,17 +155,17 @@ namespace mastercraft::cube {
         CubeType type;
         for (GLubyte x = 0; x < X; x++) {
             for (GLubyte z = 0; z < Z; z++) {
-                for (GLshort y = Y - 1; y >= 0 ; y--) {
+                for (GLshort y = Y - 1; y >= 0; y--) {
                     type = this->cubes[x][y][z];
                     
                     if (type == CubeType::AIR) {
                         opaqueAbove = false;
                         continue;
                     }
-                
+                    
                     if (type & TRANSPARENT) {
+                        opaqueAbove = false;
                         if (!occluded(type, x, y, z, CubeDirection::FACE)) {
-                            opaqueAbove = false;
                             drawnAlpha[this->countAlpha++] = CubeFace::face(x, y, z, type | CubeDirection::FACE);
                         }
                         if (!occluded(type, x, y, z, CubeDirection::TOP)) {
@@ -182,26 +186,34 @@ namespace mastercraft::cube {
                     }
                     else {
                         if (!occluded(type, x, y, z, CubeDirection::TOP)) {
-                            drawn[this->count++] = CubeFace::top(x, y, z, type | CubeDirection::TOP);
+                            drawn[this->count++] = CubeFace::top(
+                                x, y, z, computeData(type, CubeDirection::TOP, opaqueAbove)
+                            );
                         }
                         if (!occluded(type, x, y, z, CubeDirection::BOTTOM)) {
-                            drawn[this->count++] = CubeFace::bottom(x, y, z, type | CubeDirection::BOTTOM);
+                            drawn[this->count++] = CubeFace::bottom(
+                                x, y, z, computeData(type, CubeDirection::BOTTOM, opaqueAbove)
+                            );
                         }
                         if (!occluded(type, x, y, z, CubeDirection::FACE)) {
-                            drawn[this->count++] = CubeFace::face(x, y, z, type | (opaqueAbove ? CubeDirection::BOTTOM
-                                                                                               : CubeDirection::FACE));
+                            drawn[this->count++] = CubeFace::face(
+                                x, y, z, computeData(type, CubeDirection::FACE, opaqueAbove)
+                            );
                         }
                         if (!occluded(type, x, y, z, CubeDirection::BACK)) {
-                            drawn[this->count++] = CubeFace::back(x, y, z, type | (opaqueAbove ? CubeDirection::BOTTOM
-                                                                                               : CubeDirection::BACK));
+                            drawn[this->count++] = CubeFace::back(
+                                x, y, z, computeData(type, CubeDirection::BACK, opaqueAbove)
+                            );
                         }
                         if (!occluded(type, x, y, z, CubeDirection::LEFT)) {
-                            drawn[this->count++] = CubeFace::left(x, y, z, type | (opaqueAbove ? CubeDirection::BOTTOM
-                                                                                               : CubeDirection::LEFT));
+                            drawn[this->count++] = CubeFace::left(
+                                x, y, z, computeData(type, CubeDirection::LEFT, opaqueAbove)
+                            );
                         }
                         if (!occluded(type, x, y, z, CubeDirection::RIGHT)) {
-                            drawn[this->count++] = CubeFace::right(x, y, z, type | (opaqueAbove ? CubeDirection::BOTTOM
-                                                                                                : CubeDirection::RIGHT));
+                            drawn[this->count++] = CubeFace::right(
+                                x, y, z, computeData(type, CubeDirection::RIGHT, opaqueAbove)
+                            );
                         }
                         opaqueAbove = true;
                     }
