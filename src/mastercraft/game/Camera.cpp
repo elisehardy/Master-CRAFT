@@ -8,7 +8,7 @@
 namespace mastercraft::game {
     
     Camera::Camera() :
-        position(glm::vec3(0, ConfigManager::GEN_MAX_HEIGHT + 1, 0)), pitch(0.0), yaw(M_PI) {
+        position(glm::vec3(0, ConfigManager::GEN_MAX_HEIGHT + 1, 0)), pitch(0.0), yaw(M_PIf32) {
         computeDirectionVectors();
     }
     

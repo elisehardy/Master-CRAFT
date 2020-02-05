@@ -70,8 +70,6 @@ namespace mastercraft::game {
             
             /**
              * Update the game.
-             *
-             * @param event An instance of Event containing the inputs of the user.
              */
             void update();
             
@@ -82,8 +80,6 @@ namespace mastercraft::game {
             
             /**
              * Stops the game.
-             *
-             * @return true
              */
             void stop();
             

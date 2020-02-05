@@ -15,7 +15,7 @@ namespace mastercraft::cube {
     
     
     static constexpr GLushort textureLoc(GLushort x, GLushort y) {
-        return x | (y << 4u);
+        return static_cast<GLushort>(x | (y << 4u));
     }
     
     enum CubeType : GLushort {

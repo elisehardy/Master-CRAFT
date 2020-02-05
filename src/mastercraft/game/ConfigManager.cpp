@@ -73,7 +73,9 @@ namespace mastercraft::game {
                 this->framerate = 240;
                 break;
             case Framerate::FRAMERATE_VSYNC:
-                this->framerate = Game::getInstance()->windowManager->getDisplayMode().refresh_rate;
+                this->framerate = static_cast<GLubyte>(
+                    Game::getInstance()->windowManager->getDisplayMode().refresh_rate
+                );
                 this->framerate = this->framerate ? this->framerate : 60;
                 break;
             case Framerate::FRAMERATE_UNCAPPED:

@@ -1,32 +1,27 @@
 #include <random>
 #include <sstream>
 
+#include <effolkronium/random.hpp>
+
 #include <mastercraft/util/Uuid.hpp>
 
 
-namespace mastercraft::util {
+using Random = effolkronium::random_static;
 
-    
-    unsigned int Uuid::randomChar() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, 255);
-        return dis(gen);
-    }
+namespace mastercraft::util {
     
     std::string Uuid::randomHex(const unsigned int len) {
         std::stringstream ss;
+        char c;
         
         for (unsigned int i = 0; i < len; i++) {
-            const auto rc = randomChar();
-            std::stringstream hexstream;
-            hexstream << std::hex << rc;
-            auto hex = hexstream.str();
-            ss << (hex.length() < 2 ? '0' + hex : hex);
+            c = Random::get<char>(0, 15);
+            ss << (c <= 9 ? c + '0' : c + 'A');
         }
         
         return ss.str();
     }
+    
     
     std::string Uuid::uuid4() {
         return randomHex(8) + "-" + randomHex(4) + "-" + randomHex(4) + "-" + randomHex(4) + "-" + randomHex(12);

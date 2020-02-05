@@ -9,9 +9,9 @@
 
 #include <mastercraft/util/INonCopyable.hpp>
 #include <mastercraft/cube/SuperChunk.hpp>
-#include <mastercraft/entity/IEntity.hpp>
 #include <mastercraft/shader/ShaderTexture.hpp>
 #include <mastercraft/util/Noise.hpp>
+#include <mastercraft/entity/Slime.hpp>
 
 
 namespace mastercraft::game {
@@ -39,11 +39,10 @@ namespace mastercraft::game {
         
         private:
             std::map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Less> chunks;
-            std::vector<std::unique_ptr<entity::IEntity>> entities;
+            std::vector<std::unique_ptr<entity::Slime>> slimes;
             std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
             GLubyte distanceView;
-            Noise2D heightNoise;
             Noise2D temperatureNoise;
             Noise3D carvingNoise;
         
@@ -51,22 +50,17 @@ namespace mastercraft::game {
             std::unique_ptr<shader::ShaderTexture> entityShader;
             std::unique_ptr<shader::ShaderTexture> cubeShader;
             shader::Texture cubeTexture;
+            Noise2D heightNoise;
         
         private:
             
             void generateKeys();
             
-            [[nodiscard]] cube::CubeType getBiome(GLubyte height, float temperature);
+            [[nodiscard]] static cube::CubeType getBiome(GLuint height, GLfloat temperature);
             
             [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::ivec3 &position) const;
             
-            [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(GLint x, GLint y, GLint z) const;
-            
             [[nodiscard]] cube::SuperChunk *createSuperChunk(glm::ivec3 position);
-            
-            [[nodiscard]] cube::SuperChunk *createSuperChunk(GLint x, GLint y, GLint z);
-            
-            [[nodiscard]] entity::IEntity *createEntity(glm::ivec3 position);
         
         public:
             
@@ -74,9 +68,7 @@ namespace mastercraft::game {
             
             void updateDistanceView(GLubyte distance);
             
-            [[nodiscard]] std::vector<glm::ivec3> getKeys() const;
-            
-            [[nodiscard]] cube::CubeType get(GLint x, GLint y, GLint z);
+            [[nodiscard]] cube::CubeType get(glm::ivec3 position) const;
             
             void init();
             

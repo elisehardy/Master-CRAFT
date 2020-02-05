@@ -8,6 +8,7 @@
 using Random = effolkronium::random_static;
 
 namespace mastercraft::cube {
+    
     TreeGenerator::Tree TreeGenerator::plainTree(glm::vec3 position) {
         return mastercraft::cube::TreeGenerator::Tree();
     }
@@ -24,7 +25,7 @@ namespace mastercraft::cube {
     
     
     TreeGenerator::Tree TreeGenerator::cactus(glm::vec3 position) {
-        uint32_t limit = Random::get(2, 5);
+        uint32_t limit = Random::get(2u, 5u);
         Tree tree;
         
         for (uint32_t i = 0; i < limit; i++) {
@@ -35,7 +36,7 @@ namespace mastercraft::cube {
     }
     
     
-    std::vector<std::pair<glm::vec3, CubeType>> TreeGenerator::generate(glm::vec3 position, CubeType biome) {
+    TreeGenerator::Tree TreeGenerator::generate(glm::ivec3 position, CubeType biome) {
         switch (biome) {
             case DIRT_PLAIN:
                 if (Random::get<bool>(0.005)) {
@@ -75,6 +76,6 @@ namespace mastercraft::cube {
                 break;
         }
         
-        return std::vector<std::pair<glm::vec3, CubeType>>();
+        return {};
     }
 }

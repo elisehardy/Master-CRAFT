@@ -37,7 +37,7 @@ namespace mastercraft::game {
             const GLubyte *OpenGLVersion = nullptr; /**< Version of OpenGL. */
             const GLubyte *GLEWVersion = nullptr;   /**< Version of GLEW. */
             
-            GLfloat mouseSensitivity = 0.10; /**< Sensitivity of the mouse, default to 0.5. */
+            GLfloat mouseSensitivity = 0.10f; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;          /**< Field of view, default to 70. */
             GLubyte distanceView = 4;  /**< Draw distance as the radius of SuperChunk rendered. */

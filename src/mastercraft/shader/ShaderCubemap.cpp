@@ -3,9 +3,9 @@
 
 namespace mastercraft::shader {
     
-    ShaderCubemap::ShaderCubemap(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile) :
+    ShaderCubemap::ShaderCubemap(const std::string &vsFile, const std::string &fsFile) :
         Shader(vsFile, fsFile) {
-         this->uTexture = glGetUniformLocation(this->program->getId(), "uTexture");
+         this->uTexture = glGetUniformLocation(this->programId, "uTexture");
     }
     
     

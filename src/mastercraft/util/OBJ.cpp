@@ -9,8 +9,6 @@
 
 
 namespace mastercraft::util {
-
-    
     
     std::vector<entity::EntityVertex> OBJ::Load(const std::string &path) {
         std::vector<entity::EntityVertex> vertices;
@@ -19,7 +17,8 @@ namespace mastercraft::util {
         tinyobj::attrib_t attrib;
         GLuint index_offset, fv;
         std::string warn, err;
-    
+        GLuint64 v, n, t;
+        
         bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str());
         if (!warn.empty()) {
             std::cerr << warn << std::endl;
@@ -30,24 +29,28 @@ namespace mastercraft::util {
         if (!ret) {
             exit(1);
         }
-    
+        
         for (auto &shape : shapes) {
             index_offset = 0;
             for (GLuint f = 0; f < shape.mesh.num_face_vertices.size(); f++) {
                 fv = shape.mesh.num_face_vertices[f];
-            
-                for (GLuint v = 0; v < fv; v++) {
-                    tinyobj::index_t idx = shape.mesh.indices[index_offset + v];
-                    tinyobj::real_t vx = attrib.vertices[3 * idx.vertex_index + 0];
-                    tinyobj::real_t vy = attrib.vertices[3 * idx.vertex_index + 1];
-                    tinyobj::real_t vz = attrib.vertices[3 * idx.vertex_index + 2];
-                    tinyobj::real_t nx = attrib.normals[3 * idx.normal_index + 0];
-                    tinyobj::real_t ny = attrib.normals[3 * idx.normal_index + 1];
-                    tinyobj::real_t nz = attrib.normals[3 * idx.normal_index + 2];
-                    tinyobj::real_t tx = attrib.texcoords[2 * idx.texcoord_index + 0];
-                    tinyobj::real_t ty = attrib.texcoords[2 * idx.texcoord_index + 1];
+                
+                for (GLuint i = 0; i < fv; i++) {
+                    tinyobj::index_t index = shape.mesh.indices[index_offset + i];
+                    v = 3ul * static_cast<GLuint64>(index.vertex_index);
+                    n = 3ul * static_cast<GLuint64>(index.vertex_index);
+                    t = 3ul * static_cast<GLuint64>(index.vertex_index);
                     
-                    vertices.push_back(entity::EntityVertex({vx, vy, vz}, {nx, ny, nz}, {tx, ty}));
+                    tinyobj::real_t vx = attrib.vertices[v + 0];
+                    tinyobj::real_t vy = attrib.vertices[v + 1];
+                    tinyobj::real_t vz = attrib.vertices[v + 2];
+                    tinyobj::real_t nx = attrib.normals[n + 0];
+                    tinyobj::real_t ny = attrib.normals[n + 1];
+                    tinyobj::real_t nz = attrib.normals[n + 2];
+                    tinyobj::real_t tx = attrib.texcoords[n + 0];
+                    tinyobj::real_t ty = attrib.texcoords[n + 1];
+                    
+                    vertices.push_back(entity::EntityVertex({ vx, vy, vz }, { nx, ny, nz }, { tx, ty }));
                 }
                 index_offset += fv;
             }

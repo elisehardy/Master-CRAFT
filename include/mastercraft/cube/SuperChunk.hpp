@@ -14,14 +14,14 @@ namespace mastercraft::cube {
     class SuperChunk : public util::INonCopyable {
         
         public:
-            static constexpr GLubyte CHUNK_X = 1;
-            static constexpr GLubyte CHUNK_Y = 16;
-            static constexpr GLubyte CHUNK_Z = 1;
-            static constexpr GLuint CHUNK_SIZE = CHUNK_X * CHUNK_Y * CHUNK_Z;
-            static constexpr GLuint X = Chunk::X * CHUNK_X;
-            static constexpr GLuint Y = Chunk::Y * CHUNK_Y;
-            static constexpr GLuint Z = Chunk::Z * CHUNK_Z;
-            static constexpr GLuint SIZE = CHUNK_SIZE * Chunk::SIZE;
+            static constexpr GLint CHUNK_X = 1;
+            static constexpr GLint CHUNK_Y = 16;
+            static constexpr GLint CHUNK_Z = 1;
+            static constexpr GLint CHUNK_SIZE = CHUNK_X * CHUNK_Y * CHUNK_Z;
+            static constexpr GLint X = Chunk::X * CHUNK_X;
+            static constexpr GLint Y = Chunk::Y * CHUNK_Y;
+            static constexpr GLint Z = Chunk::Z * CHUNK_Z;
+            static constexpr GLint SIZE = CHUNK_SIZE * Chunk::SIZE;
             
             static_assert(game::ConfigManager::GEN_MAX_HEIGHT <= Y);
         

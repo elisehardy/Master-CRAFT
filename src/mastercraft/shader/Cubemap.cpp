@@ -10,8 +10,8 @@ namespace mastercraft::shader {
         
         for (GLuint i = 0; i < 6; i++) {
             glTexImage2D(
-                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, texture[i]->getWidth(), texture[i]->getHeight(),
-                0, GL_RGBA, GL_FLOAT, texture[i]->getPixels()
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, static_cast<GLsizei>(texture[i]->getWidth()),
+                static_cast<GLsizei>(texture[i]->getHeight()), 0, GL_RGBA, GL_FLOAT, texture[i]->getPixels()
             );
         }
         

@@ -3,7 +3,7 @@
 
 namespace mastercraft::cube {
     
-    ColumnGenerator::Column ColumnGenerator::waterColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::waterColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -23,7 +23,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::iceColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::iceColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
     
@@ -46,7 +46,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::sandBeachColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::sandBeachColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -63,7 +63,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::sandDesertColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::sandDesertColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
     
@@ -80,7 +80,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::snowColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::snowColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -97,7 +97,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::stoneColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::stoneColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -109,7 +109,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::stoneSnowColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::stoneSnowColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
     
@@ -126,7 +126,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::dirtPlainColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::dirtPlainColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -142,7 +142,7 @@ namespace mastercraft::cube {
         return column;
     }
     
-    ColumnGenerator::Column ColumnGenerator::dirtJungleColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::dirtJungleColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -158,7 +158,7 @@ namespace mastercraft::cube {
         return column;
     }
     
-    ColumnGenerator::Column ColumnGenerator::dirtSnowColumn(GLubyte height) {
+    ColumnGenerator::Column ColumnGenerator::dirtSnowColumn(GLuint height) {
         Column column = {};
         column.fill(cube::CubeType::AIR);
         
@@ -175,7 +175,7 @@ namespace mastercraft::cube {
     }
     
     
-    ColumnGenerator::Column ColumnGenerator::generate(GLubyte height, cube::CubeType type) {
+    ColumnGenerator::Column ColumnGenerator::generate(GLuint height, cube::CubeType type) {
         switch (type) {
             case WATER:
                 return waterColumn(height);

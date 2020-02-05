@@ -6,7 +6,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include <mastercraft/util/Program.hpp>
 #include <mastercraft/util/INonCopyable.hpp>
 #include <mastercraft/shader/uniform/IUniform.hpp>
 
@@ -16,13 +15,17 @@ namespace mastercraft::shader {
     class Shader : public util::INonCopyable {
         protected:
             std::unordered_map<std::string, std::shared_ptr<IUniform>> uniforms;
-            std::unique_ptr<util::Program> program;
+            GLuint programId;
+            GLuint vsId;
+            GLuint fsId;
         
         public:
             
             Shader() = default;
             
-            Shader(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile);
+            Shader(const std::string &vsPath, const std::string &fsPath);
+        
+            ~Shader();
             
             void addUniform(const std::string &name, UniformType type);
             

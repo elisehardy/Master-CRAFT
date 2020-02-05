@@ -18,31 +18,31 @@ namespace mastercraft::cube {
         private:
             typedef std::array<CubeType, SuperChunk::Y> Column;
             
-            [[nodiscard]] static Column waterColumn(GLubyte height);
+            [[nodiscard]] static Column waterColumn(GLuint height);
         
-            [[nodiscard]] static Column iceColumn(GLubyte height);
+            [[nodiscard]] static Column iceColumn(GLuint height);
         
-            [[nodiscard]] static Column sandBeachColumn(GLubyte height);
+            [[nodiscard]] static Column sandBeachColumn(GLuint height);
         
-            [[nodiscard]] static Column sandDesertColumn(GLubyte height);
+            [[nodiscard]] static Column sandDesertColumn(GLuint height);
         
-            [[nodiscard]] static Column snowColumn(GLubyte height);
+            [[nodiscard]] static Column snowColumn(GLuint height);
         
-            [[nodiscard]] static Column stoneColumn(GLubyte height);
+            [[nodiscard]] static Column stoneColumn(GLuint height);
         
-            [[nodiscard]] static Column stoneSnowColumn(GLubyte height);
+            [[nodiscard]] static Column stoneSnowColumn(GLuint height);
         
-            [[nodiscard]] static Column dirtPlainColumn(GLubyte height);
+            [[nodiscard]] static Column dirtPlainColumn(GLuint height);
         
-            [[nodiscard]] static Column dirtJungleColumn(GLubyte height);
+            [[nodiscard]] static Column dirtJungleColumn(GLuint height);
         
-            [[nodiscard]] static Column dirtSnowColumn(GLubyte height);
+            [[nodiscard]] static Column dirtSnowColumn(GLuint height);
         
         public:
             
             ColumnGenerator() = delete;
         
-            [[nodiscard]] static std::array<CubeType, SuperChunk::Y> generate(GLubyte height, CubeType type);
+            [[nodiscard]] static std::array<CubeType, SuperChunk::Y> generate(GLuint height, CubeType type);
     };
 }
 

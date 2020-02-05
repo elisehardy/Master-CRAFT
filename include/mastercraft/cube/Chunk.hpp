@@ -14,10 +14,10 @@ namespace mastercraft::cube {
     
     class Chunk : public util::INonCopyable {
         public:
-            static constexpr GLubyte X = 16;
-            static constexpr GLubyte Y = 16;
-            static constexpr GLubyte Z = 16;
-            static constexpr GLuint SIZE = X * Y * Z;
+            static constexpr GLint X = 16;
+            static constexpr GLint Y = 16;
+            static constexpr GLint Z = 16;
+            static constexpr GLint SIZE = X * Y * Z;
         
         private:
             static constexpr GLuint VERTEX_ATTR_POSITION = 0;

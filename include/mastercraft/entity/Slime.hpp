@@ -6,20 +6,27 @@
 
 #include <glm/vec2.hpp>
 
-#include <mastercraft/entity/IEntity.hpp>
-#include "EntityVertex.hpp"
+#include <mastercraft/util/INonCopyable.hpp>
+#include <mastercraft/entity/EntityVertex.hpp>
+#include <mastercraft/shader/Texture.hpp>
 
 
 namespace mastercraft::entity {
     
-    class Slime : public IEntity {
+    class Slime : public util::INonCopyable {
         private:
             static constexpr GLuint VERTEX_ATTR_POSITION = 0;
             static constexpr GLuint VERTEX_ATTR_NORMAL = 1;
             static constexpr GLuint VERTEX_ATTR_TEXTURE = 2;
+            static constexpr GLfloat SPEED = 0.5;
         
         private:
             std::vector<EntityVertex> vertices;
+            shader::Texture texture;
+            glm::vec3 direction;
+            glm::vec3 position;
+//            GLfloat rotation;
+            glm::vec3 goal;
             GLuint vbo;
             GLuint vao;
         
@@ -27,13 +34,13 @@ namespace mastercraft::entity {
             
             explicit Slime(const glm::vec3 &position);
             
-            Slime(GLfloat x, GLfloat y, GLfloat z);
+            ~Slime();
             
-            ~Slime() final;
+            void walk();
             
-            GLuint update() final;
+            GLuint update();
             
-            GLuint render() final;
+            GLuint render();
     };
 }
 

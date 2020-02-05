@@ -15,7 +15,7 @@ namespace mastercraft::shader {
             
             ShaderCubemap() = default;
             
-            ShaderCubemap(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile);
+            ShaderCubemap(const std::string &vsFile, const std::string &fsFile);
             
             void bindCubemap(const Cubemap &texture) const;
             

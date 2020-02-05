@@ -3,9 +3,9 @@
 
 namespace mastercraft::shader {
     
-    ShaderTexture::ShaderTexture(const glimac::FilePath &vsFile, const glimac::FilePath &fsFile) :
+    ShaderTexture::ShaderTexture(const std::string &vsFile, const std::string &fsFile) :
         Shader(vsFile, fsFile) {
-         this->uTexture = glGetUniformLocation(this->program->getId(), "uTexture");
+         this->uTexture = glGetUniformLocation(this->programId, "uTexture");
     }
     
     

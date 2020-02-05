@@ -14,7 +14,7 @@ namespace mastercraft::cube {
     class TreeGenerator {
         
         private:
-            typedef std::vector<std::pair<glm::vec3, CubeType>> Tree;
+            typedef std::vector<std::pair<glm::ivec3, CubeType>> Tree;
         
             [[nodiscard]] static Tree plainTree(glm::vec3 position);
         
@@ -28,7 +28,7 @@ namespace mastercraft::cube {
             
             TreeGenerator() = delete;
         
-            [[nodiscard]] static std::vector<std::pair<glm::vec3, CubeType>> generate(glm::vec3 position, CubeType biome);
+            [[nodiscard]] static std::vector<std::pair<glm::ivec3, CubeType>> generate(glm::ivec3 position, CubeType biome);
     };
 }
 

@@ -33,7 +33,7 @@ namespace mastercraft::cube {
     
     
     bool Chunk::occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const {
-        if (onBorder(x, y, z)) {
+        if (onBorder(static_cast<GLubyte>(x), static_cast<GLubyte>(y), static_cast<GLubyte>(z))) {
             game::Game *game = game::Game::getInstance();
             
             x += this->position.x;
@@ -43,33 +43,33 @@ namespace mastercraft::cube {
             if (type == CubeType::WATER) {
                 switch (direction) {
                     case CubeDirection::FACE:
-                        return game->chunkManager->get(x, y, z + 1) != CubeType::AIR;
+                        return game->chunkManager->get({x, y, z + 1}) != CubeType::AIR;
                     case CubeDirection::TOP:
-                        return game->chunkManager->get(x, y + 1, z) != CubeType::AIR;
+                        return game->chunkManager->get({x, y + 1, z}) != CubeType::AIR;
                     case CubeDirection::BACK:
-                        return game->chunkManager->get(x, y, z - 1) != CubeType::AIR;
+                        return game->chunkManager->get({x, y, z - 1}) != CubeType::AIR;
                     case CubeDirection::BOTTOM:
-                        return game->chunkManager->get(x, y - 1, z) != CubeType::AIR;
+                        return game->chunkManager->get({x, y - 1, z}) != CubeType::AIR;
                     case CubeDirection::LEFT:
-                        return game->chunkManager->get(x - 1, y, z) != CubeType::AIR;
+                        return game->chunkManager->get({x - 1, y, z}) != CubeType::AIR;
                     case CubeDirection::RIGHT:
-                        return game->chunkManager->get(x + 1, y, z) != CubeType::AIR;
+                        return game->chunkManager->get({x + 1, y, z}) != CubeType::AIR;
                 }
             }
             
             switch (direction) {
                 case CubeDirection::FACE:
-                    return !(game->chunkManager->get(x, y, z + 1) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y, z + 1}) & TRANSPARENT);
                 case CubeDirection::TOP:
-                    return !(game->chunkManager->get(x, y + 1, z) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y + 1, z}) & TRANSPARENT);
                 case CubeDirection::BACK:
-                    return !(game->chunkManager->get(x, y, z - 1) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y, z - 1}) & TRANSPARENT);
                 case CubeDirection::BOTTOM:
-                    return !(game->chunkManager->get(x, y - 1, z) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y - 1, z}) & TRANSPARENT);
                 case CubeDirection::LEFT:
-                    return !(game->chunkManager->get(x - 1, y, z) & TRANSPARENT);
+                    return !(game->chunkManager->get({x - 1, y, z}) & TRANSPARENT);
                 case CubeDirection::RIGHT:
-                    return !(game->chunkManager->get(x + 1, y, z) & TRANSPARENT);
+                    return !(game->chunkManager->get({x + 1, y, z}) & TRANSPARENT);
             }
         }
         
@@ -107,7 +107,7 @@ namespace mastercraft::cube {
     }
     
     
-    GLushort Chunk::computeData(CubeType type, CubeDirection direction, bool opaqueAbove) {
+    GLushort Chunk::computeData(CubeType type, CubeDirection direction, bool opaqueAbove) const {
         if (type & TOP_OVERLAY && opaqueAbove) {
             return type | CubeDirection::BOTTOM;
         }
@@ -155,7 +155,7 @@ namespace mastercraft::cube {
         CubeType type;
         for (GLubyte x = 0; x < X; x++) {
             for (GLubyte z = 0; z < Z; z++) {
-                for (GLshort y = Y - 1; y >= 0; y--) {
+                for (GLubyte y = Y - 1; y + 1 > 0; y--) {
                     type = this->cubes[x][y][z];
                     
                     if (type == CubeType::AIR) {
@@ -238,19 +238,19 @@ namespace mastercraft::cube {
         glEnableVertexAttribArray(VERTEX_ATTR_DATA);
         glVertexAttribPointer(
             VERTEX_ATTR_POSITION, 3, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, vertex))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, vertex))
         );
         glVertexAttribPointer(
             VERTEX_ATTR_NORMAL, 3, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, normal))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, normal))
         );
         glVertexAttribPointer(
             VERTEX_ATTR_TEXTURE, 2, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, texture))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, texture))
         );
         glVertexAttribIPointer(
             VERTEX_ATTR_DATA, 1, GL_BYTE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, data))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, data))
         );
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -263,19 +263,19 @@ namespace mastercraft::cube {
         glEnableVertexAttribArray(VERTEX_ATTR_DATA);
         glVertexAttribPointer(
             VERTEX_ATTR_POSITION, 3, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, vertex))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, vertex))
         );
         glVertexAttribPointer(
             VERTEX_ATTR_NORMAL, 3, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, normal))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, normal))
         );
         glVertexAttribPointer(
             VERTEX_ATTR_TEXTURE, 2, GL_BYTE, GL_FALSE, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, texture))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, texture))
         );
         glVertexAttribIPointer(
             VERTEX_ATTR_DATA, 1, GL_UNSIGNED_SHORT, sizeof(cube::CubeVertex),
-            (const GLvoid *) (offsetof(cube::CubeVertex, data))
+            reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, data))
         );
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -294,12 +294,12 @@ namespace mastercraft::cube {
         
         if (!alpha) {
             glBindVertexArray(this->vao);
-            glDrawArrays(GL_TRIANGLES, 0, this->count * CubeFace::VERTICE_COUNT);
+            glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(this->count * CubeFace::VERTICE_COUNT));
             glBindVertexArray(0);
         }
         else {
             glBindVertexArray(this->vaoAlpha);
-            glDrawArrays(GL_TRIANGLES, 0, this->countAlpha * CubeFace::VERTICE_COUNT);
+            glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(this->countAlpha * CubeFace::VERTICE_COUNT));
             glBindVertexArray(0);
         }
         
