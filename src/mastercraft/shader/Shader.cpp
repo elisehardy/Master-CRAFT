@@ -30,21 +30,14 @@ namespace mastercraft::shader {
     }
     
     
-    static std::string addVersion(const std::string &shaderPath) {
+    static std::string addVersion(const std::string &shaderSrc) {
         static const std::string driver = std::string(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
         static const std::string header = getHeader(driver);
         
-        std::ifstream shader = std::ifstream(shaderPath);
-        std::string content = util::FileReader::read(shaderPath);
-        content = content.replace(0, 13, header);
+        std::string newSrc = shaderSrc;
+        newSrc = newSrc.replace(0, 13, header);
         
-        std::string newPath = std::string("/tmp/" + mastercraft::util::Uuid::uuid4());
-        std::ofstream tmpShader(newPath);
-        tmpShader << content;
-        tmpShader.flush();
-        tmpShader.close();
-        
-        return newPath;
+        return newSrc;
     }
     
     
@@ -82,12 +75,14 @@ namespace mastercraft::shader {
     
     Shader::Shader(const std::string &vsPath, const std::string &fsPath) :
         programId(glCreateProgram()), vsId(glCreateShader(GL_VERTEX_SHADER)), fsId(glCreateShader(GL_FRAGMENT_SHADER)) {
-        const char *vsSource = util::FileReader::read(addVersion(vsPath)).c_str();
-        const char *fsSource = util::FileReader::read(addVersion(fsPath)).c_str();
+        const std::string vsSource = addVersion(util::FileReader::read(vsPath));
+        const std::string fsSource = addVersion(util::FileReader::read(fsPath));
+        const char *cVsSource = vsSource.c_str();
+        const char *cFsSource = fsSource.c_str();
         GLint status;
-        
-        glShaderSource(this->vsId, 1, &vsSource, nullptr);
-        glShaderSource(this->fsId, 1, &fsSource, nullptr);
+    
+        glShaderSource(this->vsId, 1, &cVsSource, nullptr);
+        glShaderSource(this->fsId, 1, &cFsSource, nullptr);
         
         glCompileShader(this->vsId);
         glGetShaderiv(this->vsId, GL_COMPILE_STATUS, &status);

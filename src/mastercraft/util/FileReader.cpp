@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 
 #include <mastercraft/util/FileReader.hpp>
 
@@ -13,7 +14,7 @@ namespace mastercraft::util {
         
         std::string content = std::string(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
         input.close();
-        
+    
         return content;
     }
 }

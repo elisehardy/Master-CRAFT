@@ -14,6 +14,7 @@ namespace mastercraft::util {
         std::vector<entity::EntityVertex> vertices;
         std::vector<tinyobj::material_t> materials;
         std::vector<tinyobj::shape_t> shapes;
+        tinyobj::real_t vx, vy, vz, nx, ny, nz, tx, ty;
         tinyobj::attrib_t attrib;
         GLuint index_offset, fv;
         std::string warn, err;
@@ -41,14 +42,14 @@ namespace mastercraft::util {
                     n = 3ul * static_cast<GLuint64>(index.vertex_index);
                     t = 3ul * static_cast<GLuint64>(index.vertex_index);
                     
-                    tinyobj::real_t vx = attrib.vertices[v + 0];
-                    tinyobj::real_t vy = attrib.vertices[v + 1];
-                    tinyobj::real_t vz = attrib.vertices[v + 2];
-                    tinyobj::real_t nx = attrib.normals[n + 0];
-                    tinyobj::real_t ny = attrib.normals[n + 1];
-                    tinyobj::real_t nz = attrib.normals[n + 2];
-                    tinyobj::real_t tx = attrib.texcoords[n + 0];
-                    tinyobj::real_t ty = attrib.texcoords[n + 1];
+                    vx = attrib.vertices[v + 0];
+                    vy = attrib.vertices[v + 1];
+                    vz = attrib.vertices[v + 2];
+                    nx = attrib.normals[n + 0];
+                    ny = attrib.normals[n + 1];
+                    nz = attrib.normals[n + 2];
+                    tx = attrib.texcoords[t + 0];
+                    ty = attrib.texcoords[t + 1];
                     
                     vertices.push_back(entity::EntityVertex({ vx, vy, vz }, { nx, ny, nz }, { tx, ty }));
                 }

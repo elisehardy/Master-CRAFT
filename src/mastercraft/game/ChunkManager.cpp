@@ -123,9 +123,9 @@ namespace mastercraft::game {
     
     glm::ivec3 ChunkManager::getSuperChunkCoordinates(const glm::ivec3 &position) const {
         return glm::ivec3(
-            std::floor(position.x / cube::SuperChunk::X) * cube::SuperChunk::X,
-            std::floor(position.y / cube::SuperChunk::Y) * cube::SuperChunk::Y,
-            std::floor(position.z / cube::SuperChunk::Z) * cube::SuperChunk::Z
+            std::floor(position.x / static_cast<GLfloat>(cube::SuperChunk::X)) * cube::SuperChunk::X,
+            std::floor(position.y / static_cast<GLfloat>(cube::SuperChunk::Y)) * cube::SuperChunk::Y,
+            std::floor(position.z / static_cast<GLfloat>(cube::SuperChunk::Z)) * cube::SuperChunk::Z
         );
     }
     
@@ -192,7 +192,7 @@ namespace mastercraft::game {
                         }
                         else { // Try generate a slime instead
                             if (Random::get<bool>(0.001)) {
-                                slimes.emplace_back(std::make_unique<entity::Slime>(glm::vec3(x, y, z)));
+                                slimes.emplace_back(std::make_unique<entity::Slime>(glm::vec3(x, y + 1, z)));
                             }
                         }
                         
