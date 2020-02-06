@@ -153,9 +153,11 @@ namespace mastercraft::cube {
         CubeFace drawnAlpha[FACE_COUNT], drawn[FACE_COUNT];
         bool opaqueAbove = false;
         CubeType type;
+        GLubyte y;
         for (GLubyte x = 0; x < X; x++) {
             for (GLubyte z = 0; z < Z; z++) {
-                for (GLubyte y = Y - 1; y + 1 > 0; y--) {
+                for (GLshort sy = Y - 1; sy >= 0 ; sy--) {
+                    y = static_cast<GLubyte>(sy);
                     type = this->cubes[x][y][z];
                     
                     if (type == CubeType::AIR) {
@@ -165,17 +167,17 @@ namespace mastercraft::cube {
                     
                     if (type & TRANSPARENT) {
                         opaqueAbove = false;
-                        if (!occluded(type, x, y, z, CubeDirection::FACE)) {
-                            drawnAlpha[this->countAlpha++] = CubeFace::face(x, y, z, type | CubeDirection::FACE);
-                        }
                         if (!occluded(type, x, y, z, CubeDirection::TOP)) {
                             drawnAlpha[this->countAlpha++] = CubeFace::top(x, y, z, type | CubeDirection::TOP);
                         }
-                        if (!occluded(type, x, y, z, CubeDirection::BACK)) {
-                            drawnAlpha[this->countAlpha++] = CubeFace::back(x, y, z, type | CubeDirection::BACK);
-                        }
                         if (!occluded(type, x, y, z, CubeDirection::BOTTOM)) {
                             drawnAlpha[this->countAlpha++] = CubeFace::bottom(x, y, z, type | CubeDirection::BOTTOM);
+                        }
+                        if (!occluded(type, x, y, z, CubeDirection::FACE)) {
+                            drawnAlpha[this->countAlpha++] = CubeFace::face(x, y, z, type | CubeDirection::FACE);
+                        }
+                        if (!occluded(type, x, y, z, CubeDirection::BACK)) {
+                            drawnAlpha[this->countAlpha++] = CubeFace::back(x, y, z, type | CubeDirection::BACK);
                         }
                         if (!occluded(type, x, y, z, CubeDirection::LEFT)) {
                             drawnAlpha[this->countAlpha++] = CubeFace::left(x, y, z, type | CubeDirection::LEFT);
@@ -187,12 +189,12 @@ namespace mastercraft::cube {
                     else {
                         if (!occluded(type, x, y, z, CubeDirection::TOP)) {
                             drawn[this->count++] = CubeFace::top(
-                                x, y, z, computeData(type, CubeDirection::TOP, opaqueAbove)
+                                x, y, z, type | CubeDirection::TOP
                             );
                         }
                         if (!occluded(type, x, y, z, CubeDirection::BOTTOM)) {
                             drawn[this->count++] = CubeFace::bottom(
-                                x, y, z, computeData(type, CubeDirection::BOTTOM, opaqueAbove)
+                                x, y, z, type | CubeDirection::BOTTOM
                             );
                         }
                         if (!occluded(type, x, y, z, CubeDirection::FACE)) {

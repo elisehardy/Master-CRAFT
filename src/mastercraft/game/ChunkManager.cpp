@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <iostream>
 
 #include <effolkronium/random.hpp>
 #include <glm/ext.hpp>

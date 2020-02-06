@@ -24,6 +24,7 @@ INCLUDE_DIRECTORIES(
 
 
 ################################# MASTERCRAFT ##################################
+
 SET(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/)
 
 FILE(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -41,9 +42,7 @@ TARGET_LINK_LIBRARIES(${TARGET_NAME} ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLE
 TARGET_COMPILE_OPTIONS(
     ${TARGET_NAME} PRIVATE
     -g
-    -O2
-    -Werror
-    -Wfatal-errors
+    -O3
     -std=c++17
 )
 
@@ -58,14 +57,11 @@ ELSEIF (CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
     TARGET_COMPILE_OPTIONS(
         ${TARGET_NAME} PRIVATE
         -Weverything
+        -Werror
+        -Wfatal-errors
     )
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.0.0")
-        TARGET_COMPILE_OPTIONS(
-            ${TARGET_NAME} PRIVATE
-            -std=c++1z
-        )
     ELSE ()
-        SET(USE_STD_FILESYSTEM 1)
     ENDIF ()
 ENDIF ()
 
@@ -73,29 +69,22 @@ ENDIF ()
 # Disable some warnings
 TARGET_COMPILE_OPTIONS(
     ${TARGET_NAME} PRIVATE
-    -Wno-c++98-compat
     -Wno-unused-parameter
     -Wno-shadow
 )
 IF (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-#        TARGET_COMPILE_OPTIONS(
-#            ${TARGET_NAME} PRIVATE
-#            -Wall
-#            -Wextra
-#        )
-ELSEIF (CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
-        TARGET_COMPILE_OPTIONS(
-            ${TARGET_NAME} PRIVATE
-            -Wno-padded
-            -Wno-weak-vtables
-            -Wno-exit-time-destructors
-        )
-    IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.0.0")
-        #        TARGET_COMPILE_OPTIONS(
-        #            ${TARGET_NAME} PRIVATE
-        #            -std=c++1z
-        #        )
+    IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS_EQUAL "8.0.0")
     ELSE ()
-        SET(USE_STD_FILESYSTEM 1)
+    ENDIF ()
+ELSEIF (CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
+    TARGET_COMPILE_OPTIONS(
+        ${TARGET_NAME} PRIVATE
+        -Wno-padded
+        -Wno-c++98-compat
+        -Wno-weak-vtables
+        -Wno-exit-time-destructors
+    )
+    IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.0.0")
+    ELSE ()
     ENDIF ()
 ENDIF ()
