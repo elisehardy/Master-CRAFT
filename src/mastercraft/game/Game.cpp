@@ -58,7 +58,7 @@ namespace mastercraft::game {
         
         if (duration >  this->configManager->getTickRate() * 1. / 1000.) {
             this->lastTick = std::chrono::steady_clock::now();
-            this->tickCount = (this->tickCount + 1u) % TICK_DAY_CYCLE;
+            this->tickCount = (this->tickCount + 1u) % ConfigManager::TICK_DAY_CYCLE;
             return true;
         }
         

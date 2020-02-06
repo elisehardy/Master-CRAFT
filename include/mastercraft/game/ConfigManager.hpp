@@ -30,8 +30,13 @@ namespace mastercraft::game {
             static constexpr GLubyte GEN_CARVING_HEIGHT = GEN_MIN_HEIGHT +30;
             static constexpr GLubyte GEN_INTERVAL_HEIGHT = GEN_MAX_HEIGHT - GEN_MIN_HEIGHT;
             static constexpr GLubyte GEN_WATER_LEVEL = GEN_MIN_HEIGHT + 22;
-            
+        
+            static constexpr GLuint SECONDS_DAY_CYCLE = 30;
+            static constexpr GLuint TICK_PER_SEC = 20;
+            static constexpr GLuint TICK_DAY_CYCLE = SECONDS_DAY_CYCLE * TICK_PER_SEC;
+        
             static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
+            static_assert(SECONDS_DAY_CYCLE > TICK_PER_SEC);
         
         private:
             const GLubyte *OpenGLVersion = nullptr; /**< Version of OpenGL. */

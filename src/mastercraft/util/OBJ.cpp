@@ -39,8 +39,8 @@ namespace mastercraft::util {
                 for (GLuint i = 0; i < fv; i++) {
                     tinyobj::index_t index = shape.mesh.indices[index_offset + i];
                     v = 3ul * static_cast<GLuint64>(index.vertex_index);
-                    n = 3ul * static_cast<GLuint64>(index.vertex_index);
-                    t = 3ul * static_cast<GLuint64>(index.vertex_index);
+                    n = 3ul * static_cast<GLuint64>(index.normal_index);
+                    t = 2ul * static_cast<GLuint64>(index.texcoord_index);
                     
                     vx = attrib.vertices[v + 0];
                     vy = attrib.vertices[v + 1];

@@ -22,11 +22,6 @@ namespace mastercraft::game {
      */
     class Game : public util::ISingleton {
         private:
-            static constexpr GLuint SECONDS_DAY_CYCLE = 30;
-            static constexpr GLuint TICK_PER_SEC = 20;
-            static constexpr GLuint TICK_DAY_CYCLE = SECONDS_DAY_CYCLE * TICK_PER_SEC;
-        
-            static_assert(SECONDS_DAY_CYCLE > TICK_PER_SEC);
             
             Game();
         
