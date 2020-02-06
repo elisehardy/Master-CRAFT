@@ -9,9 +9,9 @@ namespace mastercraft::cube {
     /**
      * Flag indicating the block us
      */
-    static constexpr GLushort TRANSPARENT = 1 << 11;
-    static constexpr GLushort ANIMATED = 1 << 12;
-    static constexpr GLushort TOP_OVERLAY = 1 << 13;
+    static constexpr GLushort ALPHA = 1u << 11u;
+    static constexpr GLushort ANIMATED = 1u << 12u;
+    static constexpr GLushort TOP_OVERLAY = 1u << 13u;
     
     
     static constexpr GLushort textureLoc(GLushort x, GLushort y) {
@@ -19,14 +19,14 @@ namespace mastercraft::cube {
     }
     
     enum CubeType : GLushort {
-        AIR = 0u | TRANSPARENT, // Empty block, not present in the texture atlas.
-        WATER = textureLoc(0, 0) | TRANSPARENT | ANIMATED,
+        AIR = 0u | ALPHA, // Empty block, not present in the texture atlas.
+        WATER = textureLoc(0, 0) | ALPHA | ANIMATED,
         SAND_BEACH = textureLoc(2, 0),
         ICE = textureLoc(3, 0),
         SNOW = textureLoc(4, 0),
         STONE = textureLoc(5, 0),
         STONE_SNOW = textureLoc(6, 0) | TOP_OVERLAY,
-        FLOWERS = textureLoc(7, 0) | TRANSPARENT,
+        FLOWERS = textureLoc(7, 0) | ALPHA,
         DIRT_PLAIN = textureLoc(2, 1) | TOP_OVERLAY,
         DIRT_JUNGLE = textureLoc(3, 1) | TOP_OVERLAY,
         DIRT_SNOW = textureLoc(4, 1) | TOP_OVERLAY,
@@ -35,9 +35,9 @@ namespace mastercraft::cube {
         WOOD_JUNGLE = textureLoc(3, 2),
         WOOD_SNOW = textureLoc(4, 2),
         CACTUS = textureLoc(5, 2),
-        LEAVES_PLAIN = textureLoc(2, 3) | TRANSPARENT,
-        LEAVES_JUNGLE = textureLoc(3, 3) | TRANSPARENT,
-        LEAVES_SNOW = textureLoc(4, 3) | TRANSPARENT
+        LEAVES_PLAIN = textureLoc(2, 3) | ALPHA,
+        LEAVES_JUNGLE = textureLoc(3, 3) | ALPHA,
+        LEAVES_SNOW = textureLoc(4, 3) | ALPHA
     };
 }
 

@@ -22,11 +22,15 @@ namespace mastercraft::game {
      */
     class Game : public util::ISingleton {
         private:
+            static constexpr GLuint SECONDS_DAY_CYCLE = 30;
+            static constexpr GLuint TICK_PER_SEC = 20;
+            static constexpr GLuint TICK_DAY_CYCLE = SECONDS_DAY_CYCLE * TICK_PER_SEC;
+        
+            static_assert(SECONDS_DAY_CYCLE > TICK_PER_SEC);
             
             Game();
         
         public:
-            std::chrono::steady_clock::time_point lastTick;
             std::unique_ptr<WindowManager> windowManager;
             std::unique_ptr<ConfigManager> configManager;
             std::unique_ptr<InputManager> inputManager;
@@ -34,13 +38,16 @@ namespace mastercraft::game {
             std::unique_ptr<entity::Skybox> skybox;
             std::unique_ptr<entity::Sun> sun;
             std::unique_ptr<Camera> camera;
-            GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             
+            std::chrono::steady_clock::time_point lastTick;
+            GLuint tickCount;
+            GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             
             /**
              * Delete move constructor.
              */
             Game(Game &&) = delete;
+            
             
             /**
              * Return the instance of Game.
@@ -48,7 +55,6 @@ namespace mastercraft::game {
              * @return The instance of Game.
              */
             static Game *getInstance();
-            
             
             /**
              * Initialize the game.
@@ -82,7 +88,6 @@ namespace mastercraft::game {
              * Stops the game.
              */
             void stop();
-            
             /**
              * Return whether the game is currently running or should be cleaned-up and closes.
              */

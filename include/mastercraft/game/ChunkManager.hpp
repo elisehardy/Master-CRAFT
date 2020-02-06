@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <unordered_map>
 
 #include <glm/gtc/noise.hpp>
 
@@ -21,15 +22,14 @@ namespace mastercraft::game {
     
     
     
-    struct Ivec3Less {
-        size_t operator()(const glm::ivec3 &v1, const glm::ivec3 &v2) const {
-            if (v1.x == v2.x) {
-                if (v1.y == v2.y) {
-                    return v1.z < v2.z;
-                }
-                return v1.y < v2.y;
-            }
-            return v1.x < v2.x;
+    struct Ivec3Hash {
+        size_t operator()(const glm::ivec3 &k) const {
+            return std::hash<int>()(k.x) ^ std::hash<int>()(k.y) ^ std::hash<int>()(k.z);
+        }
+        
+        
+        bool operator()(const glm::ivec3 &a, const glm::ivec3 &b) const {
+            return a.x == b.x && a.y == b.y && a.z == b.z;
         }
     };
     
@@ -38,42 +38,42 @@ namespace mastercraft::game {
     class ChunkManager : public util::INonCopyable {
         
         private:
-            std::map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Less> chunks;
+            std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash> chunks;
             std::vector<std::unique_ptr<entity::Slime>> slimes;
             std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
             GLubyte distanceView;
             Noise2D temperatureNoise;
             Noise3D carvingNoise;
-        
+            
         public:
             std::unique_ptr<shader::ShaderTexture> entityShader;
             std::unique_ptr<shader::ShaderTexture> cubeShader;
             shader::Texture cubeTexture;
+        
             Noise2D heightNoise;
         
         private:
-            
+        
             void generateKeys();
-            
+        
             [[nodiscard]] static cube::CubeType getBiome(GLuint height, GLfloat temperature);
-            
+        
             [[nodiscard]] glm::ivec3 getSuperChunkCoordinates(const glm::ivec3 &position) const;
-            
+        
             [[nodiscard]] cube::SuperChunk *createSuperChunk(glm::ivec3 position);
         
         public:
-            
+        
             ChunkManager(const util::Image *t_cubeTexture, GLubyte distanceView);
-            
+        
             void updateDistanceView(GLubyte distance);
-            
-            [[nodiscard]] cube::CubeType get(glm::ivec3 position) const;
-            
+        
+            [[nodiscard]] cube::CubeType get(const glm::ivec3 &position) const;
+        
             void init();
-            
+        
             void update();
-            
             void render();
     };
 }

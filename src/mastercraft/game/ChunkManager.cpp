@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 
 #include <effolkronium/random.hpp>
 #include <glm/ext.hpp>
@@ -221,7 +222,7 @@ namespace mastercraft::game {
     }
     
     
-    cube::CubeType ChunkManager::get(glm::ivec3 position) const {
+    cube::CubeType ChunkManager::get(const glm::ivec3 &position) const {
         glm::ivec3 superChunk = this->getSuperChunkCoordinates(position);
         
         if (this->chunks.count(superChunk)) {
@@ -256,7 +257,11 @@ namespace mastercraft::game {
     
     
     void ChunkManager::update() {
-        this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 64;
+        Game *game = Game::getInstance();
+        
+        if (game->tickCount % 4 == 0) {
+            this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 32;
+        }
         
         generateKeys();
         
@@ -282,8 +287,9 @@ namespace mastercraft::game {
         );
         
         // Update superChunks
-        std::for_each(this->chunks.begin(), this->chunks.end(),
-                      [](const auto &entry) { entry.second->update(); }
+        std::for_each(
+            this->chunks.begin(), this->chunks.end(),
+            [](const auto &entry) { entry.second->update(); }
         );
         
         for (const auto &entity : this->slimes) {

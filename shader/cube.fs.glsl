@@ -26,7 +26,7 @@ vec4 computeTextureColor() {
     vec2 textureCoordinates = vec2((vTexture.x + vTextureOffset.x) / 8.f, 0);
 
     if (vAnimated != 0) {
-        textureCoordinates.y = (vTexture.y + float(uVerticalOffset)) / 32.f;
+        textureCoordinates.y = (vTexture.y + float(uVerticalOffset)) / 64.f;
     } else {
         textureCoordinates.y = (vTexture.y + (vTextureOffset.y * 6.f) + float(vFace)) / 32.f;
     }

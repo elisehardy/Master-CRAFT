@@ -21,14 +21,22 @@ flat out int vAnimated;
 
 // Use to extract the bits 0b00000000.0000xxxx of aData, representing the X offset of the texture of the cube (&).
 const int TEXTURE_X = 15;
+
 // Use to extract the bits 0b00000000.xxxx0000 of aData, representing the Y offset of the texture of the cube (& >> 4).
 const int TEXTURE_Y = 240;
+
 // Use to extract the bits 0b00000xxx.00000000 of aData, representing the face of the cube (& >> 8).
 const int FACE = 1792;
+
 // Use to extract the bits 0b0000x000.00000000 of aData, telling if the cube has an alpha channel (&).
-const int ALPHA = 2048;
+const int ALPHA = 1 << 11;
+
 // Use to extract the bits 0b000x0000.00000000 of aData, telling if the cube has an animated texture (&).
-const int ANIMATED = 4096;
+const int ANIMATED = 1 << 12;
+
+// Use to extract the bits 0b00Xx0000.00000000 of aData, telling the texture use an overlay according to the top of the cube (&).
+const int TOP_OVERLAY = 1 << 13;
+
 
 void main(){
     vec4 vertexPosition = vec4(aPosition + uChunkPosition, 1);
