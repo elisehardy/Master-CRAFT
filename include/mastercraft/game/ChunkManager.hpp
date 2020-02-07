@@ -9,6 +9,7 @@
 #include <glm/gtc/noise.hpp>
 
 #include <mastercraft/util/INonCopyable.hpp>
+#include <mastercraft/entity/IEntity.hpp>
 #include <mastercraft/cube/SuperChunk.hpp>
 #include <mastercraft/shader/ShaderTexture.hpp>
 #include <mastercraft/util/Noise.hpp>
@@ -39,7 +40,7 @@ namespace mastercraft::game {
         
         private:
             std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash> chunks;
-            std::vector<std::unique_ptr<entity::Slime>> slimes;
+            std::vector<std::unique_ptr<entity::IEntity>> entities;
             std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
             GLubyte distanceView;
