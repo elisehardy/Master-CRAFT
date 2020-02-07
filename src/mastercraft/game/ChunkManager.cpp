@@ -188,8 +188,7 @@ namespace mastercraft::game {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
                 for (GLuint y = ConfigManager::GEN_MAX_HEIGHT; y >= ConfigManager::GEN_MIN_HEIGHT; y--) {
                     if (chunk->get(x, y, z) != cube::CubeType::AIR) {
-                        temperature = this->temperatureNoise({ position.x + GLint(x), position.z + GLint(z) });
-                        biome = ChunkManager::getBiome(y, temperature);
+                        biome = chunk->get(x, y, z);
                         
                         // Try to generate a tree at position
                         auto tree = cube::TreeGenerator::generate({ x, y, z }, biome);
