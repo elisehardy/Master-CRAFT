@@ -18,7 +18,7 @@ namespace mastercraft::game {
     ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
         textureVerticalOffset(0), distanceView(t_distanceView),
         temperatureNoise(
-            { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 512.f, 0.5f, 2.f
+            { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 5, 1.f, 1 / 258.f, 0.5f, 2.f
         ),
         
         carvingNoise(
@@ -150,19 +150,7 @@ namespace mastercraft::game {
                 }
             }
         }
-        
-        //        glm::vec3 point;
-        //        for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
-        //            for (GLuint y = ConfigManager::GEN_CARVING_HEIGHT; y < ConfigManager::GEN_MAX_HEIGHT; y++) {
-        //                for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
-        //                    point = { position.x + GLint(x), position.y + GLint(y), position.z + GLint(z) };
-        //                    if (this->noise3D(point) > 0.f) {
-        //                        chunk->set(x, y, z, cube::CubeType::AIR);
-        //                    }
-        //                }
-        //            }
-        //        }
-        
+        //
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
                 for (GLuint y = ConfigManager::GEN_MAX_HEIGHT; y >= ConfigManager::GEN_MIN_HEIGHT; y--) {
@@ -314,13 +302,9 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->bindTexture(this->cubeTexture);
-        std::for_each(this->chunks.begin(), this->chunks.end(),
-                      [](const auto &entry) { entry.second->render(false); }
-        );
+        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(false); });
         glDisable(GL_CULL_FACE);
-        std::for_each(this->chunks.begin(), this->chunks.end(),
-                      [](const auto &entry) { entry.second->render(true); }
-        );
+        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(true); });
         glEnable(GL_CULL_FACE);
         this->cubeShader->unbindTexture();
         this->cubeShader->stop();

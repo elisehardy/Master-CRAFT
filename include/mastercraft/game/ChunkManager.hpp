@@ -18,7 +18,7 @@
 namespace mastercraft::game {
     
     typedef util::Noise<glm::vec2, float, glm::simplex> Noise2D;
-    typedef util::Noise<glm::vec3, float, glm::perlin> Noise3D;
+    typedef util::Noise<glm::vec3, float, glm::simplex> Noise3D;
     
     
     

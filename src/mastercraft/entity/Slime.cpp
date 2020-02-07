@@ -74,8 +74,8 @@ namespace mastercraft::entity {
     GLuint Slime::update() {
         walk();
         
-        GLfloat yaw = std::atan2(this->direction.x, -this->direction.z);
-        glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw, glm::vec3(0.f, 1.f, 0.f));
+        GLfloat yaw = std::atan2(this->direction.x, this->direction.z);
+        glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw + M_PIf32, glm::vec3(0.f, 1.f, 0.f));
         glm::vec3 position;
         
         std::vector<EntityVertex> vertices;
