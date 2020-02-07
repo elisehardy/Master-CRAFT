@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 
 #include <effolkronium/random.hpp>
 #include <glm/ext.hpp>
@@ -190,8 +191,12 @@ namespace mastercraft::game {
                             );
                         }
                         else { // Try generate a slime instead
-                            if (Random::get<bool>(0.001)) {
-                                slimes.emplace_back(std::make_unique<entity::Slime>(glm::vec3(x, y + 1, z)));
+                            if (Random::get<bool>(0.0001)) {
+                                slimes.emplace_back(std::make_unique<entity::Slime>(glm::vec3(
+                                    static_cast<GLint>(x) + position.x,
+                                    static_cast<GLint>(y) + position.y + 1,
+                                    static_cast<GLint>(z) + position.z
+                                )));
                             }
                         }*/
                         
@@ -255,7 +260,7 @@ namespace mastercraft::game {
     }
     
     
-    cube::CubeType ChunkManager::get(glm::ivec3 position) const {
+    cube::CubeType ChunkManager::get(const glm::ivec3 &position) const {
         glm::ivec3 superChunk = this->getSuperChunkCoordinates(position);
         
         if (this->chunks.count(superChunk)) {
@@ -281,7 +286,7 @@ namespace mastercraft::game {
         this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
         
         this->entityShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/entity.vs.glsl", "../shader/entity.fs.glsl"
+            "../shader/slime.vs.glsl", "../shader/slime.fs.glsl"
         );
         this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
@@ -290,7 +295,11 @@ namespace mastercraft::game {
     
     
     void ChunkManager::update() {
-        this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 64;
+        Game *game = Game::getInstance();
+        
+        if (game->tickCount % 4 == 0) {
+            this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 32;
+        }
         
         generateKeys();
         
@@ -316,8 +325,9 @@ namespace mastercraft::game {
         );
         
         // Update superChunks
-        std::for_each(this->chunks.begin(), this->chunks.end(),
-                      [](const auto &entry) { entry.second->update(); }
+        std::for_each(
+            this->chunks.begin(), this->chunks.end(),
+            [](const auto &entry) { entry.second->update(); }
         );
         
         for (const auto &entity : this->slimes) {

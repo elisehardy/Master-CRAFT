@@ -59,17 +59,17 @@ namespace mastercraft::cube {
             
             switch (direction) {
                 case CubeDirection::FACE:
-                    return !(game->chunkManager->get({x, y, z + 1}) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y, z + 1}) & ALPHA);
                 case CubeDirection::TOP:
-                    return !(game->chunkManager->get({x, y + 1, z}) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y + 1, z}) & ALPHA);
                 case CubeDirection::BACK:
-                    return !(game->chunkManager->get({x, y, z - 1}) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y, z - 1}) & ALPHA);
                 case CubeDirection::BOTTOM:
-                    return !(game->chunkManager->get({x, y - 1, z}) & TRANSPARENT);
+                    return !(game->chunkManager->get({x, y - 1, z}) & ALPHA);
                 case CubeDirection::LEFT:
-                    return !(game->chunkManager->get({x - 1, y, z}) & TRANSPARENT);
+                    return !(game->chunkManager->get({x - 1, y, z}) & ALPHA);
                 case CubeDirection::RIGHT:
-                    return !(game->chunkManager->get({x + 1, y, z}) & TRANSPARENT);
+                    return !(game->chunkManager->get({x + 1, y, z}) & ALPHA);
             }
         }
         
@@ -92,17 +92,17 @@ namespace mastercraft::cube {
         
         switch (direction) {
             case CubeDirection::FACE:
-                return !(this->cubes[x][y][z + 1] & TRANSPARENT);
+                return !(this->cubes[x][y][z + 1] & ALPHA);
             case CubeDirection::TOP:
-                return !(this->cubes[x][y + 1][z] & TRANSPARENT);
+                return !(this->cubes[x][y + 1][z] & ALPHA);
             case CubeDirection::BACK:
-                return !(this->cubes[x][y][z - 1] & TRANSPARENT);
+                return !(this->cubes[x][y][z - 1] & ALPHA);
             case CubeDirection::BOTTOM:
-                return !(this->cubes[x][y - 1][z] & TRANSPARENT);
+                return !(this->cubes[x][y - 1][z] & ALPHA);
             case CubeDirection::LEFT:
-                return !(this->cubes[x - 1][y][z] & TRANSPARENT);
+                return !(this->cubes[x - 1][y][z] & ALPHA);
             case CubeDirection::RIGHT:
-                return !(this->cubes[x + 1][y][z] & TRANSPARENT);
+                return !(this->cubes[x + 1][y][z] & ALPHA);
         }
     }
     
@@ -165,7 +165,7 @@ namespace mastercraft::cube {
                         continue;
                     }
                     
-                    if (type & TRANSPARENT) {
+                    if (type & ALPHA) {
                         opaqueAbove = false;
                         if (!occluded(type, x, y, z, CubeDirection::TOP)) {
                             drawnAlpha[this->countAlpha++] = CubeFace::top(x, y, z, type | CubeDirection::TOP);
@@ -251,7 +251,7 @@ namespace mastercraft::cube {
             reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, texture))
         );
         glVertexAttribIPointer(
-            VERTEX_ATTR_DATA, 1, GL_BYTE, sizeof(cube::CubeVertex),
+            VERTEX_ATTR_DATA, 1, GL_SHORT, sizeof(cube::CubeVertex),
             reinterpret_cast<const GLvoid *>(offsetof(cube::CubeVertex, data))
         );
         glBindBuffer(GL_ARRAY_BUFFER, 0);

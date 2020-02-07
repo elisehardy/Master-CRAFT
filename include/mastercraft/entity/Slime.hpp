@@ -9,6 +9,7 @@
 #include <mastercraft/util/INonCopyable.hpp>
 #include <mastercraft/entity/EntityVertex.hpp>
 #include <mastercraft/shader/Texture.hpp>
+#include <mastercraft/game/ConfigManager.hpp>
 
 
 namespace mastercraft::entity {
@@ -18,25 +19,25 @@ namespace mastercraft::entity {
             static constexpr GLuint VERTEX_ATTR_POSITION = 0;
             static constexpr GLuint VERTEX_ATTR_NORMAL = 1;
             static constexpr GLuint VERTEX_ATTR_TEXTURE = 2;
-            static constexpr GLfloat SPEED = 0.5;
+            
+            static constexpr GLfloat SPEED = 1.f / game::ConfigManager::TICK_PER_SEC * 4.f;
         
         private:
             std::vector<EntityVertex> vertices;
             shader::Texture texture;
             glm::vec3 direction;
             glm::vec3 position;
-//            GLfloat rotation;
             glm::vec3 goal;
             GLuint vbo;
             GLuint vao;
         
+            void walk();
+        
         public:
-            
+        
             explicit Slime(const glm::vec3 &position);
             
             ~Slime();
-            
-            void walk();
             
             GLuint update();
             

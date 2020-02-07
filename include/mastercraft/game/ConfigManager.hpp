@@ -30,8 +30,13 @@ namespace mastercraft::game {
             static constexpr GLubyte GEN_CARVING_HEIGHT = GEN_MIN_HEIGHT +30;
             static constexpr GLubyte GEN_INTERVAL_HEIGHT = GEN_MAX_HEIGHT - GEN_MIN_HEIGHT;
             static constexpr GLubyte GEN_WATER_LEVEL = GEN_MIN_HEIGHT + 22;
-            
+        
+            static constexpr GLuint SECONDS_DAY_CYCLE = 30;
+            static constexpr GLuint TICK_PER_SEC = 20;
+            static constexpr GLuint TICK_DAY_CYCLE = SECONDS_DAY_CYCLE * TICK_PER_SEC;
+        
             static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
+            static_assert(SECONDS_DAY_CYCLE > TICK_PER_SEC);
         
         private:
             const GLubyte *OpenGLVersion = nullptr; /**< Version of OpenGL. */
@@ -40,7 +45,7 @@ namespace mastercraft::game {
             GLfloat mouseSensitivity = 0.10f; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;          /**< Field of view, default to 70. */
-            GLubyte distanceView = 4;  /**< Draw distance as the radius of SuperChunk rendered. */
+            GLubyte distanceView = 10;  /**< Draw distance as the radius of SuperChunk rendered. */
             GLubyte framerate = 0;     /**< Framerate real value, default to 0 (uncapped). */
             Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
             

@@ -1,8 +1,11 @@
+#include <iostream>
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <effolkronium/random.hpp>
+
 #include <mastercraft/entity/Slime.hpp>
 #include <mastercraft/util/OBJ.hpp>
-#include <iostream>
 #include <mastercraft/game/Game.hpp>
-#include <effolkronium/random.hpp>
 
 
 using Random = effolkronium::random_static;
@@ -10,8 +13,10 @@ using Random = effolkronium::random_static;
 namespace mastercraft::entity {
     
     Slime::Slime(const glm::vec3 &t_position) :
-        texture(util::Image::loadPNG("../assets/entity/slime/slime.png", 250, 253)), position(t_position){//, rotation(0) {
-        this->vertices = util::OBJ::Load("../assets/entity/slime/slime.obj");
+        vertices(util::OBJ::Load("../assets/entity/slime/slime.obj")),
+        texture(util::Image::loadPNG("../assets/entity/slime/slime.png", 250, 253)),
+        direction(glm::vec3(0)), position(t_position), goal(t_position) {
+        
         glGenBuffers(1, &this->vbo);
         glGenVertexArrays(1, &this->vao);
     }
@@ -23,13 +28,60 @@ namespace mastercraft::entity {
     }
     
     
+    void Slime::walk() {
+        if (glm::vec2(this->position.x, this->position.z) == glm::vec2(this->goal.x, this->goal.z)) {
+            if (Random::get<bool>(0.99)) { // If at goal, 99% chance of idling each tick
+                return;
+            }
+            
+            // Compute another goal
+            this->goal = {
+                Random::get<float>(this->position.x - 25, this->position.x + 25),
+                0,
+                Random::get<float>(this->position.z - 25, this->position.z + 25)
+            };
+        }
+        
+        // Compute direction vector
+        this->direction = this->goal - glm::vec3(this->position.x, 0, this->position.z);
+        if (glm::length(this->direction) > 1.f) {
+            this->direction = glm::normalize(this->direction) * SPEED;
+        }
+        
+        game::Game *game = game::Game::getInstance();
+        glm::vec3 nextPosition = this->position + this->direction;
+        
+        if (game->chunkManager->get(nextPosition) != cube::CubeType::AIR) { // Next cube is solid, trying he one above
+            nextPosition += glm::vec3(0, 1, 0);
+            
+            // If next cube height is more than 1, make the slime idle by setting goal to its position
+            if (game->chunkManager->get(nextPosition) != cube::CubeType::AIR) {
+                this->goal = this->position;
+                return;
+            }
+        }
+        else {
+            // Fall until reaching solid cube
+            while (game->chunkManager->get(nextPosition - glm::vec3(0, 1, 0)) == cube::CubeType::AIR) {
+                nextPosition -= glm::vec3(0, 1, 0);
+            }
+        }
+        
+        this->position = nextPosition;
+    }
+    
+    
     GLuint Slime::update() {
         walk();
         
-        std::vector<EntityVertex> vertices;
+        GLfloat yaw = std::atan2(this->direction.x, -this->direction.z);
+        glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw, glm::vec3(0.f, 1.f, 0.f));
+        glm::vec3 position;
         
+        std::vector<EntityVertex> vertices;
         for (const EntityVertex &vertex: this->vertices) {
-            vertices.push_back(vertex + this->position);
+            position = glm::vec3(rY * glm::vec4(vertex.vertex - glm::vec3(0.5), 1)) + glm::vec3(0.5) + this->position;
+            vertices.emplace_back(position, vertex.normal, vertex.texture);
         }
         
         // Fill the VBO
@@ -62,44 +114,12 @@ namespace mastercraft::entity {
     }
     
     
-    void Slime::walk() {
-        if (this->position == this->goal) {
-            if (Random::get<bool>(0.95)) { // If at goal, 95% chance of idling each tick
-                return;
-            }
-            
-            // Compute another goal
-            this->goal = {
-                Random::get(position.x - 10, position.x + 10),
-                0,
-                Random::get(position.z - 10, position.z + 10)
-            };
-            this->direction = glm::normalize(this->goal - this->position) * SPEED;
-            this->direction.y = 0;
-        }
-        
-        game::Game *game = game::Game::getInstance();
-        glm::vec3 nextPosition = this->position + this->direction;
-        
-        if (game->chunkManager->get(nextPosition) != cube::CubeType::AIR) { // Next cube is solid, trying he one above
-            nextPosition += glm::vec3(0, 1, 0);
-    
-            // If next cube height is more than 1, make the slime idle by setting goal to its position
-            if (game->chunkManager->get(nextPosition) != cube::CubeType::AIR) {
-                this->goal = this->position;
-                return;
-            }
-        }
-        
-        this->position = nextPosition;
-    }
-    
-    
     GLuint Slime::render() {
         game::Game *game = game::Game::getInstance();
+        
         glBindVertexArray(this->vao);
         game->chunkManager->entityShader->bindTexture(this->texture);
-        glDrawArrays(GL_TRIANGLES, 0, GLsizei(this->vertices.size()));
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(this->vertices.size()));
         game->chunkManager->entityShader->unbindTexture();
         glBindVertexArray(0);
         

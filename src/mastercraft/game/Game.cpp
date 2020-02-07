@@ -40,8 +40,8 @@ namespace mastercraft::game {
         this->chunkManager->init();
         this->configManager->init();
         this->camera->init();
-        
         this->lastTick = std::chrono::steady_clock::now();
+        this->tickCount = 0;
         
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -56,8 +56,9 @@ namespace mastercraft::game {
         std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
         double duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - this->lastTick).count();
         
-        if (duration > 1. / this->configManager->getTickRate() * 1000) {
+        if (duration >  this->configManager->getTickRate() * 1. / 1000.) {
             this->lastTick = std::chrono::steady_clock::now();
+            this->tickCount = (this->tickCount + 1u) % ConfigManager::TICK_DAY_CYCLE;
             return true;
         }
         

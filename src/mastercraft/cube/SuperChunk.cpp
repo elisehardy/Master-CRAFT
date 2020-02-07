@@ -48,11 +48,11 @@ namespace mastercraft::cube {
     
     
     void SuperChunk::touch() {
-    
+        
         for (GLubyte x = 0; x < CHUNK_X; x++) {
             for (GLubyte y = 0; y < CHUNK_Y; y++) {
                 for (GLubyte z = 0; z < CHUNK_Z; z++) {
-                  this->chunks[x][y][z].touch();
+                    this->chunks[x][y][z].touch();
                 }
             }
         }
