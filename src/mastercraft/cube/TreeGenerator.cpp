@@ -290,12 +290,12 @@ namespace mastercraft::cube {
     TreeGenerator::Tree TreeGenerator::generate(glm::ivec3 position, CubeType biome) {
         switch (biome) {
             case DIRT_PLAIN:
-                if (Random::get<bool>(0.01)) {
+                if (Random::get<bool>(0.03)) {
                     return plainTree(position);
                 }
                 break;
             case DIRT_JUNGLE:
-                if (Random::get<bool>(0.05)) {
+                if (Random::get<bool>(0.2)) {
                     return jungleTree(position);
                 }
                 break;
