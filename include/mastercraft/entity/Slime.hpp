@@ -7,6 +7,7 @@
 #include <glm/vec2.hpp>
 
 #include <mastercraft/util/INonCopyable.hpp>
+#include <mastercraft/entity/IEntity.hpp>
 #include <mastercraft/entity/EntityVertex.hpp>
 #include <mastercraft/shader/Texture.hpp>
 #include <mastercraft/game/ConfigManager.hpp>
@@ -14,7 +15,7 @@
 
 namespace mastercraft::entity {
     
-    class Slime : public util::INonCopyable {
+class Slime : public IEntity {
         private:
             static constexpr GLuint VERTEX_ATTR_POSITION = 0;
             static constexpr GLuint VERTEX_ATTR_NORMAL = 1;

@@ -7,6 +7,7 @@
 #include <mastercraft/game/ChunkManager.hpp>
 #include <mastercraft/game/Game.hpp>
 #include <mastercraft/entity/Slime.hpp>
+#include <mastercraft/entity/Robot.hpp>
 #include <mastercraft/cube/ColumnGenerator.hpp>
 #include <mastercraft/cube/TreeGenerator.hpp>
 
@@ -206,13 +207,23 @@ namespace mastercraft::game {
                                 }
                             );
                         }
-                        else { // Try generate a slime instead
+                        else { // Try generate a entity instead
                             if (Random::get<bool>(0.0001)) {
-                                slimes.emplace_back(std::make_unique<entity::Slime>(glm::vec3(
-                                    static_cast<GLint>(x) + position.x,
-                                    static_cast<GLint>(y) + position.y + 1,
-                                    static_cast<GLint>(z) + position.z
-                                )));
+                                auto type = Random::get(0,1);
+                                if (type){
+                                    entities.emplace_back(std::make_unique<entity::Slime>(glm::vec3(
+                                            static_cast<GLint>(x) + position.x,
+                                            static_cast<GLint>(y) + position.y + 1,
+                                            static_cast<GLint>(z) + position.z
+                                    )));
+                                } else{
+                                    entities.emplace_back(std::make_unique<entity::Robot>(  glm::vec3(
+                                            static_cast<GLint>(x) + position.x,
+                                            static_cast<GLint>(y) + position.y + 1,
+                                            static_cast<GLint>(z) + position.z
+                                    )));
+                                }
+
                             }
                         }
                         
@@ -312,7 +323,7 @@ namespace mastercraft::game {
             [](const auto &entry) { entry.second->update(); }
         );
         
-        for (const auto &entity : this->slimes) {
+        for (const auto &entity : this->entities) {
             entity->update();
         }
     }
@@ -341,7 +352,7 @@ namespace mastercraft::game {
         this->entityShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
         this->entityShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->entityShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
-        for (const auto &entity : this->slimes) {
+        for (const auto &entity : this->entities) {
             entity->render();
         }
         this->entityShader->stop();
