@@ -163,7 +163,7 @@ namespace mastercraft::game {
                             chunk->set(x, y2, z, column[y2]);
                         }
                         
-                        // Try to generate a tree at position
+                       /* // Try to generate a tree at position
                         auto tree = cube::TreeGenerator::generate({ x, y, z }, biome);
                         if (!tree.empty()) { // If a tree was generated
                             std::for_each(
@@ -186,8 +186,42 @@ namespace mastercraft::game {
                                     static_cast<GLint>(z) + position.z
                                 )));
                             }
-                        }
+                        }*/
                         
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
+            for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
+                for (GLuint y = ConfigManager::GEN_MAX_HEIGHT; y >= ConfigManager::GEN_MIN_HEIGHT; y--) {
+                    if (chunk->get(x, y, z) != cube::CubeType::AIR) {
+                        temperature = this->temperatureNoise({ position.x + GLint(x), position.z + GLint(z) });
+                        biome = ChunkManager::getBiome(y, temperature);
+
+                        // Try to generate a tree at position
+                        auto tree = cube::TreeGenerator::generate({ x, y, z }, biome);
+                        if (!tree.empty()) { // If a tree was generated
+                            std::for_each(
+                                    tree.begin(), tree.end(),
+                                    [&chunk](const auto &e) {
+                                        chunk->set(
+                                                static_cast<GLuint>(e.first.x),
+                                                static_cast<GLuint>(e.first.y),
+                                                static_cast<GLuint>(e.first.z),
+                                                e.second
+                                        );
+                                    }
+                            );
+                        }
+                        else { // Try generate a slime instead
+                            if (Random::get<bool>(0.001)) {
+                                slimes.emplace_back(std::make_unique<entity::Slime>(glm::vec3(x, y + 1, z)));
+                            }
+                        }
+
                         break;
                     }
                 }
