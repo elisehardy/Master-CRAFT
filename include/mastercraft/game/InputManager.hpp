@@ -1,7 +1,7 @@
 #ifndef MASTERCRAFT_INPUTMANAGER_HPP
 #define MASTERCRAFT_INPUTMANAGER_HPP
 
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 
 #include <mastercraft/util/INonCopyable.hpp>
 

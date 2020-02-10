@@ -16,7 +16,12 @@ namespace mastercraft::entity {
             vertices(util::OBJ::Load("../assets/entity/robot/robot.obj")),
             texture(util::Image::loadPNG("../assets/entity/robot/robot.png", 250, 253)),
             direction(glm::vec3(0)), position(t_position), goal(t_position) {
-
+        
+        this->texture.bind();
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        this->texture.unbind();
+        
         glGenBuffers(1, &this->vbo);
         glGenVertexArrays(1, &this->vao);
     }

@@ -66,7 +66,7 @@ namespace mastercraft::entity {
         glCullFace(GL_FRONT);
         this->shader->use();
         this->shader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
-        this->shader->bindCubemap(game->configManager->isDay() ? *this->day : *this->night);
+        this->shader->bindCubemap(game->tickCount < game::ConfigManager::TICK_DAY ? *this->day : *this->night);
         glBindVertexArray(this->vao);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);

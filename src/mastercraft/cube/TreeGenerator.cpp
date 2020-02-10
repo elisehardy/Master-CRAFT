@@ -403,7 +403,7 @@ namespace mastercraft::cube {
                 }
                 break;
             case DIRT_JUNGLE:
-                if (Random::get<bool>(0.5)) {
+                if (Random::get<bool>(1)) {
                     return jungleTree(position);
                 }
                 break;

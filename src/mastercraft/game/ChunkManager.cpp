@@ -30,6 +30,11 @@ namespace mastercraft::game {
         cubeTexture(shader::Texture(t_cubeTexture)),
         heightNoise({ Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 3, 1.f, 1 / 256.f, 0.5f, 2.f
         ) {
+        
+        cubeTexture.bind();
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        cubeTexture.unbind();
     }
     
     

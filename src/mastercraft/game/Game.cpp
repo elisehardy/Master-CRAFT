@@ -1,8 +1,7 @@
 #include <iostream>
 
 #include <GL/glew.h>
-#include <glm/ext.hpp>
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 
 #include <mastercraft/game/Game.hpp>
 
@@ -11,7 +10,6 @@ namespace mastercraft::game {
     
     Game::Game() :
         running(true) {
-        
     }
     
     
@@ -28,12 +26,13 @@ namespace mastercraft::game {
         if (GLEW_OK != glewInitError) {
             throw std::runtime_error(reinterpret_cast<const char *>(glewGetErrorString(glewInitError)));
         }
-    
+        
         util::Image *atlas = util::Image::loadPNG("../assets/block/atlas.png", 3072, 16384);
         
         this->configManager = std::make_unique<ConfigManager>();
         this->inputManager = std::make_unique<InputManager>();
         this->camera = std::make_unique<Camera>();
+        this->debug = std::make_unique<Debug>();
         this->chunkManager = std::make_unique<ChunkManager>(atlas, this->configManager->getDistanceView());
         this->skybox = std::make_unique<entity::Skybox>();
         this->sun = std::make_unique<entity::Sun>(1, 0, 0);
@@ -50,15 +49,17 @@ namespace mastercraft::game {
     
     void Game::cleanup() {
     }
-
+    
     
     bool Game::tick() {
+        static constexpr double TICK_PER_MS = 1. / ConfigManager::TICK_PER_SEC * 1000.;
+        
         std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
         double duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - this->lastTick).count();
         
-        if (duration >  this->configManager->getTickRate() * 1. / 1000.) {
-            this->lastTick = std::chrono::steady_clock::now();
-            this->tickCount = (this->tickCount + 1u) % ConfigManager::TICK_DAY_CYCLE;
+        if (duration >= TICK_PER_MS) {
+            this->lastTick = now;
+            this->tickCount = (this->tickCount + 1u) % ConfigManager::TICK_CYCLE;
             return true;
         }
         
@@ -101,8 +102,7 @@ namespace mastercraft::game {
         
         this->inputManager->handleHeldMouseButton();
         this->inputManager->handleHeldKey();
-    
-    
+        
         if (this->tick()) {
             this->chunkManager->update();
         }
@@ -113,13 +113,16 @@ namespace mastercraft::game {
     
     void Game::render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+        
         glDisable(GL_DEPTH_TEST);
         this->skybox->render();
         this->sun->render();
         glEnable(GL_DEPTH_TEST);
         
         this->chunkManager->render();
+        if (this->configManager->getDebug()) {
+            this->debug->render();
+        }
         
         this->windowManager->refresh();
     }

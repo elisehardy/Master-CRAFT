@@ -54,10 +54,17 @@ namespace mastercraft::game {
         if (InputManager::isKeyPressed(SDL_SCANCODE_SPACE)) {
             game->camera->moveUp(0.6f);
         }
-        
+    
+        if (InputManager::isKeyPressed(SDL_SCANCODE_F10)) {
+            game->configManager->switchDebug();
+        }
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {
-            game->configManager->switchDay();
+            if (game->tickCount > ConfigManager::TICK_DAY) {
+                game->tickCount = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.25f);
+            } else {
+                game->tickCount = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.75f);
+            }
         }
     }
     

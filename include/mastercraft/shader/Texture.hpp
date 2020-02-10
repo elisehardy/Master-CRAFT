@@ -11,7 +11,7 @@
 
 namespace mastercraft::shader {
     
-    class Texture : public util::INonCopyable {
+    class Texture  {
         private:
             GLuint textureId = 0;
         
@@ -21,7 +21,11 @@ namespace mastercraft::shader {
             
             explicit Texture(const util::Image *texture);
             
-            [[nodiscard]] GLuint getTextureId() const;
+            explicit Texture(GLuint textureId);
+        
+            void bind() const;
+            
+            void unbind() const;
     };
 }
 

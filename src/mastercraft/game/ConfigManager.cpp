@@ -108,31 +108,6 @@ namespace mastercraft::game {
     }
     
     
-    GLuint ConfigManager::getTickRate() const {
-        return tickRate;
-    }
-    
-    
-    void ConfigManager::setTickRate(GLuint tickRate) {
-        this->tickRate = tickRate;
-    }
-    
-    
-    GLboolean ConfigManager::isDay() const {
-        return day;
-    }
-    
-    
-    void ConfigManager::setDay(GLboolean day) {
-        this->day = day;
-    }
-    
-    
-    void ConfigManager::switchDay() {
-        this->day = !this->day;
-    }
-    
-    
     GLboolean ConfigManager::getFaceCulling() const {
         return faceCulling;
     }

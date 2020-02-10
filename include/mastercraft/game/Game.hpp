@@ -11,6 +11,7 @@
 #include <mastercraft/game/InputManager.hpp>
 #include <mastercraft/game/WindowManager.hpp>
 #include <mastercraft/game/ChunkManager.hpp>
+#include <mastercraft/game/Debug.hpp>
 #include <mastercraft/entity/Skybox.hpp>
 #include <mastercraft/entity/Sun.hpp>
 
@@ -33,6 +34,7 @@ namespace mastercraft::game {
             std::unique_ptr<entity::Skybox> skybox;
             std::unique_ptr<entity::Sun> sun;
             std::unique_ptr<Camera> camera;
+            std::unique_ptr<Debug> debug;
             
             std::chrono::steady_clock::time_point lastTick;
             GLuint tickCount;
@@ -63,7 +65,7 @@ namespace mastercraft::game {
             
             /**
              * Check whether the game should be updated, so that the game loop runs at a fixed rate of
-             * 'ConfigManager::tickRate' ticks per second.
+             * 'ConfigManager::TICK_PER_SEC' ticks per second.
              *
              * @return true if a tick happened.
              */

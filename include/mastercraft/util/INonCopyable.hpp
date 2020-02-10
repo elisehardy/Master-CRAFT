@@ -20,6 +20,7 @@ namespace mastercraft::util {
             INonCopyable &operator=(const INonCopyable &) = delete;
         
         protected:
+            
             INonCopyable() = default;
             
             ~INonCopyable() = default;

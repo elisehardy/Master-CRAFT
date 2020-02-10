@@ -21,9 +21,9 @@ namespace mastercraft::util {
             throw std::runtime_error(msg);
         }
         
-        float scale = 1.f / 255.f;
+        static constexpr float SCALE = 1.f / 255.f;
         for (GLuint64 i = 0; i < raw.size(); i += 4) {
-            pixels.emplace_back(raw[i] * scale, raw[i + 1] * scale, raw[i + 2] * scale, raw[i + 3] * scale);
+            pixels.emplace_back(raw[i] * SCALE, raw[i + 1] * SCALE, raw[i + 2] * SCALE, raw[i + 3] * SCALE);
         }
         
         return new Image(width, height, pixels);

@@ -24,7 +24,7 @@ namespace mastercraft::cube {
             static constexpr GLuint VERTEX_ATTR_NORMAL = 1;
             static constexpr GLuint VERTEX_ATTR_TEXTURE = 2;
             static constexpr GLuint VERTEX_ATTR_DATA = 3;
-        
+            
             CubeType cubes[X][Y][Z] {};
             glm::ivec3 position = glm::ivec3(0);
             GLboolean modified = true;
@@ -34,26 +34,27 @@ namespace mastercraft::cube {
             GLuint count = 0;
             GLuint vbo = 0;
             GLuint vao = 0;
-        
+            
             [[nodiscard]] static bool onBorder(GLubyte x, GLubyte y, GLubyte z);
             
             [[nodiscard]] bool occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const;
-        
+            
             [[nodiscard]] GLushort computeData(CubeType type, CubeDirection direction, bool opaqueAbove) const;
+            
         public:
             
             Chunk();
             
             ~Chunk();
-        
+            
             CubeType get(GLubyte x, GLubyte y, GLubyte z);
             
             void set(GLubyte x, GLubyte y, GLubyte z, CubeType type);
             
             void setPosition(GLint x, GLint y, GLint z);
-        
+            
             void touch();
-        
+            
             GLuint update();
             
             GLuint render(bool alpha);
