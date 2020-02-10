@@ -15,9 +15,9 @@ namespace mastercraft::game {
     
     struct Glyph {
         shader::Texture texture; /**< ID handle of the glyph texture. */
-        glm::vec2 size;         /**< Size of glyph. */
-        glm::vec2 bearing;      /**< Offset from baseline to left/top of glyph. */
-        FT_Pos advance;          /**<  Offset to advance to next glyph. */
+        glm::vec2 size;          /**< Size of glyph. */
+        glm::vec2 bearing;       /**< Offset from baseline to left/top of glyph. */
+        FT_Pos advance;          /**< Offset to advance to next glyph. */
         
         Glyph() = default;
         
@@ -29,10 +29,14 @@ namespace mastercraft::game {
     class Debug : public util::INonCopyable {
         private:
             static constexpr GLuint VERTEX_ATTR_POSITION = 0;
-        
+            static constexpr GLfloat LINE_HEIGHT =40;
+            static constexpr GLfloat LINE_SPACING = 5;
+            
         private:
             std::unique_ptr<shader::ShaderTexture> shader;
             std::unordered_map<FT_ULong, Glyph> glyphs;
+            GLfloat height;          /**< Height of the screen */
+            GLfloat width;           /**< Width of the screen */
             GLuint vbo = 0;
             GLuint vao = 0;
             

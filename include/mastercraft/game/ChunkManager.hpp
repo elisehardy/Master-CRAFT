@@ -75,6 +75,7 @@ namespace mastercraft::game {
             void init();
         
             void update();
+            
             void render();
     };
 }

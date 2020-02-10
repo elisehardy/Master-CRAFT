@@ -4,6 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <mastercraft/game/Debug.hpp>
+#include <mastercraft/game/Game.hpp>
 #include <mastercraft/util/Image.hpp>
 
 
@@ -15,7 +16,7 @@ namespace mastercraft::game {
     
     
     Debug::Debug() {
-        // Loading Glyphs
+        
         FT_Library ft;
         if (FT_Init_FreeType(&ft)) {
             throw std::runtime_error("Error: Could not init FreeType");
@@ -25,7 +26,7 @@ namespace mastercraft::game {
         if (FT_New_Face(ft, "../assets/GameSystem.ttf", 0, &face)) {
             throw std::runtime_error("Error: Could not load font '../assets/GameSystem.ttf'");
         }
-        FT_Set_Pixel_Sizes(face, 0, 48);
+        FT_Set_Pixel_Sizes(face, 0, LINE_HEIGHT);
         
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         for (FT_ULong c = 0; c < 128; c++) {
@@ -63,9 +64,18 @@ namespace mastercraft::game {
         FT_Done_FreeType(ft);
         
         // Loading shaders
+        SDL_DisplayMode display = Game::getInstance()->windowManager->getDisplayMode();
+        this->width = static_cast<GLfloat>(display.w);
+        this->height = static_cast<GLfloat>(display.h);
+        
+        glm::mat4 projection = glm::ortho(0.0f, this->width, 0.0f, this->height);
+        
         this->shader = std::make_unique<shader::ShaderTexture>("../shader/debug.vs.glsl", "../shader/debug.fs.glsl");
         this->shader->addUniform("uProjection", shader::UNIFORM_MATRIX_4F);
         this->shader->addUniform("uTextColor", shader::UNIFORM_3_F);
+        this->shader->use();
+        this->shader->loadUniform("uProjection", glm::value_ptr(projection));
+        this->shader->stop();
         
         // Generating VBO and VAO
         glGenBuffers(1, &this->vbo);
@@ -111,7 +121,6 @@ namespace mastercraft::game {
                 { xpos,     ypos + h, 0.0, 0.0 },
                 { xpos,     ypos,     0.0, 1.0 },
                 { xpos + w, ypos,     1.0, 1.0 },
-                
                 { xpos,     ypos + h, 0.0, 0.0 },
                 { xpos + w, ypos,     1.0, 1.0 },
                 { xpos + w, ypos + h, 1.0, 0.0 }
@@ -131,7 +140,15 @@ namespace mastercraft::game {
     
     
     void Debug::render() {
-        this->renderText(25.0f, 25.0f, 1.0f, "This is sample text", glm::vec3(0.5, 0.8f, 0.2f));
-        this->renderText(540.0f, 570.0f, 0.5f, "(C) LearnOpenGL.com", glm::vec3(0.3, 0.7f, 0.9f));
+        glm::vec3 color;
+        if (Game::getInstance()->tickCount < game::ConfigManager::TICK_DAY) {
+            color = { 0, 0, 0 };
+        }
+        else {
+            color = { 1, 1, 1 };
+        }
+        
+        this->renderText(0.0f, this->height - 50, 1.0f, "fps:", color);
+        this->renderText(0.0f, this->height - 50, 1.0f, std::string("SuperChunk: ") + " - Chunk: " + " - Cube: ", color);
     }
 }
