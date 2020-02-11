@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <iostream>
+#include <iomanip>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -26,7 +27,7 @@ namespace mastercraft::game {
         if (FT_New_Face(ft, "../assets/GameSystem.ttf", 0, &face)) {
             throw std::runtime_error("Error: Could not load font '../assets/GameSystem.ttf'");
         }
-        FT_Set_Pixel_Sizes(face, 0, LINE_HEIGHT);
+        FT_Set_Pixel_Sizes(face, 0, static_cast<FT_UInt>(LINE_HEIGHT));
         
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         for (FT_ULong c = 0; c < 128; c++) {
@@ -141,14 +142,81 @@ namespace mastercraft::game {
     
     void Debug::render() {
         glm::vec3 color;
-        if (Game::getInstance()->tickCount < game::ConfigManager::TICK_DAY) {
+        Game *game = Game::getInstance();
+        std::stringstream ss;
+        
+        if (game->tickCount < game::ConfigManager::TICK_DAY) {
             color = { 0, 0, 0 };
         }
         else {
             color = { 1, 1, 1 };
         }
         
-        this->renderText(0.0f, this->height - 50, 1.0f, "fps:", color);
-        this->renderText(0.0f, this->height - 50, 1.0f, std::string("SuperChunk: ") + " - Chunk: " + " - Cube: ", color);
+        game::Statistics stats = game->stats;
+        glm::ivec3 position = game->camera->getPosition();
+        float i = 0;
+        
+        ss << game->configManager->getCpuInfo();
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "OpenGL version: " << game->configManager->getOpenGlVersion();
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        i++;
+        ss.str(std::string());
+        ss << "Position: (" << position.x << "," << position.y << "," << position.z << ")";
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "FPS: " << stats.fps << "/" << game->configManager->getFramerateString();
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Rendered face: " << stats.rendered_face << "/" << stats.face << " ("
+           << std::setprecision(2) << static_cast<float>(stats.rendered_face) / static_cast<float>(stats.face) * 100.f
+           << "%)";
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "SuperChunks: " << stats.superchunk << " - Chunks: " << stats.chunk << " - Cubes: " << stats.cube
+           << " - Entities: " << stats.entity;
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Size: " << "Superchunk (" << cube::SuperChunk::CHUNK_X << "/" << cube::SuperChunk::CHUNK_Y << "/"
+           << cube::SuperChunk::CHUNK_Z << ") - Chunk (" << cube::Chunk::X << "/" << cube::Chunk::Y << "/"
+           << cube::Chunk::Z << ")";
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Distance: " << game->configManager->getDistanceView() << " - FOV: " << game->configManager->getFov();
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        i++;
+        ss.str(std::string());
+        ss << "Occlusion culling: ";
+        if (game->configManager->getOcclusionCulling()) {
+            ss << stats.occludedFace;
+        }
+        else {
+            ss << "Disabled";
+        }
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Frustum culling: ";
+        //        if (game->configManager->getFrustumCulling()) {
+        //            ss << stats.frustumCulledFace;
+        //        }
+        //        else {
+        //            ss << "Disabled";
+        //        }
+        ss << "Not implemented";
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Face culling: " << (game->configManager->getFaceCulling() ? "Enabled" : "Disabled");
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
     }
 }

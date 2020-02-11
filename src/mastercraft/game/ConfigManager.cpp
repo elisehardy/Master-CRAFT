@@ -1,5 +1,8 @@
+#include <sstream>
+
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <cpuid/libcpuid.h>
 
 #include <mastercraft/game/ConfigManager.hpp>
 #include <mastercraft/game/Game.hpp>
@@ -8,30 +11,54 @@
 namespace mastercraft::game {
     
     void ConfigManager::init() {
-        this->setOpenGlVersion(glGetString(GL_VERSION));
-        this->setGlewVersion(glewGetString(GLEW_VERSION));
+        this->setOpenGlVersion(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+        this->setGlewVersion(reinterpret_cast<const char *>(glewGetString(GLEW_VERSION)));
         this->setFaceCulling(true);
         SDL_SetRelativeMouseMode(SDL_TRUE);
+        
+        struct cpu_raw_data_t raw {};
+        struct cpu_id_t data {};
+        if (cpuid_get_raw_data(&raw) < 0) {
+            this->CPUInfo = "Unknown";
+        }
+        else if (cpu_identify(&raw, &data) < 0) {
+            this->CPUInfo = "Unknown";
+        }
+        else {
+            std::stringstream ss;
+            ss << data.brand_str << " - " << data.num_cores << " cores (" << data.num_logical_cpus << " threads)";
+            this->CPUInfo = ss.str();
+        }
     }
     
     
-    const GLubyte *ConfigManager::getOpenGlVersion() const {
-        return OpenGLVersion;
+    std::string ConfigManager::getOpenGlVersion() const {
+        return this->OpenGLVersion;
     }
     
     
-    void ConfigManager::setOpenGlVersion(const GLubyte *openGlVersion) {
-        OpenGLVersion = openGlVersion;
+    void ConfigManager::setOpenGlVersion(const std::string &openGlVersion) {
+        this->OpenGLVersion = openGlVersion;
     }
     
     
-    const GLubyte *ConfigManager::getGlewVersion() const {
-        return GLEWVersion;
+    std::string ConfigManager::getGlewVersion() const {
+        return this->GLEWVersion;
     }
     
     
-    void ConfigManager::setGlewVersion(const GLubyte *glewVersion) {
-        GLEWVersion = glewVersion;
+    void ConfigManager::setGlewVersion(const std::string &glewVersion) {
+        this->GLEWVersion = glewVersion;
+    }
+    
+    
+    std::string ConfigManager::getCpuInfo() const {
+        return this->CPUInfo;
+    }
+    
+    
+    void ConfigManager::setCpuInfo(const std::string &cpuInfo) {
+        this->CPUInfo = cpuInfo;
     }
     
     
@@ -47,6 +74,28 @@ namespace mastercraft::game {
     
     GLubyte ConfigManager::getFramerate() const {
         return framerate;
+    }
+    
+    
+    std::string ConfigManager::getFramerateString() const {
+        switch (this->framerateOpt) {
+            case Framerate::FRAMERATE_60:
+                return "80";
+            case Framerate::FRAMERATE_75:
+                return "70";
+            case Framerate::FRAMERATE_120:
+                return "120";
+            case Framerate::FRAMERATE_144:
+                return "144";
+            case Framerate::FRAMERATE_180:
+                return "180";
+            case Framerate::FRAMERATE_240:
+                return "240";
+            case Framerate::FRAMERATE_VSYNC:
+                return std::to_string(this->framerate) + " (VSYNC)";
+            case Framerate::FRAMERATE_UNCAPPED:
+                return "Uncapped";
+        }
     }
     
     
@@ -98,12 +147,12 @@ namespace mastercraft::game {
     }
     
     
-    GLubyte ConfigManager::getDistanceView() const {
+    GLuint ConfigManager::getDistanceView() const {
         return distanceView;
     }
     
     
-    void ConfigManager::setDistanceView(GLubyte distanceView) {
+    void ConfigManager::setDistanceView(GLuint distanceView) {
         this->distanceView = distanceView;
     }
     

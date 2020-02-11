@@ -55,6 +55,13 @@ namespace mastercraft::game {
             game->camera->moveUp(0.6f);
         }
     
+        if (InputManager::isKeyPressed(SDL_SCANCODE_F1)) {
+            game->configManager->switchFaceCulling();
+        }
+        if (InputManager::isKeyPressed(SDL_SCANCODE_F2)) {
+            game->configManager->switchOcclusionCulling();
+            game->chunkManager->clearChunks();
+        }
         if (InputManager::isKeyPressed(SDL_SCANCODE_F10)) {
             game->configManager->switchDebug();
         }

@@ -33,6 +33,10 @@ namespace mastercraft::cube {
     
     
     bool Chunk::occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const {
+        if (!game::Game::getInstance()->configManager->getOcclusionCulling()) {
+        
+        }
+        
         if (onBorder(static_cast<GLubyte>(x), static_cast<GLubyte>(y), static_cast<GLubyte>(z))) {
             game::Game *game = game::Game::getInstance();
             

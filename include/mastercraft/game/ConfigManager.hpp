@@ -1,6 +1,8 @@
 #ifndef MASTERCRAFT_CONFIGMANAGER_HPP
 #define MASTERCRAFT_CONFIGMANAGER_HPP
 
+#include <string>
+
 #include <GL/glew.h>
 
 #include <mastercraft/util/INonCopyable.hpp>
@@ -40,13 +42,14 @@ namespace mastercraft::game {
             static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
         
         private:
-            const GLubyte *OpenGLVersion = nullptr; /**< Version of OpenGL. */
-            const GLubyte *GLEWVersion = nullptr;   /**< Version of GLEW. */
+            std::string OpenGLVersion; /**< Version of OpenGL. */
+            std::string GLEWVersion;   /**< Version of GLEW. */
+            std::string CPUInfo;       /**< CPU brand and core information. */
             
             GLfloat mouseSensitivity = 0.10f; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;          /**< Field of view, default to 70. */
-            GLubyte distanceView = 4;  /**< Draw distance as the radius of SuperChunk rendered. */
+            GLuint distanceView = 7;  /**< Draw distance as the radius of SuperChunk rendered. */
             GLubyte framerate = 0;     /**< Framerate real value, default to 0 (uncapped). */
             Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
             
@@ -61,13 +64,17 @@ namespace mastercraft::game {
             
             void init();
             
-            [[nodiscard]] const GLubyte *getOpenGlVersion() const;
+            [[nodiscard]] std::string getOpenGlVersion() const;
             
-            void setOpenGlVersion(const GLubyte *openGlVersion);
+            void setOpenGlVersion(const std::string &openGlVersion);
             
-            [[nodiscard]] const GLubyte *getGlewVersion() const;
+            [[nodiscard]] std::string getGlewVersion() const;
             
-            void setGlewVersion(const GLubyte *glewVersion);
+            void setGlewVersion(const std::string &GlewVersion);
+            
+            [[nodiscard]] std::string getCpuInfo() const;
+            
+            void setCpuInfo(const std::string &cpuinfo);
             
             [[nodiscard]] GLfloat getMouseSensitivity() const;
             
@@ -75,15 +82,17 @@ namespace mastercraft::game {
             
             [[nodiscard]] GLubyte getFramerate() const;
             
+            [[nodiscard]] std::string getFramerateString() const;
+            
             void setFramerate(Framerate framerate);
             
             [[nodiscard]] GLfloat getFov() const;
             
             void setFov(GLfloat fov);
             
-            [[nodiscard]] GLubyte getDistanceView() const;
+            [[nodiscard]] GLuint getDistanceView() const;
             
-            void setDistanceView(GLubyte distanceView);
+            void setDistanceView(GLuint distanceView);
             
             [[nodiscard]] GLboolean getFaceCulling() const;
             

@@ -69,6 +69,8 @@ namespace mastercraft::game {
             ChunkManager(const util::Image *t_cubeTexture, GLubyte distanceView);
         
             void updateDistanceView(GLubyte distance);
+            
+            void clearChunks();
         
             [[nodiscard]] cube::CubeType get(const glm::ivec3 &position) const;
         

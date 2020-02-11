@@ -213,21 +213,21 @@ namespace mastercraft::game {
                         }
                         else { // Try generate a entity instead
                             if (Random::get<bool>(0.0001)) {
-                                auto type = Random::get(0,1);
-                                if (type){
+                                auto type = Random::get(0, 1);
+                                if (type) {
                                     entities.emplace_back(std::make_unique<entity::Slime>(glm::vec3(
-                                            static_cast<GLint>(x) + position.x,
-                                            static_cast<GLint>(y) + position.y + 1,
-                                            static_cast<GLint>(z) + position.z
-                                    )));
-                                } else{
-                                    entities.emplace_back(std::make_unique<entity::Robot>(  glm::vec3(
-                                            static_cast<GLint>(x) + position.x,
-                                            static_cast<GLint>(y) + position.y + 1,
-                                            static_cast<GLint>(z) + position.z
+                                        static_cast<GLint>(x) + position.x,
+                                        static_cast<GLint>(y) + position.y + 1,
+                                        static_cast<GLint>(z) + position.z
                                     )));
                                 }
-
+                                else {
+                                    entities.emplace_back(std::make_unique<entity::Robot>(glm::vec3(
+                                        static_cast<GLint>(x) + position.x,
+                                        static_cast<GLint>(y) + position.y + 1,
+                                        static_cast<GLint>(z) + position.z
+                                    )));
+                                }
                             }
                         }
                         
@@ -249,6 +249,11 @@ namespace mastercraft::game {
             }
         }
         return chunk;
+    }
+    
+    
+    void ChunkManager::clearChunks() {
+        this->chunks.clear();
     }
     
     
@@ -330,6 +335,12 @@ namespace mastercraft::game {
         for (const auto &entity : this->entities) {
             entity->update();
         }
+        
+        game->stats.entity = static_cast<GLuint>(this->entities.size());
+        game->stats.superchunk = static_cast<GLuint>(this->chunks.size());
+        game->stats.chunk = game->stats.superchunk * cube::SuperChunk::CHUNK_SIZE;
+        game->stats.cube = game->stats.superchunk * cube::SuperChunk::SIZE;
+        game->stats.face = game->stats.cube * 6;
     }
     
     
@@ -345,9 +356,14 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->bindTexture(this->cubeTexture);
-        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(false); });
+        game->stats.rendered_face = 0;
+        std::for_each(this->chunks.begin(), this->chunks.end(),
+                      [&game](const auto &entry) { game->stats.rendered_face += entry.second->render(false); }
+        );
         glDisable(GL_CULL_FACE);
-        std::for_each(this->chunks.begin(), this->chunks.end(), [](const auto &entry) { entry.second->render(true); });
+        std::for_each(this->chunks.begin(), this->chunks.end(),
+                      [&game](const auto &entry) { game->stats.rendered_face += entry.second->render(true); }
+        );
         glEnable(GL_CULL_FACE);
         this->cubeShader->unbindTexture();
         this->cubeShader->stop();

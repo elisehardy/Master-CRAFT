@@ -12,6 +12,7 @@
 #include <mastercraft/game/WindowManager.hpp>
 #include <mastercraft/game/ChunkManager.hpp>
 #include <mastercraft/game/Debug.hpp>
+#include <mastercraft/game/Statistics.hpp>
 #include <mastercraft/entity/Skybox.hpp>
 #include <mastercraft/entity/Sun.hpp>
 
@@ -35,15 +36,11 @@ namespace mastercraft::game {
             std::unique_ptr<entity::Sun> sun;
             std::unique_ptr<Camera> camera;
             std::unique_ptr<Debug> debug;
+            Statistics stats;
             
             std::chrono::steady_clock::time_point lastTick;
             GLuint tickCount;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
-            
-            /**
-             * Delete move constructor.
-             */
-            Game(Game &&) = delete;
             
             
             /**

@@ -33,13 +33,12 @@ namespace mastercraft::game {
             static constexpr GLfloat LINE_SPACING = 5;
             
         private:
-            std::unique_ptr<shader::ShaderTexture> shader;
-            std::unordered_map<FT_ULong, Glyph> glyphs;
-            GLfloat height;          /**< Height of the screen */
-            GLfloat width;           /**< Width of the screen */
-            GLuint vbo = 0;
-            GLuint vao = 0;
-            
+            std::unique_ptr<shader::ShaderTexture> shader; /**< Shader use to render the debug information. */
+            std::unordered_map<FT_ULong, Glyph> glyphs;    /**< Table containing information for each ASCII character */
+            GLfloat height;          /**< Height of the screen. */
+            GLfloat width;           /**< Width of the screen. */
+            GLuint vbo = 0;          /**< VBO use to render the debug menu. */
+            GLuint vao = 0;          /**< VBO use to render the debug menu. */
             
             void renderText(GLfloat x, GLfloat y, GLfloat scale, const std::string &text, const glm::vec3 &color);
         
