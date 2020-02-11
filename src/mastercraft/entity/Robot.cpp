@@ -80,12 +80,13 @@ namespace mastercraft::entity {
         walk();
 
         GLfloat yaw = std::atan2(this->direction.x, this->direction.z);
-        glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw + M_PIf32, glm::vec3(0.f, 1.f, 0.f));
+        glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw , glm::vec3(0.f, 1.f, 0.f));
+        glm::mat4 scale = glm::scale( glm::mat4(1.f), glm::vec3(0.1f,0.1f,0.1f));
         glm::vec3 position;
 
         std::vector<EntityVertex> vertices;
         for (const EntityVertex &vertex: this->vertices) {
-            position = glm::vec3(rY * glm::vec4(vertex.vertex - glm::vec3(0.5), 1)) + glm::vec3(0.5) + this->position;
+            position = glm::vec3(scale * rY * glm::vec4(vertex.vertex - glm::vec3(0.5), 1)) + glm::vec3(0.5) + this->position;
             vertices.emplace_back(position, vertex.normal, vertex.texture);
         }
 
