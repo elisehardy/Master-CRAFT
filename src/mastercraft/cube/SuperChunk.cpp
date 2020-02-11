@@ -87,6 +87,7 @@ namespace mastercraft::cube {
             return 0;
         }
         
+        GLuint rendered = 0;
         glm::vec3 position;
         game::Game *game = game::Game::getInstance();
         for (GLubyte x = 0; x < CHUNK_X; x++) {
@@ -98,11 +99,11 @@ namespace mastercraft::cube {
                         z * Chunk::Z + this->position.z
                     );
                     game->chunkManager->cubeShader->loadUniform("uChunkPosition", glm::value_ptr(position));
-                    this->chunks[x][y][z].render(alpha);
+                    rendered += this->chunks[x][y][z].render(alpha);
                 }
             }
         }
         
-        return this->count;
+        return rendered;
     }
 }

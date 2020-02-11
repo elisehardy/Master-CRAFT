@@ -34,7 +34,7 @@ namespace mastercraft::cube {
     
     bool Chunk::occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const {
         if (!game::Game::getInstance()->configManager->getOcclusionCulling()) {
-        
+            return false;
         }
         
         if (onBorder(static_cast<GLubyte>(x), static_cast<GLubyte>(y), static_cast<GLubyte>(z))) {
@@ -47,33 +47,33 @@ namespace mastercraft::cube {
             if (type == CubeType::WATER) {
                 switch (direction) {
                     case CubeDirection::FACE:
-                        return game->chunkManager->get({x, y, z + 1}) != CubeType::AIR;
+                        return game->chunkManager->get({ x, y, z + 1 }) != CubeType::AIR;
                     case CubeDirection::TOP:
-                        return game->chunkManager->get({x, y + 1, z}) != CubeType::AIR;
+                        return game->chunkManager->get({ x, y + 1, z }) != CubeType::AIR;
                     case CubeDirection::BACK:
-                        return game->chunkManager->get({x, y, z - 1}) != CubeType::AIR;
+                        return game->chunkManager->get({ x, y, z - 1 }) != CubeType::AIR;
                     case CubeDirection::BOTTOM:
-                        return game->chunkManager->get({x, y - 1, z}) != CubeType::AIR;
+                        return game->chunkManager->get({ x, y - 1, z }) != CubeType::AIR;
                     case CubeDirection::LEFT:
-                        return game->chunkManager->get({x - 1, y, z}) != CubeType::AIR;
+                        return game->chunkManager->get({ x - 1, y, z }) != CubeType::AIR;
                     case CubeDirection::RIGHT:
-                        return game->chunkManager->get({x + 1, y, z}) != CubeType::AIR;
+                        return game->chunkManager->get({ x + 1, y, z }) != CubeType::AIR;
                 }
             }
             
             switch (direction) {
                 case CubeDirection::FACE:
-                    return !(game->chunkManager->get({x, y, z + 1}) & ALPHA);
+                    return !(game->chunkManager->get({ x, y, z + 1 }) & ALPHA);
                 case CubeDirection::TOP:
-                    return !(game->chunkManager->get({x, y + 1, z}) & ALPHA);
+                    return !(game->chunkManager->get({ x, y + 1, z }) & ALPHA);
                 case CubeDirection::BACK:
-                    return !(game->chunkManager->get({x, y, z - 1}) & ALPHA);
+                    return !(game->chunkManager->get({ x, y, z - 1 }) & ALPHA);
                 case CubeDirection::BOTTOM:
-                    return !(game->chunkManager->get({x, y - 1, z}) & ALPHA);
+                    return !(game->chunkManager->get({ x, y - 1, z }) & ALPHA);
                 case CubeDirection::LEFT:
-                    return !(game->chunkManager->get({x - 1, y, z}) & ALPHA);
+                    return !(game->chunkManager->get({ x - 1, y, z }) & ALPHA);
                 case CubeDirection::RIGHT:
-                    return !(game->chunkManager->get({x + 1, y, z}) & ALPHA);
+                    return !(game->chunkManager->get({ x + 1, y, z }) & ALPHA);
             }
         }
         
@@ -160,7 +160,7 @@ namespace mastercraft::cube {
         GLubyte y;
         for (GLubyte x = 0; x < X; x++) {
             for (GLubyte z = 0; z < Z; z++) {
-                for (GLshort sy = Y - 1; sy >= 0 ; sy--) {
+                for (GLshort sy = Y - 1; sy >= 0; sy--) {
                     y = static_cast<GLubyte>(sy);
                     type = this->cubes[x][y][z];
                     
@@ -192,14 +192,10 @@ namespace mastercraft::cube {
                     }
                     else {
                         if (!occluded(type, x, y, z, CubeDirection::TOP)) {
-                            drawn[this->count++] = CubeFace::top(
-                                x, y, z, type | CubeDirection::TOP
-                            );
+                            drawn[this->count++] = CubeFace::top(x, y, z, type | CubeDirection::TOP);
                         }
                         if (!occluded(type, x, y, z, CubeDirection::BOTTOM)) {
-                            drawn[this->count++] = CubeFace::bottom(
-                                x, y, z, type | CubeDirection::BOTTOM
-                            );
+                            drawn[this->count++] = CubeFace::bottom(x, y, z, type | CubeDirection::BOTTOM);
                         }
                         if (!occluded(type, x, y, z, CubeDirection::FACE)) {
                             drawn[this->count++] = CubeFace::face(
@@ -302,14 +298,14 @@ namespace mastercraft::cube {
             glBindVertexArray(this->vao);
             glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(this->count * CubeFace::VERTICE_COUNT));
             glBindVertexArray(0);
+            return this->count;
         }
         else {
             glBindVertexArray(this->vaoAlpha);
             glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(this->countAlpha * CubeFace::VERTICE_COUNT));
             glBindVertexArray(0);
+            return this->countAlpha;
         }
-        
-        return this->count + this->countAlpha;
     }
     
     

@@ -52,7 +52,7 @@ void main() {
 
     vec4 textureColor = computeTextureColor();
     vec3 diffuse = vec3(computeDiffuseLighting(lightDirection, lightColor));
-    vec3 ambient = vec3(0.4);
+    vec3 ambient = vec3(.4);
 
     fFragColor = vec4(
         min(1.f, diffuse.x + ambient.x),

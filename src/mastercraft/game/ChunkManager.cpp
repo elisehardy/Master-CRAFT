@@ -299,9 +299,7 @@ namespace mastercraft::game {
     void ChunkManager::update() {
         Game *game = Game::getInstance();
         
-        if (game->tickCount % 4 == 0) {
-            this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 32;
-        }
+        this->textureVerticalOffset = (this->textureVerticalOffset + 1) % 32;
         
         generateKeys();
         
@@ -356,13 +354,16 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->bindTexture(this->cubeTexture);
+        game->configManager->getFaceCulling() ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
         game->stats.rendered_face = 0;
-        std::for_each(this->chunks.begin(), this->chunks.end(),
-                      [&game](const auto &entry) { game->stats.rendered_face += entry.second->render(false); }
+        std::for_each(
+            this->chunks.begin(), this->chunks.end(),
+            [&game](const auto &entry) { game->stats.rendered_face += entry.second->render(false); }
         );
         glDisable(GL_CULL_FACE);
-        std::for_each(this->chunks.begin(), this->chunks.end(),
-                      [&game](const auto &entry) { game->stats.rendered_face += entry.second->render(true); }
+        std::for_each(
+            this->chunks.begin(), this->chunks.end(),
+            [&game](const auto &entry) { game->stats.rendered_face += entry.second->render(true); }
         );
         glEnable(GL_CULL_FACE);
         this->cubeShader->unbindTexture();

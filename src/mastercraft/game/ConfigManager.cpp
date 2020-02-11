@@ -164,23 +164,11 @@ namespace mastercraft::game {
     
     void ConfigManager::setFaceCulling(GLboolean faceCulling) {
         this->faceCulling = faceCulling;
-        if (faceCulling) {
-            glEnable(GL_CULL_FACE);
-        }
-        else {
-            glDisable(GL_CULL_FACE);
-        }
     }
     
     
     void ConfigManager::switchFaceCulling() {
         this->faceCulling = !this->faceCulling;
-        if (this->faceCulling) {
-            glEnable(GL_CULL_FACE);
-        }
-        else {
-            glDisable(GL_CULL_FACE);
-        }
     }
     
     
