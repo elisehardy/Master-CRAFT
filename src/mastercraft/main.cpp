@@ -6,24 +6,41 @@ using namespace mastercraft;
 
 
 int main(int argc, char **argv) {
-    std::chrono::steady_clock::time_point start;
-    GLint64 elapsed;
+    std::chrono::steady_clock::time_point cmptStart, limiterStart, now;
+    double duration;
+    GLuint fps = 0;
     
     game::Game *game = game::Game::getInstance();
-    
     game->init();
     
+    cmptStart = std::chrono::steady_clock::now();
+    limiterStart = cmptStart;
     while (game->isRunning()) {
-        start = std::chrono::steady_clock::now();
         
         game->update();
-        game->render();
         
-        elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(
-            std::chrono::steady_clock::now() - start
-        ).count();
+        if (game->configManager->getFramerate() > 0) { // Capped framerate
+            now = std::chrono::steady_clock::now();
+            duration = std::chrono::duration_cast<std::chrono::microseconds>(now - limiterStart).count();
+            if (duration >= game->configManager->getFramerateInv()) {
+                game->render();
+                limiterStart = now;
+            }
+            fps++;
+        }
+        else { // Uncapped framerate
+            game->render();
+            fps++;
+        }
         
-        game->stats.fps = static_cast<GLuint>(10e9 / elapsed);
+        // Computing FPS
+        now = std::chrono::steady_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::seconds>(now - cmptStart).count();
+        if (duration >= 1.) {
+            game->stats.fps = static_cast<GLuint>(fps);
+            fps = 0;
+            cmptStart = now;
+        }
     }
     
     game->cleanup();

@@ -1,7 +1,5 @@
 #include <sstream>
 
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
 #include <cpuid/libcpuid.h>
 
 #include <mastercraft/game/ConfigManager.hpp>
@@ -72,8 +70,12 @@ namespace mastercraft::game {
     }
     
     
-    GLubyte ConfigManager::getFramerate() const {
+    GLuint ConfigManager::getFramerate() const {
         return framerate;
+    }
+    
+    GLuint ConfigManager::getFramerateInv() const {
+        return framerateInv;
     }
     
     
@@ -100,35 +102,72 @@ namespace mastercraft::game {
     
     
     void ConfigManager::setFramerate(Framerate framerate) {
+        GLuint fps;
+        
         this->framerateOpt = framerate;
         
         switch (framerate) {
             case Framerate::FRAMERATE_60:
                 this->framerate = 60;
+                this->framerateInv = static_cast<GLuint>(1. / 60. * 1e6);
                 break;
             case Framerate::FRAMERATE_75:
                 this->framerate = 75;
+                this->framerateInv = static_cast<GLuint>(1. / 75. * 1e6);
                 break;
             case Framerate::FRAMERATE_120:
                 this->framerate = 120;
+                this->framerateInv = static_cast<GLuint>(1. / 120. * 1e6);
                 break;
             case Framerate::FRAMERATE_144:
                 this->framerate = 144;
+                this->framerateInv = static_cast<GLuint>(1. / 144. * 1e6);
                 break;
             case Framerate::FRAMERATE_180:
                 this->framerate = 180;
+                this->framerateInv = static_cast<GLuint>(1. / 180. * 1e6);
                 break;
             case Framerate::FRAMERATE_240:
                 this->framerate = 240;
+                this->framerateInv = static_cast<GLuint>(1. / 240. * 1e6);
                 break;
             case Framerate::FRAMERATE_VSYNC:
-                this->framerate = static_cast<GLubyte>(
-                    Game::getInstance()->windowManager->getDisplayMode().refresh_rate
-                );
+                fps = static_cast<GLuint>(Game::getInstance()->windowManager->getDisplayMode().refresh_rate);
+                this->framerate = fps;
                 this->framerate = this->framerate ? this->framerate : 60;
                 break;
             case Framerate::FRAMERATE_UNCAPPED:
                 this->framerate = 0;
+                this->framerateInv = 0;
+                break;
+        }
+    }
+    
+    void ConfigManager::cycleFramerate() {
+        switch (this->framerateOpt) {
+            case Framerate::FRAMERATE_60:
+                this->setFramerate(Framerate::FRAMERATE_75);
+                break;
+            case Framerate::FRAMERATE_75:
+                this->setFramerate(Framerate::FRAMERATE_120);
+                break;
+            case Framerate::FRAMERATE_120:
+                this->setFramerate(Framerate::FRAMERATE_144);
+                break;
+            case Framerate::FRAMERATE_144:
+                this->setFramerate(Framerate::FRAMERATE_180);
+                break;
+            case Framerate::FRAMERATE_180:
+                this->setFramerate(Framerate::FRAMERATE_240);
+                break;
+            case Framerate::FRAMERATE_240:
+                this->setFramerate(Framerate::FRAMERATE_VSYNC);
+                break;
+            case Framerate::FRAMERATE_VSYNC:
+                this->setFramerate(Framerate::FRAMERATE_UNCAPPED);
+                break;
+            case Framerate::FRAMERATE_UNCAPPED:
+                this->setFramerate(Framerate::FRAMERATE_60);
                 break;
         }
     }

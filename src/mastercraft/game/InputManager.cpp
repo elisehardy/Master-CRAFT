@@ -62,6 +62,9 @@ namespace mastercraft::game {
             game->configManager->switchOcclusionCulling();
             game->chunkManager->clearChunks();
         }
+        if (InputManager::isKeyPressed(SDL_SCANCODE_F3)) {
+            game->configManager->cycleFramerate();
+        }
         if (InputManager::isKeyPressed(SDL_SCANCODE_F10)) {
             game->configManager->switchDebug();
         }

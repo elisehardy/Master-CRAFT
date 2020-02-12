@@ -25,8 +25,6 @@ namespace mastercraft::game {
     
     class ConfigManager : public util::INonCopyable {
         public:
-            static constexpr GLint TEXTURE_SIZE = 32;
-            
             static constexpr GLubyte GEN_MIN_HEIGHT = 128; /**< Minimum height when procedurally generating a chunk. */
             static constexpr GLubyte GEN_MAX_HEIGHT = 192; /**< Maximum height when procedurally generating a chunk. */
             static constexpr GLubyte GEN_CARVING_HEIGHT = GEN_MIN_HEIGHT + 30;
@@ -49,8 +47,9 @@ namespace mastercraft::game {
             GLfloat mouseSensitivity = 0.10f; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;          /**< Field of view, default to 70. */
-            GLuint distanceView = 7;  /**< Draw distance as the radius of SuperChunk rendered. */
-            GLubyte framerate = 0;     /**< Framerate real value, default to 0 (uncapped). */
+            GLuint distanceView = 1;  /**< Draw distance as the radius of SuperChunk rendered. */
+            GLuint framerate = 0;     /**< Framerate value, default to 0 (uncapped). */
+            GLuint framerateInv = 0;  /**< Number of microseconds between frame. */
             Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
             
             GLboolean faceCulling = true;      /**< Whether face culling is enabled. */
@@ -80,40 +79,44 @@ namespace mastercraft::game {
             
             void setMouseSensitivity(GLfloat mouseSensitivity);
             
-            [[nodiscard]] GLubyte getFramerate() const;
+            [[nodiscard]] GLuint getFramerate() const;
+            
+            [[nodiscard]] GLuint getFramerateInv() const;
             
             [[nodiscard]] std::string getFramerateString() const;
             
             void setFramerate(Framerate framerate);
-            
+        
+            void cycleFramerate();
+        
             [[nodiscard]] GLfloat getFov() const;
-            
+        
             void setFov(GLfloat fov);
-            
+        
             [[nodiscard]] GLuint getDistanceView() const;
-            
+        
             void setDistanceView(GLuint distanceView);
-            
+        
             [[nodiscard]] GLboolean getFaceCulling() const;
-            
+        
             void setFaceCulling(GLboolean faceCulling);
-            
+        
             void switchFaceCulling();
-            
+        
             [[nodiscard]] GLboolean getOcclusionCulling() const;
-            
+        
             void setOcclusionCulling(GLboolean occlusionCulling);
-            
+        
             void switchOcclusionCulling();
-            
+        
             [[nodiscard]] GLboolean getFrustumCulling() const;
-            
+        
             void setFrustumCulling(GLboolean frustumCulling);
-            
+        
             void switchFrustumCulling();
-            
+        
             [[nodiscard]] GLboolean getDebug() const;
-            
+        
             void setDebug(GLboolean debug);
             
             void switchDebug();
