@@ -141,11 +141,12 @@ namespace mastercraft::game {
     
     
     void Debug::render() {
-        glm::vec3 color;
         Game *game = Game::getInstance();
         std::stringstream ss;
+        glm::vec3 color;
+        GLint length;
         
-        if (game->tickCount < game::ConfigManager::TICK_DAY) {
+        if (game->tickDay < game::ConfigManager::TICK_DAY) {
             color = { 0, 0, 0 };
         }
         else {
@@ -161,6 +162,17 @@ namespace mastercraft::game {
         
         ss.str(std::string());
         ss << "OpenGL version: " << game->configManager->getOpenGlVersion();
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        i++;
+        length = static_cast<GLint>(std::to_string(ConfigManager::TICK_PER_SEC).size());
+        ss.str(std::string());
+        ss << "Tick: " << std::setfill('0') << std::setw(length) << game->tickSecond << "/" << ConfigManager::TICK_PER_SEC;
+        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        length = static_cast<GLint>(std::to_string(ConfigManager::TICK_CYCLE).size());
+        ss << "Day: " << std::setfill('0') << std::setw(length) << game->tickDay << "/" << ConfigManager::TICK_CYCLE;
         this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
         
         i++;

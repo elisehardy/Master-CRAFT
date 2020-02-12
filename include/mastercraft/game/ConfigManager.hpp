@@ -46,11 +46,11 @@ namespace mastercraft::game {
             
             GLfloat mouseSensitivity = 0.10f; /**< Sensitivity of the mouse, default to 0.5. */
             
-            GLfloat fov = 70;          /**< Field of view, default to 70. */
-            GLuint distanceView = 1;  /**< Draw distance as the radius of SuperChunk rendered. */
+            GLfloat fov = 70;         /**< Field of view, default to 70. */
+            GLint distanceView = 7;   /**< Draw distance as the radius of SuperChunk rendered. */
             GLuint framerate = 0;     /**< Framerate value, default to 0 (uncapped). */
-            GLuint framerateInv = 0;  /**< Number of microseconds between frame. */
-            Framerate framerateOpt = Framerate::FRAMERATE_UNCAPPED; /**< Chosen Framerate, default to uncapped. */
+            GLuint usPerFrame = 0;    /**< Number of microseconds between frame. */
+            Framerate framerateOpt ;  /**< Chosen Framerate, default to VSYNC. */
             
             GLboolean faceCulling = true;      /**< Whether face culling is enabled. */
             GLboolean occlusionCulling = true; /**< Whether occlusion culling is enabled. */
@@ -93,9 +93,13 @@ namespace mastercraft::game {
         
             void setFov(GLfloat fov);
         
-            [[nodiscard]] GLuint getDistanceView() const;
+            [[nodiscard]] GLint getDistanceView() const;
         
-            void setDistanceView(GLuint distanceView);
+            void setDistanceView(GLint distanceView);
+            
+            void incDistanceView();
+            
+            void decDistanceView();
         
             [[nodiscard]] GLboolean getFaceCulling() const;
         

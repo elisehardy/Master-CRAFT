@@ -29,9 +29,9 @@ namespace mastercraft::game {
     class Debug : public util::INonCopyable {
         private:
             static constexpr GLuint VERTEX_ATTR_POSITION = 0;
-            static constexpr GLfloat LINE_HEIGHT =40;
-            static constexpr GLfloat LINE_SPACING = 5;
-            
+            static constexpr GLfloat LINE_HEIGHT = 30;
+            static constexpr GLfloat LINE_SPACING = 2;
+        
         private:
             std::unique_ptr<shader::ShaderTexture> shader; /**< Shader use to render the debug information. */
             std::unordered_map<FT_ULong, Glyph> glyphs;    /**< Table containing information for each ASCII character */

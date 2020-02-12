@@ -31,9 +31,8 @@ namespace mastercraft::entity {
     GLuint Sun::update() {
         glm::vec3 vertices[36];
         
-        
         for (GLuint i = 0; i < 36; i++) {
-            vertices[i] = (this->vertices[i] * 0.05f + this->position);
+            vertices[i] = (this->vertices[i]  + position + glm::vec3(0, 40, 0));
         }
         
         // Fill the VBO

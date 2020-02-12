@@ -68,8 +68,6 @@ namespace mastercraft::entity {
             
             ~Skybox();
             
-            GLuint update();
-            
             GLuint render();
     };
 }

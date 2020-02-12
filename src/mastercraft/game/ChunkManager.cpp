@@ -17,8 +17,8 @@ using Random = effolkronium::random_static;
 
 namespace mastercraft::game {
     
-    ChunkManager::ChunkManager(const util::Image *t_cubeTexture, GLubyte t_distanceView) :
-        textureVerticalOffset(0), distanceView(t_distanceView),
+    ChunkManager::ChunkManager(const util::Image *t_cubeTexture) :
+        textureVerticalOffset(0),
         temperatureNoise(
             { Random::get<float>(0., 100000.), Random::get<float>(0., 100000.) }, 5, 1.f, 1 / 258.f, 0.5f, 2.f
         ),
@@ -40,8 +40,10 @@ namespace mastercraft::game {
     
     
     void ChunkManager::generateKeys() {
-        glm::vec3 camera = Game::getInstance()->camera->getPosition();
+        Game *game = Game::getInstance();
+        glm::vec3 camera = game->camera->getPosition();
         glm::ivec3 position = getSuperChunkCoordinates(camera);
+        GLint distanceView = game->configManager->getDistanceView();
         
         GLint startx = position.x - distanceView * cube::SuperChunk::X;
         GLint startz = position.z - distanceView * cube::SuperChunk::Z;
@@ -262,11 +264,6 @@ namespace mastercraft::game {
     
     void ChunkManager::clearChunks() {
         this->chunks.clear();
-    }
-    
-    
-    void ChunkManager::updateDistanceView(GLubyte distance) {
-        this->distanceView = distance;
     }
     
     

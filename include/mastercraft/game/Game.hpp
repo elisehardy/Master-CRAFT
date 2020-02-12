@@ -39,7 +39,8 @@ namespace mastercraft::game {
             Statistics stats;
             
             std::chrono::steady_clock::time_point lastTick;
-            GLuint tickCount;
+            GLuint tickSecond;
+            GLuint tickDay;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             
             

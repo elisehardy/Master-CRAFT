@@ -12,6 +12,7 @@ namespace mastercraft::game {
         this->setOpenGlVersion(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
         this->setGlewVersion(reinterpret_cast<const char *>(glewGetString(GLEW_VERSION)));
         this->setFaceCulling(true);
+        this->setFramerate(Framerate::FRAMERATE_60);
         SDL_SetRelativeMouseMode(SDL_TRUE);
         
         struct cpu_raw_data_t raw {};
@@ -75,16 +76,16 @@ namespace mastercraft::game {
     }
     
     GLuint ConfigManager::getFramerateInv() const {
-        return framerateInv;
+        return usPerFrame;
     }
     
     
     std::string ConfigManager::getFramerateString() const {
         switch (this->framerateOpt) {
             case Framerate::FRAMERATE_60:
-                return "80";
+                return "60";
             case Framerate::FRAMERATE_75:
-                return "70";
+                return "75";
             case Framerate::FRAMERATE_120:
                 return "120";
             case Framerate::FRAMERATE_144:
@@ -109,36 +110,36 @@ namespace mastercraft::game {
         switch (framerate) {
             case Framerate::FRAMERATE_60:
                 this->framerate = 60;
-                this->framerateInv = static_cast<GLuint>(1. / 60. * 1e6);
+                this->usPerFrame = static_cast<GLuint>(1. / 60. * 1e6);
                 break;
             case Framerate::FRAMERATE_75:
                 this->framerate = 75;
-                this->framerateInv = static_cast<GLuint>(1. / 75. * 1e6);
+                this->usPerFrame = static_cast<GLuint>(1. / 75. * 1e6);
                 break;
             case Framerate::FRAMERATE_120:
                 this->framerate = 120;
-                this->framerateInv = static_cast<GLuint>(1. / 120. * 1e6);
+                this->usPerFrame = static_cast<GLuint>(1. / 120. * 1e6);
                 break;
             case Framerate::FRAMERATE_144:
                 this->framerate = 144;
-                this->framerateInv = static_cast<GLuint>(1. / 144. * 1e6);
+                this->usPerFrame = static_cast<GLuint>(1. / 144. * 1e6);
                 break;
             case Framerate::FRAMERATE_180:
                 this->framerate = 180;
-                this->framerateInv = static_cast<GLuint>(1. / 180. * 1e6);
+                this->usPerFrame = static_cast<GLuint>(1. / 180. * 1e6);
                 break;
             case Framerate::FRAMERATE_240:
                 this->framerate = 240;
-                this->framerateInv = static_cast<GLuint>(1. / 240. * 1e6);
+                this->usPerFrame = static_cast<GLuint>(1. / 240. * 1e6);
                 break;
             case Framerate::FRAMERATE_VSYNC:
                 fps = static_cast<GLuint>(Game::getInstance()->windowManager->getDisplayMode().refresh_rate);
-                this->framerate = fps;
-                this->framerate = this->framerate ? this->framerate : 60;
+                this->framerate = fps ? fps : 60;
+                this->usPerFrame = static_cast<GLuint>(1. / this->framerate * 1e6);
                 break;
             case Framerate::FRAMERATE_UNCAPPED:
                 this->framerate = 0;
-                this->framerateInv = 0;
+                this->usPerFrame = 0;
                 break;
         }
     }
@@ -186,13 +187,23 @@ namespace mastercraft::game {
     }
     
     
-    GLuint ConfigManager::getDistanceView() const {
+    GLint ConfigManager::getDistanceView() const {
         return distanceView;
     }
     
     
-    void ConfigManager::setDistanceView(GLuint distanceView) {
+    void ConfigManager::setDistanceView(GLint distanceView) {
         this->distanceView = distanceView;
+    }
+    
+    
+    void ConfigManager::incDistanceView() {
+        this->distanceView = std::min(this->distanceView + 1, 32);
+    }
+    
+    
+    void ConfigManager::decDistanceView() {
+        this->distanceView = std::max(this->distanceView - 1, 1);
     }
     
     

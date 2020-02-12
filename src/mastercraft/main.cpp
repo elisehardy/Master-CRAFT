@@ -25,8 +25,8 @@ int main(int argc, char **argv) {
             if (duration >= game->configManager->getFramerateInv()) {
                 game->render();
                 limiterStart = now;
+                fps++;
             }
-            fps++;
         }
         else { // Uncapped framerate
             game->render();

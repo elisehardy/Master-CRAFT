@@ -65,15 +65,21 @@ namespace mastercraft::game {
         if (InputManager::isKeyPressed(SDL_SCANCODE_F3)) {
             game->configManager->cycleFramerate();
         }
+        if (InputManager::isKeyPressed(SDL_SCANCODE_F4)) {
+            game->configManager->decDistanceView();
+        }
+        if (InputManager::isKeyPressed(SDL_SCANCODE_F5)) {
+            game->configManager->incDistanceView();
+        }
         if (InputManager::isKeyPressed(SDL_SCANCODE_F10)) {
             game->configManager->switchDebug();
         }
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {
-            if (game->tickCount > ConfigManager::TICK_DAY) {
-                game->tickCount = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.25f);
+            if (game->tickDay > ConfigManager::TICK_DAY) {
+                game->tickDay = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.25f);
             } else {
-                game->tickCount = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.75f);
+                game->tickDay = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.75f);
             }
         }
     }

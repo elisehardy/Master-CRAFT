@@ -33,14 +33,14 @@ namespace mastercraft::game {
         this->inputManager = std::make_unique<InputManager>();
         this->camera = std::make_unique<Camera>();
         this->debug = std::make_unique<Debug>();
-        this->chunkManager = std::make_unique<ChunkManager>(atlas, this->configManager->getDistanceView());
+        this->chunkManager = std::make_unique<ChunkManager>(atlas);
         this->skybox = std::make_unique<entity::Skybox>();
-        this->sun = std::make_unique<entity::Sun>(1, 0, 0);
+        this->sun = std::make_unique<entity::Sun>(0,1,0);
         this->chunkManager->init();
         this->configManager->init();
         this->camera->init();
         this->lastTick = std::chrono::steady_clock::now();
-        this->tickCount = 0;
+        this->tickDay = 0;
         
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -59,7 +59,9 @@ namespace mastercraft::game {
         
         if (duration >= TICK_PER_MS) {
             this->lastTick = now;
-            this->tickCount = (this->tickCount + 1u) % ConfigManager::TICK_CYCLE;
+            this->tickDay = (this->tickDay + 1u) % ConfigManager::TICK_CYCLE;
+            this->tickSecond = (this->tickSecond + 1u) % ConfigManager::TICK_PER_SEC;
+            
             return true;
         }
         
@@ -107,23 +109,23 @@ namespace mastercraft::game {
             this->chunkManager->update();
         }
         this->sun->update();
-        this->skybox->update();
     }
     
     
     void Game::render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        glDisable(GL_DEPTH_TEST);
-        this->skybox->render();
+//        glDisable(GL_DEPTH_TEST);
+//        this->skybox->render();
+//        glEnable(GL_DEPTH_TEST);
         this->sun->render();
-        glEnable(GL_DEPTH_TEST);
-        
-        this->chunkManager->render();
+//        glClear(GL_DEPTH_BUFFER_BIT);
+//
+//        this->chunkManager->render();
         if (this->configManager->getDebug()) {
             this->debug->render();
         }
-        
+//
         this->windowManager->refresh();
     }
     

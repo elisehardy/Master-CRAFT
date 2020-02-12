@@ -43,7 +43,6 @@ namespace mastercraft::game {
             std::vector<std::unique_ptr<entity::IEntity>> entities;
             std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
-            GLubyte distanceView;
             Noise2D temperatureNoise;
             Noise3D carvingNoise;
             
@@ -66,9 +65,7 @@ namespace mastercraft::game {
         
         public:
         
-            ChunkManager(const util::Image *t_cubeTexture, GLubyte distanceView);
-        
-            void updateDistanceView(GLubyte distance);
+            ChunkManager(const util::Image *t_cubeTexture);
             
             void clearChunks();
         
