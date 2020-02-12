@@ -8,6 +8,7 @@
 #include <mastercraft/game/Game.hpp>
 #include <mastercraft/entity/Slime.hpp>
 #include <mastercraft/entity/Robot.hpp>
+#include <mastercraft/entity/Spider.hpp>
 #include <mastercraft/cube/ColumnGenerator.hpp>
 #include <mastercraft/cube/TreeGenerator.hpp>
 
@@ -213,12 +214,19 @@ namespace mastercraft::game {
                         }
                         else { // Try generate a entity instead
                             if (Random::get<bool>(0.0001)) {
-                                auto type = Random::get(0, 1);
-                                if (type) {
+                                auto type = Random::get(0, 2);
+                                if (type == 1) {
                                     entities.emplace_back(std::make_unique<entity::Slime>(glm::vec3(
                                         static_cast<GLint>(x) + position.x,
                                         static_cast<GLint>(y) + position.y + 1,
                                         static_cast<GLint>(z) + position.z
+                                    )));
+                                }
+                                else if(type == 2){
+                                    entities.emplace_back(std::make_unique<entity::Spider>(glm::vec3(
+                                            static_cast<GLint>(x) + position.x,
+                                            static_cast<GLint>(y) + position.y + 1,
+                                            static_cast<GLint>(z) + position.z
                                     )));
                                 }
                                 else {
