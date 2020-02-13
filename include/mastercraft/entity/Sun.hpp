@@ -56,7 +56,7 @@ namespace mastercraft::entity {
                 { 1,  -1, 1 },
             };
             std::unique_ptr<shader::Shader> shader;
-//            glm::vec3 position;
+            glm::vec3 position;
             GLuint vbo;
             GLuint vao;
         
@@ -69,6 +69,8 @@ namespace mastercraft::entity {
             GLuint update();
             
             GLuint render();
+            
+            [[nodiscard]] glm::vec3 getPosition();
     };
 }
 

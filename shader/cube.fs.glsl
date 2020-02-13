@@ -46,18 +46,17 @@ vec3 computeDiffuseLighting(vec3 lightDirection, vec3 lightColor) {
 
 void main() {
     vec4 textureColor = computeTextureColor();
-    if (textureColor.w == 0) {
+    if (textureColor.w == 0.f) {
         discard;
     }
 
     vec3 light;
     if (uDay == 1) {
         vec3 lightColor = vec3(1);
-        vec3 lightPosition = vec3(1000, 1000, 1000);
-        vec3 lightDirection = normalize(lightPosition - vPosition);
+        vec3 lightDirection = normalize(uLightPosition - vPosition);
 
         vec3 diffuse = vec3(computeDiffuseLighting(lightDirection, lightColor));
-        vec3 ambient = vec3(.4);
+        vec3 ambient = vec3(.2);
         light =  diffuse + ambient;
     }
     else {

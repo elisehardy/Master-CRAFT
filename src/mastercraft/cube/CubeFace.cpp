@@ -9,12 +9,12 @@ namespace mastercraft::cube {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
-            CubeVertex({ x + 0, y + 0, z + 1 }, { 0, 0, -1 }, { 1, 1 }, data),
-            CubeVertex({ x + 1, y + 0, z + 1 }, { 0, 0, -1 }, { 0, 1 }, data),
-            CubeVertex({ x + 1, y + 1, z + 1 }, { 0, 0, -1 }, { 0, 0 }, data),
-            CubeVertex({ x + 1, y + 1, z + 1 }, { 0, 0, -1 }, { 0, 0 }, data),
-            CubeVertex({ x + 0, y + 1, z + 1 }, { 0, 0, -1 }, { 1, 0 }, data),
-            CubeVertex({ x + 0, y + 0, z + 1 }, { 0, 0, -1 }, { 1, 1 }, data),
+            CubeVertex({ x + 0, y + 0, z + 1 }, { 0, 0, 1 }, { 1, 1 }, data),
+            CubeVertex({ x + 1, y + 0, z + 1 }, { 0, 0, 1 }, { 0, 1 }, data),
+            CubeVertex({ x + 1, y + 1, z + 1 }, { 0, 0, 1 }, { 0, 0 }, data),
+            CubeVertex({ x + 1, y + 1, z + 1 }, { 0, 0, 1 }, { 0, 0 }, data),
+            CubeVertex({ x + 0, y + 1, z + 1 }, { 0, 0, 1 }, { 1, 0 }, data),
+            CubeVertex({ x + 0, y + 0, z + 1 }, { 0, 0, 1 }, { 1, 1 }, data),
         };
         
         std::memcpy(face.vertices, v, sizeof(face.vertices));
@@ -43,12 +43,12 @@ namespace mastercraft::cube {
         CubeFace face;
         
         CubeVertex v[VERTICE_COUNT] = {
-            CubeVertex({ x + 1, y + 0, z + 0 }, { 0, 0, 1 }, { 1, 1 }, data),
-            CubeVertex({ x + 0, y + 0, z + 0 }, { 0, 0, 1 }, { 0, 1 }, data),
-            CubeVertex({ x + 0, y + 1, z + 0 }, { 0, 0, 1 }, { 0, 0 }, data),
-            CubeVertex({ x + 0, y + 1, z + 0 }, { 0, 0, 1 }, { 0, 0 }, data),
-            CubeVertex({ x + 1, y + 1, z + 0 }, { 0, 0, 1 }, { 1, 0 }, data),
-            CubeVertex({ x + 1, y + 0, z + 0 }, { 0, 0, 1 }, { 1, 1 }, data),
+            CubeVertex({ x + 1, y + 0, z + 0 }, { 0, 0, -1 }, { 1, 1 }, data),
+            CubeVertex({ x + 0, y + 0, z + 0 }, { 0, 0, -1 }, { 0, 1 }, data),
+            CubeVertex({ x + 0, y + 1, z + 0 }, { 0, 0, -1 }, { 0, 0 }, data),
+            CubeVertex({ x + 0, y + 1, z + 0 }, { 0, 0, -1 }, { 0, 0 }, data),
+            CubeVertex({ x + 1, y + 1, z + 0 }, { 0, 0, -1 }, { 1, 0 }, data),
+            CubeVertex({ x + 1, y + 0, z + 0 }, { 0, 0, -1 }, { 1, 1 }, data),
         };
         
         std::memcpy(face.vertices, v, sizeof(face.vertices));

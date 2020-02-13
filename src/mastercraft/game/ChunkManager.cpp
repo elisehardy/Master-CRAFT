@@ -291,6 +291,7 @@ namespace mastercraft::game {
         this->cubeShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
         this->cubeShader->addUniform("uChunkPosition", shader::UNIFORM_3_F);
         this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
+        this->cubeShader->addUniform("uLightPosition", shader::UNIFORM_3_F);
         this->cubeShader->addUniform("uDay", shader::UNIFORM_1_I);
         
         this->entityShader = std::make_unique<shader::ShaderTexture>(
@@ -299,6 +300,7 @@ namespace mastercraft::game {
         this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
+        this->entityShader->addUniform("uLightPosition", shader::UNIFORM_3_F);
         this->entityShader->addUniform("uDay", shader::UNIFORM_MATRIX_4F);
     }
     
@@ -321,11 +323,19 @@ namespace mastercraft::game {
             this->chunks.erase(key);
         }
         
-//        // Delete entity outside distanceView
-//        for (const auto &entity: this->entities) {
-//            if (this->chunks.count(getSuperChunkCoordinates(entity->)))
-//        }
-//
+        // Delete entity outside distanceView
+        std::vector<GLint64> toDelete;
+        for (GLuint64 i = 0; i < this->entities.size(); i++) {
+            if (!this->chunks.count(getSuperChunkCoordinates(entities[i]->getPosition()))) {
+                toDelete.push_back(static_cast<long>(i));
+            }
+        }
+        
+        GLint64  i = 0;
+        for (const auto &index: toDelete) {
+            this->entities.erase(this->entities.begin() + index - i++);
+        }
+
         // Add new superChunk that entered distanceView
         std::for_each(
             this->keys.begin(), this->keys.end(),
@@ -361,12 +371,13 @@ namespace mastercraft::game {
         glm::mat4 MVMatrix = game->camera->getViewMatrix();
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(MVMatrix));
-        
+        glm::vec3 lightPos = glm::vec3(MVMatrix * glm::vec4(game->sun->getPosition(), 0));
         this->cubeShader->use();
         this->cubeShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
         this->cubeShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
+        this->cubeShader->loadUniform("uLightPosition", glm::value_ptr(lightPos));
         this->cubeShader->loadUniform("uDay", &uDay);
         this->cubeShader->bindTexture(this->cubeTexture);
         game->configManager->getFaceCulling() ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
@@ -388,6 +399,7 @@ namespace mastercraft::game {
         this->entityShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
         this->entityShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->entityShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
+        this->entityShader->loadUniform("uLightPosition", glm::value_ptr(lightPos));
         this->entityShader->loadUniform("uDay", &uDay);
         for (const auto &entity : this->entities) {
             entity->render();

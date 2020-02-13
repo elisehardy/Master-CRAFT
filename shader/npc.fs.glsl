@@ -29,8 +29,7 @@ void main() {
     vec3 light;
     if (uDay == 1) {
         vec3 lightColor = vec3(1);
-        vec3 lightPosition = vec3(1000, 1000, 1000);
-        vec3 lightDirection = normalize(lightPosition - vPosition);
+        vec3 lightDirection = normalize(uLightPosition - vPosition);
 
         vec3 diffuse = vec3(computeDiffuseLighting(lightDirection, lightColor));
         vec3 ambient = vec3(0.4);
