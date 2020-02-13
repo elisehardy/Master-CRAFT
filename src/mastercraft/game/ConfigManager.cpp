@@ -12,7 +12,7 @@ namespace mastercraft::game {
         this->setOpenGlVersion(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
         this->setGlewVersion(reinterpret_cast<const char *>(glewGetString(GLEW_VERSION)));
         this->setFaceCulling(true);
-        this->setFramerate(Framerate::FRAMERATE_60);
+        this->setFramerate(Framerate::FRAMERATE_VSYNC);
         SDL_SetRelativeMouseMode(SDL_TRUE);
         
         struct cpu_raw_data_t raw {};
@@ -203,7 +203,7 @@ namespace mastercraft::game {
     
     
     void ConfigManager::decDistanceView() {
-        this->distanceView = std::max(this->distanceView - 1, 1);
+        this->distanceView = std::max(this->distanceView - 1, 0);
     }
     
     

@@ -47,7 +47,7 @@ namespace mastercraft::game {
             GLfloat mouseSensitivity = 0.10f; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;         /**< Field of view, default to 70. */
-            GLint distanceView = 7;   /**< Draw distance as the radius of SuperChunk rendered. */
+            GLint distanceView = 4;   /**< Draw distance as the radius of SuperChunk rendered. */
             GLuint framerate = 0;     /**< Framerate value, default to 0 (uncapped). */
             GLuint usPerFrame = 0;    /**< Number of microseconds between frame. */
             Framerate framerateOpt ;  /**< Chosen Framerate, default to VSYNC. */

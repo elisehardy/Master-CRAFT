@@ -33,18 +33,19 @@ namespace mastercraft::cube {
     
     
     bool Chunk::occluded(CubeType type, GLint x, GLint y, GLint z, CubeDirection direction) const {
-        if (!game::Game::getInstance()->configManager->getOcclusionCulling()) {
+        game::Game *game = game::Game::getInstance();
+        
+        if (!game->configManager->getOcclusionCulling()) {
             return false;
         }
         
         if (onBorder(static_cast<GLubyte>(x), static_cast<GLubyte>(y), static_cast<GLubyte>(z))) {
-            game::Game *game = game::Game::getInstance();
-            
             x += this->position.x;
             y += this->position.y;
             z += this->position.z;
-            
-            if (type == CubeType::WATER) {
+    
+            // Face with ALPHA are drawn only when in contact with AIR
+            if (type & ALPHA) {
                 switch (direction) {
                     case CubeDirection::FACE:
                         return game->chunkManager->get({ x, y, z + 1 }) != CubeType::AIR;
@@ -76,8 +77,9 @@ namespace mastercraft::cube {
                     return !(game->chunkManager->get({ x + 1, y, z }) & ALPHA);
             }
         }
-        
-        if (type == CubeType::WATER) {
+    
+        // Face with ALPHA are drawn only when in contact with AIR
+        if (type & ALPHA) {
             switch (direction) {
                 case CubeDirection::FACE:
                     return this->cubes[x][y][z + 1] != CubeType::AIR;

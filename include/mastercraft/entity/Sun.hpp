@@ -56,15 +56,13 @@ namespace mastercraft::entity {
                 { 1,  -1, 1 },
             };
             std::unique_ptr<shader::Shader> shader;
-            glm::vec3 position;
+//            glm::vec3 position;
             GLuint vbo;
             GLuint vao;
         
         public:
             
-            explicit Sun(const glm::vec3 &position);
-            
-            Sun(GLfloat x, GLfloat y, GLfloat z);
+            Sun();
             
             ~Sun();
             

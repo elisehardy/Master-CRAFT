@@ -87,6 +87,7 @@ namespace mastercraft::entity {
         std::vector<EntityVertex> vertices;
         for (const EntityVertex &vertex: this->vertices) {
             position = glm::vec3(scale * rY * glm::vec4(vertex.vertex - glm::vec3(0.5), 1)) + glm::vec3(0.5) + this->position;
+            position -= glm::vec3(0, 0.6, 0);
             vertices.emplace_back(position, vertex.normal, vertex.texture);
         }
 
@@ -122,12 +123,12 @@ namespace mastercraft::entity {
 
     GLuint Robot::render() {
         game::Game *game = game::Game::getInstance();
-
-        glBindVertexArray(this->vao);
+    
         game->chunkManager->entityShader->bindTexture(this->texture);
+        glBindVertexArray(this->vao);
         glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(this->vertices.size()));
-        game->chunkManager->entityShader->unbindTexture();
         glBindVertexArray(0);
+        game->chunkManager->entityShader->unbindTexture();
 
         return 1;
     }

@@ -8,17 +8,11 @@
 
 namespace mastercraft::entity {
     
-    Sun::Sun(const glm::vec3 &t_position) :
-        shader(std::make_unique<shader::Shader>("../shader/sun.vs.glsl", "../shader/sun.fs.glsl")),
-        position(t_position) {
+    Sun::Sun() :
+        shader(std::make_unique<shader::Shader>("../shader/sun.vs.glsl", "../shader/sun.fs.glsl")) {
         this->shader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
         glGenBuffers(1, &this->vbo);
         glGenVertexArrays(1, &this->vao);
-    }
-    
-    
-    Sun::Sun(GLfloat x, GLfloat y, GLfloat z) :
-        Sun(glm::vec3(x, y, z)) {
     }
     
     
@@ -29,17 +23,17 @@ namespace mastercraft::entity {
     
     
     GLuint Sun::update() {
-        glm::vec3 vertices[36];
-        
-        for (GLuint i = 0; i < 36; i++) {
-            vertices[i] = (this->vertices[i]  + position + glm::vec3(0, 40, 0));
-        }
-        
+//        glm::vec3 vertices[36];
+//
+//        for (GLuint i = 0; i < 36; i++) {
+//            vertices[i] = this->vertices[i];
+//        }
+//
         // Fill the VBO
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        
+    
         // Set the VAO
         glBindVertexArray(this->vao);
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
@@ -54,7 +48,8 @@ namespace mastercraft::entity {
     
     GLuint Sun::render() {
         game::Game *game = game::Game::getInstance();
-        glm::mat4 MVMatrix = glm::mat4(glm::mat3(game->camera->getViewMatrix())); // Remove translation from the MV
+        glm::mat4 MVMatrix = game->camera->getViewMatrix();
+//        glm::mat4 MVMatrix = glm::mat4(glm::mat3(game->camera->getViewMatrix())); // Remove translation from the MV
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
         
         this->shader->use();

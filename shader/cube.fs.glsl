@@ -8,11 +8,10 @@ flat in int vFace;
 flat in int vAlpha;
 flat in int vAnimated;
 
-uniform vec3 uCamera;
-uniform vec3 uLightColor;
+uniform sampler2D uTexture;
 uniform vec3 uLightPosition;
 uniform int uVerticalOffset;
-uniform sampler2D uTexture;
+uniform int uDay;
 
 out vec4 fFragColor;
 
@@ -46,18 +45,29 @@ vec3 computeDiffuseLighting(vec3 lightDirection, vec3 lightColor) {
 
 
 void main() {
-    vec3 lightColor = vec3(1);
-    vec3 lightPosition = vec3(1000, 1000, 1000);
-    vec3 lightDirection = normalize(lightPosition - vPosition);
-
     vec4 textureColor = computeTextureColor();
-    vec3 diffuse = vec3(computeDiffuseLighting(lightDirection, lightColor));
-    vec3 ambient = vec3(.4);
+    if (textureColor.w == 0) {
+        discard;
+    }
+
+    vec3 light;
+    if (uDay == 1) {
+        vec3 lightColor = vec3(1);
+        vec3 lightPosition = vec3(1000, 1000, 1000);
+        vec3 lightDirection = normalize(lightPosition - vPosition);
+
+        vec3 diffuse = vec3(computeDiffuseLighting(lightDirection, lightColor));
+        vec3 ambient = vec3(.4);
+        light =  diffuse + ambient;
+    }
+    else {
+        light = vec3(.1);
+    }
 
     fFragColor = vec4(
-        min(1.f, diffuse.x + ambient.x),
-        min(1.f, diffuse.y + ambient.y),
-        min(1.f, diffuse.z + ambient.z),
+        min(1.f, light.x),
+        min(1.f, light.y),
+        min(1.f, light.z),
         1
     ) * textureColor;
 }

@@ -196,7 +196,7 @@ namespace mastercraft::game {
         for (GLuint x = 0; x < cube::SuperChunk::X; x++) {
             for (GLuint z = 0; z < cube::SuperChunk::Z; z++) {
                 for (GLuint y = ConfigManager::GEN_MAX_HEIGHT; y >= ConfigManager::GEN_MIN_HEIGHT; y--) {
-                    if (chunk->get(x, y, z) != cube::CubeType::AIR) {
+                    if (!(chunk->get(x, y, z) & cube::NOT_FLOOR)) {
                         biome = chunk->get(x, y, z);
                         
                         // Try to generate a tree at position
@@ -216,19 +216,19 @@ namespace mastercraft::game {
                         }
                         else { // Try generate a entity instead
                             if (Random::get<bool>(0.0001)) {
-                                auto type = Random::get(0, 2);
-                                if (type == 1) {
+                                auto type = Random::get(0.f, 1.f);
+                                if (type <= 0.4f) {
                                     entities.emplace_back(std::make_unique<entity::Slime>(glm::vec3(
                                         static_cast<GLint>(x) + position.x,
                                         static_cast<GLint>(y) + position.y + 1,
                                         static_cast<GLint>(z) + position.z
                                     )));
                                 }
-                                else if(type == 2){
+                                else if (type <= 0.8f) {
                                     entities.emplace_back(std::make_unique<entity::Spider>(glm::vec3(
-                                            static_cast<GLint>(x) + position.x,
-                                            static_cast<GLint>(y) + position.y + 1,
-                                            static_cast<GLint>(z) + position.z
+                                        static_cast<GLint>(x) + position.x,
+                                        static_cast<GLint>(y) + position.y + 1,
+                                        static_cast<GLint>(z) + position.z
                                     )));
                                 }
                                 else {
@@ -291,13 +291,15 @@ namespace mastercraft::game {
         this->cubeShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
         this->cubeShader->addUniform("uChunkPosition", shader::UNIFORM_3_F);
         this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
+        this->cubeShader->addUniform("uDay", shader::UNIFORM_1_I);
         
         this->entityShader = std::make_unique<shader::ShaderTexture>(
-            "../shader/slime.vs.glsl", "../shader/slime.fs.glsl"
+            "../shader/npc.vs.glsl", "../shader/npc.fs.glsl"
         );
         this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
+        this->entityShader->addUniform("uDay", shader::UNIFORM_MATRIX_4F);
     }
     
     
@@ -329,6 +331,7 @@ namespace mastercraft::game {
             }
         );
         
+        
         // Update superChunks
         std::for_each(
             this->chunks.begin(), this->chunks.end(),
@@ -349,6 +352,7 @@ namespace mastercraft::game {
     
     void ChunkManager::render() {
         Game *game = Game::getInstance();
+        GLuint uDay = game->tickCycle < game::ConfigManager::TICK_DAY;
         glm::mat4 MVMatrix = game->camera->getViewMatrix();
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(MVMatrix));
@@ -358,6 +362,7 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
+        this->cubeShader->loadUniform("uDay", &uDay);
         this->cubeShader->bindTexture(this->cubeTexture);
         game->configManager->getFaceCulling() ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
         game->stats.rendered_face = 0;
@@ -378,6 +383,7 @@ namespace mastercraft::game {
         this->entityShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
         this->entityShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->entityShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
+        this->entityShader->loadUniform("uDay", &uDay);
         for (const auto &entity : this->entities) {
             entity->render();
         }

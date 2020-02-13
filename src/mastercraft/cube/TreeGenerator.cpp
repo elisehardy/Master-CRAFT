@@ -1,10 +1,7 @@
-#include <stdexcept>
-
 #include <effolkronium/random.hpp>
 
 #include <mastercraft/cube/TreeGenerator.hpp>
 #include <mastercraft/game/Game.hpp>
-#include <iostream>
 
 
 using Random = effolkronium::random_static;
@@ -12,8 +9,9 @@ using Random = effolkronium::random_static;
 namespace mastercraft::cube {
     
     TreeGenerator::Tree TreeGenerator::plainTree(glm::vec3 position) {
-        if (position.x + 6 >= Chunk::X || position.x - 6 < 0 || position.z + 6 >= Chunk::Z || position.z - 6 < 0) {
-            return mastercraft::cube::TreeGenerator::Tree();
+        if (position.x + 5 >= SuperChunk::X || position.x - 5 < 0
+            || position.z + 5 >= SuperChunk::Z || position.z - 5 < 0) {
+            return TreeGenerator::Tree();
         }
         
         uint32_t trunk = Random::get(6u, 10u);
@@ -105,24 +103,24 @@ namespace mastercraft::cube {
         tree.emplace_back(glm::ivec3(position.x, position.y + 1 + trunk + 1, position.z), CubeType::LEAVES_PLAIN);
         tree.emplace_back(glm::ivec3(position.x - 1, position.y + 1 + trunk + 1, position.z), CubeType::LEAVES_PLAIN);
         tree.emplace_back(glm::ivec3(position.x - 2, position.y + 1 + trunk + 1, position.z), CubeType::LEAVES_PLAIN);
-        tree.emplace_back(glm::ivec3(position.x - 2, position.y + 1 + trunk + 1, position.z + 1),
-                          CubeType::LEAVES_PLAIN
+        tree.emplace_back(
+            glm::ivec3(position.x - 2, position.y + 1 + trunk + 1, position.z + 1), CubeType::LEAVES_PLAIN
         );
-        tree.emplace_back(glm::ivec3(position.x - 2, position.y + 1 + trunk + 1, position.z - 1),
-                          CubeType::LEAVES_PLAIN
+        tree.emplace_back(
+            glm::ivec3(position.x - 2, position.y + 1 + trunk + 1, position.z - 1), CubeType::LEAVES_PLAIN
         );
-        tree.emplace_back(glm::ivec3(position.x - 1, position.y + 1 + trunk + 1, position.z + 1),
-                          CubeType::LEAVES_PLAIN
+        tree.emplace_back(
+            glm::ivec3(position.x - 1, position.y + 1 + trunk + 1, position.z + 1), CubeType::LEAVES_PLAIN
         );
-        tree.emplace_back(glm::ivec3(position.x - 1, position.y + 1 + trunk + 1, position.z - 1),
-                          CubeType::LEAVES_PLAIN
+        tree.emplace_back(
+            glm::ivec3(position.x - 1, position.y + 1 + trunk + 1, position.z - 1), CubeType::LEAVES_PLAIN
         );
         
-        tree.emplace_back(glm::ivec3(position.x + 1, position.y + 1 + trunk + 1, position.z - 1),
-                          CubeType::LEAVES_PLAIN
+        tree.emplace_back(
+            glm::ivec3(position.x + 1, position.y + 1 + trunk + 1, position.z - 1), CubeType::LEAVES_PLAIN
         );
-        tree.emplace_back(glm::ivec3(position.x + 1, position.y + 1 + trunk + 1, position.z + 1),
-                          CubeType::LEAVES_PLAIN
+        tree.emplace_back(
+            glm::ivec3(position.x + 1, position.y + 1 + trunk + 1, position.z + 1), CubeType::LEAVES_PLAIN
         );
         tree.emplace_back(glm::ivec3(position.x, position.y + 1 + trunk + 1, position.z + 1), CubeType::LEAVES_PLAIN);
         tree.emplace_back(glm::ivec3(position.x, position.y + 1 + trunk + 1, position.z - 1), CubeType::LEAVES_PLAIN);
@@ -137,8 +135,9 @@ namespace mastercraft::cube {
     
     
     TreeGenerator::Tree TreeGenerator::jungleTree(glm::vec3 position) {
-        if (position.x + 6 >= Chunk::X || position.x - 6 < 0 || position.z + 6 >= Chunk::Z || position.z - 6 < 0) {
-            return mastercraft::cube::TreeGenerator::Tree();
+        if (position.x + 6 >= SuperChunk::X || position.x - 2 < 0
+            || position.z + 1 >= SuperChunk::Z || position.z - 1 < 0) {
+            return TreeGenerator::Tree();
         }
         
         uint32_t trunk = Random::get(4u, 5u);
@@ -221,81 +220,80 @@ namespace mastercraft::cube {
             }
             
             //one floor
-            tree.emplace_back(glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk, position.z), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk, position.z), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3 + 3, position.y + 1 + trunk, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 3, position.y + 1 + trunk, position.z), CubeType::LEAVES_JUNGLE
             );
             
             tree.emplace_back(glm::ivec3(position.x + 3, position.y + 1 + trunk, position.z), CubeType::LEAVES_JUNGLE);
-            tree.emplace_back(glm::ivec3(position.x + 3 - 1, position.y + 1 + trunk, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 - 1, position.y + 1 + trunk, position.z), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3 - 2, position.y + 1 + trunk, position.z),
-                              CubeType::LEAVES_JUNGLE
-            );
-            
-            tree.emplace_back(glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_JUNGLE
-            );
-            tree.emplace_back(glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_JUNGLE
-            );
-            tree.emplace_back(glm::ivec3(position.x + 3, position.y + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_JUNGLE
-            );
-            tree.emplace_back(glm::ivec3(position.x + 3 - 1, position.y + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 - 2, position.y + 1 + trunk, position.z), CubeType::LEAVES_JUNGLE
             );
             
-            tree.emplace_back(glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk, position.z - 1),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk, position.z + 1), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk, position.z - 1),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk, position.z + 1), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3, position.y + 1 + trunk, position.z - 1),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3, position.y + 1 + trunk, position.z + 1), CubeType::LEAVES_JUNGLE
+            );
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 - 1, position.y + 1 + trunk, position.z + 1), CubeType::LEAVES_JUNGLE
+            );
+            
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk, position.z - 1), CubeType::LEAVES_JUNGLE
+            );
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk, position.z - 1), CubeType::LEAVES_JUNGLE
+            );
+            tree.emplace_back(
+                glm::ivec3(position.x + 3, position.y + 1 + trunk, position.z - 1), CubeType::LEAVES_JUNGLE
             );
             
             //two floor
-            tree.emplace_back(glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk + 1, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk + 1, position.z), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk + 1, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 2, position.y + 1 + trunk + 1, position.z), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3, position.y + 1 + trunk + 1, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3, position.y + 1 + trunk + 1, position.z), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3 - 1, position.y + 1 + trunk + 1, position.z),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 - 1, position.y + 1 + trunk + 1, position.z), CubeType::LEAVES_JUNGLE
             );
             
-            tree.emplace_back(glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk + 1, position.z + 1),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk + 1, position.z + 1), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3, position.y + 1 + trunk + 1, position.z + 1),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3, position.y + 1 + trunk + 1, position.z + 1), CubeType::LEAVES_JUNGLE
             );
-            tree.emplace_back(glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk + 1, position.z - 1),
-                              CubeType::LEAVES_JUNGLE
+            tree.emplace_back(
+                glm::ivec3(position.x + 3 + 1, position.y + 1 + trunk + 1, position.z - 1), CubeType::LEAVES_JUNGLE
             );
         }
         
         return tree;
-        
-        //return mastercraft::cube::TreeGenerator::Tree();
     }
     
     
     TreeGenerator::Tree TreeGenerator::snowTree(glm::vec3 position) {
-        if (position.x + 2 >= Chunk::X || position.x - 2 < 0 || position.z + 2 >= Chunk::Z || position.z - 2 < 0) {
-            return mastercraft::cube::TreeGenerator::Tree();
+        if (position.x + 2 >= SuperChunk::X || position.x - 2 < 0
+            || position.z + 2 >= SuperChunk::Z || position.z - 2 < 0) {
+            return TreeGenerator::Tree();
         }
         uint32_t trunk = Random::get(2u, 3u);
         
@@ -315,61 +313,67 @@ namespace mastercraft::cube {
             );
         }
         
-        for (uint32_t i = 0; i < leaves; i++) {
+        for (GLfloat i = 0; i < leaves; i += 1) {
             tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + trunk, position.z), CubeType::WOOD_SNOW);
+            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + trunk + 1, position.z),
+                              CubeType::WOOD_SNOW
+            );
+            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + trunk + 2, position.z),
+                              CubeType::WOOD_SNOW
+            );
             // one floor
-            tree.emplace_back(glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 1 + trunk, position.z),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 1 + trunk, position.z), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 1 + trunk, position.z),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 1 + trunk, position.z), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z + 1), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z - 1),
-                              CubeType::LEAVES_SNOW
-            );
-            
-            tree.emplace_back(glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_SNOW
-            );
-            tree.emplace_back(glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_SNOW
-            );
-            tree.emplace_back(glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 1 + trunk, position.z + 1),
-                              CubeType::LEAVES_SNOW
-            );
-            tree.emplace_back(glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 1 + trunk, position.z - 1),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z - 1), CubeType::LEAVES_SNOW
             );
             
-            tree.emplace_back(glm::ivec3(position.x + 2, position.y + 1 + i * 3 + 1 + trunk, position.z),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 1 + trunk, position.z + 1), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x - 2, position.y + 1 + i * 3 + 1 + trunk, position.z),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 1 + trunk, position.z + 1), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z + 2),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 1 + trunk, position.z + 1), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z - 2),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 1 + trunk, position.z - 1), CubeType::LEAVES_SNOW
+            );
+            
+            tree.emplace_back(
+                glm::ivec3(position.x + 2, position.y + 1 + i * 3 + 1 + trunk, position.z), CubeType::LEAVES_SNOW
+            );
+            tree.emplace_back(
+                glm::ivec3(position.x - 2, position.y + 1 + i * 3 + 1 + trunk, position.z), CubeType::LEAVES_SNOW
+            );
+            tree.emplace_back(
+                glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z + 2), CubeType::LEAVES_SNOW
+            );
+            tree.emplace_back(
+                glm::ivec3(position.x, position.y + 1 + i * 3 + 1 + trunk, position.z - 2), CubeType::LEAVES_SNOW
             );
             
             
             // two floor
-            tree.emplace_back(glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 2 + trunk, position.z),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x + 1, position.y + 1 + i * 3 + 2 + trunk, position.z), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 2 + trunk, position.z),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x - 1, position.y + 1 + i * 3 + 2 + trunk, position.z), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + 2 + trunk, position.z + 1),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x, position.y + 1 + i * 3 + 2 + trunk, position.z + 1), CubeType::LEAVES_SNOW
             );
-            tree.emplace_back(glm::ivec3(position.x, position.y + 1 + i * 3 + 2 + trunk, position.z - 1),
-                              CubeType::LEAVES_SNOW
+            tree.emplace_back(
+                glm::ivec3(position.x, position.y + 1 + i * 3 + 2 + trunk, position.z - 1), CubeType::LEAVES_SNOW
             );
         }
         //three floor
@@ -398,12 +402,12 @@ namespace mastercraft::cube {
     TreeGenerator::Tree TreeGenerator::generate(glm::ivec3 position, CubeType biome) {
         switch (biome) {
             case DIRT_PLAIN:
-                if (Random::get<bool>(0.1)) {
+                if (Random::get<bool>(0.01)) {
                     return plainTree(position);
                 }
                 break;
             case DIRT_JUNGLE:
-                if (Random::get<bool>(1)) {
+                if (Random::get<bool>(0.1)) {
                     return jungleTree(position);
                 }
                 break;

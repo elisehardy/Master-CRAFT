@@ -146,7 +146,7 @@ namespace mastercraft::game {
         glm::vec3 color;
         GLint length;
         
-        if (game->tickDay < game::ConfigManager::TICK_DAY) {
+        if (game->tickCycle < game::ConfigManager::TICK_DAY) {
             color = { 0, 0, 0 };
         }
         else {
@@ -158,77 +158,64 @@ namespace mastercraft::game {
         float i = 0;
         
         ss << game->configManager->getCpuInfo();
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         ss.str(std::string());
         ss << "OpenGL version: " << game->configManager->getOpenGlVersion();
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         i++;
         length = static_cast<GLint>(std::to_string(ConfigManager::TICK_PER_SEC).size());
         ss.str(std::string());
         ss << "Tick: " << std::setfill('0') << std::setw(length) << game->tickSecond << "/" << ConfigManager::TICK_PER_SEC;
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         ss.str(std::string());
         length = static_cast<GLint>(std::to_string(ConfigManager::TICK_CYCLE).size());
-        ss << "Day: " << std::setfill('0') << std::setw(length) << game->tickDay << "/" << ConfigManager::TICK_CYCLE;
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        ss << "Cycle: " << std::setfill('0') << std::setw(length) << game->tickCycle << "/" << ConfigManager::TICK_CYCLE;
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         i++;
         ss.str(std::string());
         ss << "Position: (" << position.x << "," << position.y << "," << position.z << ")";
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         ss.str(std::string());
         ss << "FPS: " << stats.fps << "/" << game->configManager->getFramerateString();
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         ss.str(std::string());
         ss << "Rendered face: " << stats.rendered_face << "/" << stats.face << " ("
            << std::setprecision(2) << static_cast<float>(stats.rendered_face) / static_cast<float>(stats.face) * 100.f
            << "%)";
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         ss.str(std::string());
-        ss << "SuperChunks: " << stats.superchunk << " - Chunks: " << stats.chunk << " - Cubes: " << stats.cube
+        ss << "Loaded: SuperChunks: " << stats.superchunk << " - Chunks: " << stats.chunk << " - Cubes: " << stats.cube
            << " - Entities: " << stats.entity;
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.f, ss.str(), color);
         
         ss.str(std::string());
         ss << "Size: " << "Superchunk (" << cube::SuperChunk::CHUNK_X << "/" << cube::SuperChunk::CHUNK_Y << "/"
            << cube::SuperChunk::CHUNK_Z << ") - Chunk (" << cube::Chunk::X << "/" << cube::Chunk::Y << "/"
            << cube::Chunk::Z << ")";
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         ss.str(std::string());
         ss << "Distance: " << game->configManager->getDistanceView() << " - FOV: " << game->configManager->getFov();
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         i++;
         ss.str(std::string());
-        ss << "Occlusion culling: ";
-        if (game->configManager->getOcclusionCulling()) {
-            ss << stats.occludedFace;
-        }
-        else {
-            ss << "Disabled";
-        }
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        ss << "Occlusion culling: " << (game->configManager->getOcclusionCulling() ? "Enabled" : "Disabled");
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
-        ss.str(std::string());
-        ss << "Frustum culling: ";
-        //        if (game->configManager->getFrustumCulling()) {
-        //            ss << stats.frustumCulledFace;
-        //        }
-        //        else {
-        //            ss << "Disabled";
-        //        }
-        ss << "Not implemented";
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+//        ss.str(std::string());
+//        ss << "Frustum culling: " << (game->configManager->getFrustumCulling() ? "Enabled" : "Disabled");
+//        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
         ss.str(std::string());
         ss << "Face culling: " << (game->configManager->getFaceCulling() ? "Enabled" : "Disabled");
-        this->renderText(10.f, this->height - 40 - (LINE_HEIGHT + LINE_SPACING) * i++, 1.0f, ss.str(), color);
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
     }
 }
