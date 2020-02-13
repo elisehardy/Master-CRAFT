@@ -357,7 +357,7 @@ namespace mastercraft::game {
     
     void ChunkManager::render() {
         Game *game = Game::getInstance();
-        GLuint uDay = game->tickCycle < game::ConfigManager::TICK_DAY;
+        GLuint uDay = game->isDay();
         glm::mat4 MVMatrix = game->camera->getViewMatrix();
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(MVMatrix));

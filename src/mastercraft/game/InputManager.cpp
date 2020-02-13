@@ -76,11 +76,12 @@ namespace mastercraft::game {
         }
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {
-            if (game->tickCycle > ConfigManager::TICK_DAY) {
-                game->tickCycle = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.25f);
+            if (game->isDay()) {
+                game->tickCycle = ConfigManager::TICK_DAY_END;
             } else {
-                game->tickCycle = static_cast<GLuint>(ConfigManager::TICK_CYCLE * 0.75f);
+                game->tickCycle = ConfigManager::TICK_DAY_START;
             }
+            game->switchDay();
         }
     }
     

@@ -41,6 +41,7 @@ namespace mastercraft::game {
             std::chrono::steady_clock::time_point lastTick;
             GLuint tickSecond;
             GLuint tickCycle;
+            GLboolean day;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             
             
@@ -83,6 +84,17 @@ namespace mastercraft::game {
              * Stops the game.
              */
             void stop();
+        
+            /**
+             * Switch day and night.
+             */
+            void switchDay();
+            
+            /**
+             * Return if it's currently the day or the night.
+             */
+            [[nodiscard]] bool isDay();
+            
             /**
              * Return whether the game is currently running or should be cleaned-up and closes.
              */

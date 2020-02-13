@@ -36,13 +36,12 @@ namespace mastercraft::game {
         this->chunkManager = std::make_unique<ChunkManager>(atlas);
         this->skybox = std::make_unique<entity::Skybox>();
         this->sun = std::make_unique<entity::Sun>();
-        this->sun->update();
         this->chunkManager->init();
         this->configManager->init();
         this->camera->init();
         this->lastTick = std::chrono::steady_clock::now();
         this->tickCycle = 0;
-        
+        this->day = true;
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
@@ -62,7 +61,9 @@ namespace mastercraft::game {
             this->lastTick = now;
             this->tickCycle = (this->tickCycle + 1u) % ConfigManager::TICK_CYCLE;
             this->tickSecond = (this->tickSecond + 1u) % ConfigManager::TICK_PER_SEC;
-            
+            if (this->tickCycle == ConfigManager::TICK_DAY_START || this->tickCycle == ConfigManager::TICK_DAY_END) {
+                this->day = !this->day;
+            }
             return true;
         }
         
@@ -109,7 +110,7 @@ namespace mastercraft::game {
         if (this->tick()) {
             this->chunkManager->update();
         }
-//        this->sun->update();
+        this->sun->update();
     }
     
     
@@ -117,26 +118,36 @@ namespace mastercraft::game {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         glDisable(GL_DEPTH_TEST);
-//        this->skybox->render();
+        this->skybox->render();
         glEnable(GL_DEPTH_TEST);
         this->sun->render();
-//        glClear(GL_DEPTH_BUFFER_BIT);
-
-//        this->chunkManager->render();
+        glClear(GL_DEPTH_BUFFER_BIT);
+        
+        this->chunkManager->render();
         if (this->configManager->getDebug()) {
             this->debug->render();
         }
-
+        
         this->windowManager->refresh();
     }
     
     
-    bool Game::isRunning() {
-        return this->running;
+    void Game::switchDay() {
+        this->day = !this->day;
+    }
+    
+    
+    bool Game::isDay() {
+        return this->day;
     }
     
     
     void Game::stop() {
         this->running = false;
+    }
+    
+    
+    bool Game::isRunning() {
+        return this->running;
     }
 }

@@ -23,18 +23,22 @@ namespace mastercraft::entity {
     
     
     GLuint Sun::update() {
-//        glm::vec3 vertices[36];
-//
-//        for (GLuint i = 0; i < 36; i++) {
-//            vertices[i] = this->vertices[i];
-//        }
-//
-    std::cout << "UPDATE MAGUEULE" << std::endl;
+        game::Game *game = game::Game::getInstance();
+        GLfloat angle = glm::radians(360.f / game::ConfigManager::TICK_CYCLE * game->tickCycle);
+        glm::mat4 rotation = glm::rotate(glm::mat4(1.f), angle, glm::vec3(0.f, 0.f, 1.f));
+        glm::vec3 position, camera = game->camera->getPosition();
+        glm::vec3 vertices[36];
+        
+        for (GLuint i = 0; i < 36; i++) {
+            position = glm::vec3(rotation * glm::vec4(this->vertices[i] + glm::vec3(20, 0, 0), 1)) + camera;
+            vertices[i] = position;
+        }
+        
         // Fill the VBO
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
+        
         // Set the VAO
         glBindVertexArray(this->vao);
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
@@ -50,10 +54,9 @@ namespace mastercraft::entity {
     GLuint Sun::render() {
         game::Game *game = game::Game::getInstance();
         glm::mat4 MVMatrix = game->camera->getViewMatrix();
-//        glm::mat4 MVMatrix = glm::mat4(glm::mat3(game->camera->getViewMatrix())); // Remove translation from the MV
+        //        glm::mat4 MVMatrix = glm::mat4(glm::mat3(game->camera->getViewMatrix())); // Remove translation from the MV
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
-        std::cout << "RENDER MAGUEULE" << std::endl;
-    
+        
         this->shader->use();
         this->shader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         glBindVertexArray(this->vao);

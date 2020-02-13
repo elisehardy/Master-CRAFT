@@ -34,8 +34,8 @@ namespace mastercraft::game {
             static constexpr GLuint SECONDS_DAY_CYCLE = 60;
             static constexpr GLuint TICK_PER_SEC = 20;
             static constexpr GLuint TICK_CYCLE = SECONDS_DAY_CYCLE * TICK_PER_SEC;
-            static constexpr GLuint TICK_DAY = static_cast<GLuint>(TICK_CYCLE * 0.5f);
-            static constexpr GLuint TICK_NIGHT = TICK_DAY;
+            static constexpr GLuint TICK_DAY_START = static_cast<const GLuint>(TICK_CYCLE * 0.95);
+            static constexpr GLuint TICK_DAY_END = static_cast<const GLuint>(TICK_CYCLE * 0.55);
             
             static_assert(GEN_MIN_HEIGHT < GEN_MAX_HEIGHT);
         
@@ -47,10 +47,10 @@ namespace mastercraft::game {
             GLfloat mouseSensitivity = 0.10f; /**< Sensitivity of the mouse, default to 0.5. */
             
             GLfloat fov = 70;         /**< Field of view, default to 70. */
-            GLint distanceView = 4;   /**< Draw distance as the radius of SuperChunk rendered. */
+            GLint distanceView = 6;   /**< Draw distance as the radius of SuperChunk rendered. */
             GLuint framerate = 0;     /**< Framerate value, default to 0 (uncapped). */
             GLuint usPerFrame = 0;    /**< Number of microseconds between frame. */
-            Framerate framerateOpt ;  /**< Chosen Framerate, default to VSYNC. */
+            Framerate framerateOpt = Framerate::FRAMERATE_VSYNC ;  /**< Chosen Framerate, default to VSYNC. */
             
             GLboolean faceCulling = true;      /**< Whether face culling is enabled. */
             GLboolean occlusionCulling = true; /**< Whether occlusion culling is enabled. */

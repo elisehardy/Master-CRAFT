@@ -146,7 +146,7 @@ namespace mastercraft::game {
         glm::vec3 color;
         GLint length;
         
-        if (game->tickCycle < game::ConfigManager::TICK_DAY) {
+        if (game->isDay()) {
             color = { 0, 0, 0 };
         }
         else {

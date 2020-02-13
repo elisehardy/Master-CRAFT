@@ -6,7 +6,9 @@ in vec2 vTexture;
 
 out vec4 fFragColor;
 
+
 uniform sampler2D uTexture;
+uniform vec3 uLightPosition;
 uniform int uDay;
 
 /**

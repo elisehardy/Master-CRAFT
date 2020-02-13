@@ -1,7 +1,7 @@
 #{{ HEADER }}
 
-out vec3 fFragColor;
+out vec4 fFragColor;
 
 void main() {
-    fFragColor = vec3(1.);
+    fFragColor = vec4(1.);
 }
