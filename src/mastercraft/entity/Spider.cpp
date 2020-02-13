@@ -13,9 +13,9 @@ using Random = effolkronium::random_static;
 namespace mastercraft::entity {
 
     Spider::Spider(const glm::vec3 &t_position) :
-            vertices(util::OBJ::Load("../assets/entity/spider/spider.obj")),
+        IEntity(t_position), vertices(util::OBJ::Load("../assets/entity/spider/spider.obj")),
             texture(util::Image::loadPNG("../assets/entity/spider/spider.png", 256, 256)),
-            direction(glm::vec3(0)), position(t_position), goal(t_position) {
+            direction(glm::vec3(0)), goal(t_position) {
 
         this->texture.bind();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

@@ -29,6 +29,7 @@ namespace mastercraft::entity {
 //            vertices[i] = this->vertices[i];
 //        }
 //
+    std::cout << "UPDATE MAGUEULE" << std::endl;
         // Fill the VBO
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
@@ -51,7 +52,8 @@ namespace mastercraft::entity {
         glm::mat4 MVMatrix = game->camera->getViewMatrix();
 //        glm::mat4 MVMatrix = glm::mat4(glm::mat3(game->camera->getViewMatrix())); // Remove translation from the MV
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
-        
+        std::cout << "RENDER MAGUEULE" << std::endl;
+    
         this->shader->use();
         this->shader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         glBindVertexArray(this->vao);

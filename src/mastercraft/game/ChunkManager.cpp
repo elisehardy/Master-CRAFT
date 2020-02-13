@@ -321,6 +321,11 @@ namespace mastercraft::game {
             this->chunks.erase(key);
         }
         
+//        // Delete entity outside distanceView
+//        for (const auto &entity: this->entities) {
+//            if (this->chunks.count(getSuperChunkCoordinates(entity->)))
+//        }
+//
         // Add new superChunk that entered distanceView
         std::for_each(
             this->keys.begin(), this->keys.end(),

@@ -27,7 +27,6 @@ class Slime : public IEntity {
             std::vector<EntityVertex> vertices;
             shader::Texture texture;
             glm::vec3 direction;
-            glm::vec3 position;
             glm::vec3 goal;
             GLuint vbo;
             GLuint vao;

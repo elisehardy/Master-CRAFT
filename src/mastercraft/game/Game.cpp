@@ -36,6 +36,7 @@ namespace mastercraft::game {
         this->chunkManager = std::make_unique<ChunkManager>(atlas);
         this->skybox = std::make_unique<entity::Skybox>();
         this->sun = std::make_unique<entity::Sun>();
+        this->sun->update();
         this->chunkManager->init();
         this->configManager->init();
         this->camera->init();
@@ -108,7 +109,7 @@ namespace mastercraft::game {
         if (this->tick()) {
             this->chunkManager->update();
         }
-        this->sun->update();
+//        this->sun->update();
     }
     
     
@@ -116,12 +117,12 @@ namespace mastercraft::game {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         glDisable(GL_DEPTH_TEST);
-        this->skybox->render();
+//        this->skybox->render();
         glEnable(GL_DEPTH_TEST);
         this->sun->render();
-        glClear(GL_DEPTH_BUFFER_BIT);
+//        glClear(GL_DEPTH_BUFFER_BIT);
 
-        this->chunkManager->render();
+//        this->chunkManager->render();
         if (this->configManager->getDebug()) {
             this->debug->render();
         }
