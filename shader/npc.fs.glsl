@@ -33,7 +33,7 @@ void main() {
         vec3 lightDirection = normalize(lightPosition - vPosition);
 
         vec3 diffuse = vec3(computeDiffuseLighting(lightDirection, lightColor));
-        vec3 ambient = vec3(0.4);
+        vec3 ambient = vec3(.4);
         light = diffuse + ambient;
     }
     else {

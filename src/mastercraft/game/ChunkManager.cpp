@@ -299,7 +299,7 @@ namespace mastercraft::game {
         this->entityShader->addUniform("uMV", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
-        this->entityShader->addUniform("uDay", shader::UNIFORM_MATRIX_4F);
+        this->entityShader->addUniform("uDay", shader::UNIFORM_1_I);
     }
     
     

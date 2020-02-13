@@ -46,7 +46,7 @@ vec3 computeDiffuseLighting(vec3 lightDirection, vec3 lightColor) {
 
 void main() {
     vec4 textureColor = computeTextureColor();
-    if (textureColor.w == 0) {
+    if (textureColor.w == 0.f) {
         discard;
     }
 
