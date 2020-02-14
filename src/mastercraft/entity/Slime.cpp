@@ -8,6 +8,8 @@
 #include <mastercraft/game/Game.hpp>
 
 
+# define M_PIf32 __f32 (3.141592653589793238462643383279502884) /* pi */
+
 using Random = effolkronium::random_static;
 
 namespace mastercraft::entity {
