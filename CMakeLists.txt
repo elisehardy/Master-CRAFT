@@ -71,6 +71,7 @@ ELSEIF (CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
         -Weverything
         -Werror
         -Wfatal-errors
+        -Wno-unknown-pragmas
     )
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.0.0")
     ELSE ()

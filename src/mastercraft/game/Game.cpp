@@ -59,8 +59,8 @@ namespace mastercraft::game {
         
         if (duration >= TICK_PER_MS) {
             this->lastTick = now;
-            this->tickCycle = (this->tickCycle + 1u) % ConfigManager::TICK_CYCLE;
-            this->tickSecond = (this->tickSecond + 1u) % ConfigManager::TICK_PER_SEC;
+            this->tickCycle = (this->tickCycle + 1) % ConfigManager::TICK_CYCLE;
+            this->tickSecond = (this->tickSecond + 1) % ConfigManager::TICK_PER_SEC;
             if (this->tickCycle == ConfigManager::DUSK_END || this->tickCycle == ConfigManager::DAWN_END) {
                 this->day = !this->day;
             }

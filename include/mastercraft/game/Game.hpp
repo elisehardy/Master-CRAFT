@@ -40,7 +40,7 @@ namespace mastercraft::game {
             
             std::chrono::steady_clock::time_point lastTick;
             GLuint tickSecond;
-            GLuint tickCycle;
+            GLint tickCycle;
             GLboolean day;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             

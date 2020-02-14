@@ -35,18 +35,18 @@ namespace mastercraft::game {
             static constexpr GLubyte GEN_WATER_LEVEL = GEN_MIN_HEIGHT + 22;
             
             // Time
-            static constexpr GLuint SECONDS_CYCLE = 40;
-            static constexpr GLuint TICK_PER_SEC = 20;
-            static constexpr GLuint TICK_CYCLE = SECONDS_CYCLE * TICK_PER_SEC;
+            static constexpr GLint SECONDS_CYCLE = 40;
+            static constexpr GLint TICK_PER_SEC = 20;
+            static constexpr GLint TICK_CYCLE = SECONDS_CYCLE * TICK_PER_SEC;
             
             // Skybox and lighting
-            static constexpr GLuint DAWN_START = game::ConfigManager::TICK_CYCLE / 360 * 350;
-            static constexpr GLuint DAWN = game::ConfigManager::TICK_CYCLE / 360 * 360;
-            static constexpr GLuint DAWN_END = game::ConfigManager::TICK_CYCLE / 360 * 30;
+            static constexpr GLint DAWN_START = game::ConfigManager::TICK_CYCLE / 360 * 0;
+            static constexpr GLint DAWN = game::ConfigManager::TICK_CYCLE / 360 * 15;
+            static constexpr GLint DAWN_END = game::ConfigManager::TICK_CYCLE / 360 * 30;
             
-            static constexpr GLuint DUSK_START = game::ConfigManager::TICK_CYCLE / 360 * 170;
-            static constexpr GLuint DUSK = game::ConfigManager::TICK_CYCLE / 360 * 190;
-            static constexpr GLuint DUSK_END = game::ConfigManager::TICK_CYCLE / 360 * 210;
+            static constexpr GLint DUSK_START = game::ConfigManager::TICK_CYCLE / 360 * 190;
+            static constexpr GLint DUSK = game::ConfigManager::TICK_CYCLE / 360 * 205;
+            static constexpr GLint DUSK_END = game::ConfigManager::TICK_CYCLE / 360 * 220;
             
             static constexpr glm::vec3 DAWN_DUSK_SKYBOX_COLOR = glm::vec3(255.f, 188.f, 60.f) / 255.f;
             static constexpr glm::vec3 DAY_SKYBOX_COLOR = glm::vec3(42.f, 102.f, 175.f) / 255.f;
@@ -56,11 +56,11 @@ namespace mastercraft::game {
             static constexpr glm::vec3 DAY_LIGHT_COLOR = glm::vec3(255.f, 255.f, 220.f) / 255.f;
             static constexpr glm::vec3 NIGHT_LIGHT_COLOR = glm::vec3(20.f, 60.f, 180.f) / 255.f;
             
-            static constexpr GLfloat DAWN_DUSK_DIR_LIGHT_INTENSITY = .4f;
+            static constexpr GLfloat DAWN_DUSK_LIGHT_DIR_INTENSITY = .4f;
             static constexpr GLfloat DAY_LIGHT_DIR_INTENSITY = 1.f;
             static constexpr GLfloat NIGHT_LIGHT_DIR_INTENSITY = 0.f;
             
-            static constexpr GLfloat DAWN_DUSK_AMB_LIGHT_INTENSITY = .3f;
+            static constexpr GLfloat DAWN_DUSK_LIGHT_AMB_INTENSITY = .3f;
             static constexpr GLfloat DAY_LIGHT_AMB_INTENSITY = .4f;
             static constexpr GLfloat NIGHT_LIGHT_AMB_INTENSITY = .15f;
             
@@ -154,13 +154,13 @@ namespace mastercraft::game {
         
             [[nodiscard]] static GLfloat changeIntervalTo01(GLfloat x, GLfloat oldMin, GLfloat oldMax);
         
-            [[nodiscard]] static glm::vec3 getSkyboxColor(GLuint tick);
+            [[nodiscard]] static glm::vec3 getSkyboxColor(GLint tick);
             
-            [[nodiscard]] static glm::vec3 getLightColor(GLuint tick);
+            [[nodiscard]] static glm::vec3 getLightColor(GLint tick);
             
-            [[nodiscard]] static GLfloat getLightDirIntensity(GLuint tick);
+            [[nodiscard]] static GLfloat getLightDirIntensity(GLint tick);
             
-            [[nodiscard]] static GLfloat getLightAmbIntensity(GLuint tick);
+            [[nodiscard]] static GLfloat getLightAmbIntensity(GLint tick);
     };
 }
 
