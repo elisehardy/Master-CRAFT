@@ -8,7 +8,9 @@
 #include <mastercraft/game/Game.hpp>
 
 
-# define M_PIf32 __f32 (3.141592653589793238462643383279502884) /* pi */
+#ifndef M_PIf32
+#define M_PIf32 3.14159265358979323846264338327950288f /* pi */
+#endif
 
 using Random = effolkronium::random_static;
 

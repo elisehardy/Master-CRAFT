@@ -5,8 +5,13 @@
 #include <mastercraft/game/Game.hpp>
 
 
-# define M_PIf32    __f32 (3.141592653589793238462643383279502884) /* pi */
-# define M_PI_2f32  __f32 (1.570796326794896619231321691639751442) /* pi/2 */
+#ifndef M_PIf32
+#define M_PIf32    3.141592653589793238462643383279502884f /* pi */
+#endif
+
+#ifndef M_PI_2f32
+#define M_PI_2f32  1.570796326794896619231321691639751442f /* pi/2 */
+#endif
 
 namespace mastercraft::game {
     
