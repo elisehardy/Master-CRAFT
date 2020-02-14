@@ -2,6 +2,7 @@
 #define MASTERCRAFT_SUN_HPP
 
 #include <mastercraft/shader/Shader.hpp>
+#include <mastercraft/game/ConfigManager.hpp>
 
 
 namespace mastercraft::entity {

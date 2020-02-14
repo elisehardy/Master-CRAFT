@@ -1,6 +1,8 @@
 #ifndef MASTERCRAFT_SKYBOX_HPP
 #define MASTERCRAFT_SKYBOX_HPP
 
+#include <glm/vec3.hpp>
+
 #include <mastercraft/shader/Cubemap.hpp>
 #include <mastercraft/shader/ShaderCubemap.hpp>
 
@@ -56,9 +58,8 @@ namespace mastercraft::entity {
                 { 1,  1,  1 },
                 { 1,  -1, 1 },
             };
-            std::unique_ptr <shader::ShaderCubemap> shader;
-            std::unique_ptr <shader::Cubemap> night;
-            std::unique_ptr <shader::Cubemap> day;
+            std::unique_ptr<shader::ShaderCubemap> shader;
+            std::unique_ptr<shader::Cubemap> negativeSky;
             GLuint vbo;
             GLuint vao;
         

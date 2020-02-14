@@ -145,13 +145,14 @@ namespace mastercraft::game {
         std::stringstream ss;
         glm::vec3 color;
         GLint length;
+    
+        glm::mat4 MVMatrix = game->camera->getViewMatrix();
+        glm::vec3 lightPos = glm::vec3(MVMatrix * glm::vec4(game->sun->getPosition(), 0));
+        glm::vec3 lightColor = ConfigManager::getLightColor(game->tickCycle);
+        GLfloat lightDirIntensity = ConfigManager::getLightDirIntensity(game->tickCycle);
+        GLfloat lightAmbIntensity = ConfigManager::getLightAmbIntensity(game->tickCycle);
         
-        if (game->isDay()) {
-            color = { 0, 0, 0 };
-        }
-        else {
-            color = { 1, 1, 1 };
-        }
+        color = glm::vec3(1) - ConfigManager::getSkyboxColor(game->tickCycle);
         
         game::Statistics stats = game->stats;
         glm::ivec3 position = game->camera->getPosition();
@@ -175,6 +176,23 @@ namespace mastercraft::game {
         ss << "Cycle: " << std::setfill('0') << std::setw(length) << game->tickCycle << "/" << ConfigManager::TICK_CYCLE;
         this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
         
+        i++;
+        ss.str(std::string());
+        ss << "Light position: (" << lightPos.x << ", " << lightPos.y << ", " << lightPos.z << ")";
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Light color: (" << lightColor.x << ", " << lightColor.y << ", " << lightColor.z << ")";
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Directional light intensity: " << lightDirIntensity;
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
+        
+        ss.str(std::string());
+        ss << "Ambient light intensity: " << lightAmbIntensity;
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
+
         i++;
         ss.str(std::string());
         ss << "Position: (" << position.x << "," << position.y << "," << position.z << ")";

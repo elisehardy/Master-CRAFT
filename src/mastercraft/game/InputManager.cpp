@@ -77,9 +77,9 @@ namespace mastercraft::game {
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {
             if (game->isDay()) {
-                game->tickCycle = ConfigManager::TICK_DAY_END;
+                game->tickCycle = ConfigManager::DUSK_END;
             } else {
-                game->tickCycle = ConfigManager::TICK_DAY_START;
+                game->tickCycle = ConfigManager::DAWN_END;
             }
             game->switchDay();
         }

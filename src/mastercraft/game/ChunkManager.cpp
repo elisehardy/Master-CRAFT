@@ -292,7 +292,9 @@ namespace mastercraft::game {
         this->cubeShader->addUniform("uChunkPosition", shader::UNIFORM_3_F);
         this->cubeShader->addUniform("uVerticalOffset", shader::UNIFORM_1_I);
         this->cubeShader->addUniform("uLightPosition", shader::UNIFORM_3_F);
-        this->cubeShader->addUniform("uDay", shader::UNIFORM_1_I);
+        this->cubeShader->addUniform("uLightColor", shader::UNIFORM_3_F);
+        this->cubeShader->addUniform("uLightDirIntensity", shader::UNIFORM_1_F);
+        this->cubeShader->addUniform("uLightAmbIntensity", shader::UNIFORM_1_F);
         
         this->entityShader = std::make_unique<shader::ShaderTexture>(
             "../shader/npc.vs.glsl", "../shader/npc.fs.glsl"
@@ -301,7 +303,9 @@ namespace mastercraft::game {
         this->entityShader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uNormal", shader::UNIFORM_MATRIX_4F);
         this->entityShader->addUniform("uLightPosition", shader::UNIFORM_3_F);
-        this->entityShader->addUniform("uDay", shader::UNIFORM_1_I);
+        this->entityShader->addUniform("uLightColor", shader::UNIFORM_3_F);
+        this->entityShader->addUniform("uLightDirIntensity", shader::UNIFORM_1_F);
+        this->entityShader->addUniform("uLightAmbIntensity", shader::UNIFORM_1_F);
     }
     
     
@@ -367,18 +371,25 @@ namespace mastercraft::game {
     
     void ChunkManager::render() {
         Game *game = Game::getInstance();
-        GLuint uDay = game->isDay();
+        
         glm::mat4 MVMatrix = game->camera->getViewMatrix();
         glm::mat4 MVPMatrix = game->camera->getProjMatrix() * MVMatrix;
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(MVMatrix));
+        
         glm::vec3 lightPos = glm::vec3(MVMatrix * glm::vec4(game->sun->getPosition(), 0));
+        glm::vec3 lightColor = ConfigManager::getLightColor(game->tickCycle);
+        GLfloat lightDirIntensity = ConfigManager::getLightDirIntensity(game->tickCycle);
+        GLfloat lightAmbIntensity = ConfigManager::getLightAmbIntensity(game->tickCycle);
+        
         this->cubeShader->use();
         this->cubeShader->loadUniform("uMV", glm::value_ptr(MVMatrix));
         this->cubeShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->cubeShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->cubeShader->loadUniform("uVerticalOffset", &this->textureVerticalOffset);
         this->cubeShader->loadUniform("uLightPosition", glm::value_ptr(lightPos));
-        this->cubeShader->loadUniform("uDay", &uDay);
+        this->cubeShader->loadUniform("uLightColor", glm::value_ptr(lightColor));
+        this->cubeShader->loadUniform("uLightDirIntensity", &lightDirIntensity);
+        this->cubeShader->loadUniform("uLightAmbIntensity", &lightAmbIntensity);
         this->cubeShader->bindTexture(this->cubeTexture);
         game->configManager->getFaceCulling() ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
         game->stats.rendered_face = 0;
@@ -400,7 +411,9 @@ namespace mastercraft::game {
         this->entityShader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
         this->entityShader->loadUniform("uNormal", glm::value_ptr(normalMatrix));
         this->entityShader->loadUniform("uLightPosition", glm::value_ptr(lightPos));
-        this->entityShader->loadUniform("uDay", &uDay);
+        this->entityShader->loadUniform("uLightColor", glm::value_ptr(lightColor));
+        this->entityShader->loadUniform("uLightDirIntensity", &lightDirIntensity);
+        this->entityShader->loadUniform("uLightAmbIntensity", &lightAmbIntensity);
         for (const auto &entity : this->entities) {
             entity->render();
         }

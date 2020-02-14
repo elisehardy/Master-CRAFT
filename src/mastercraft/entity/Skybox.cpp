@@ -10,31 +10,18 @@ namespace mastercraft::entity {
     
     Skybox::Skybox() {
         std::unique_ptr<util::Image> texture[6] = {
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/day_right.png", 512, 512)),
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/day_left.png", 512, 512)),
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/day_top.png", 512, 512)),
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/day_bottom.png", 512, 512)),
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/day_back.png", 512, 512)),
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/day_front.png", 512, 512)),
+            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/negative_right.png", 512, 512)),
+            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/negative_left.png", 512, 512)),
+            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/negative_top.png", 512, 512)),
+            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/negative_bottom.png", 512, 512)),
+            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/negative_back.png", 512, 512)),
+            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/negative_front.png", 512, 512)),
         };
-        this->day = std::make_unique<shader::Cubemap>(texture);
-        
-        texture[0] =
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/night_right.png", 512, 512));
-        texture[1] =
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/night_left.png", 512, 512));
-        texture[2] =
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/night_top.png", 512, 512));
-        texture[3] =
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/night_bottom.png", 512, 512));
-        texture[4] =
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/night_back.png", 512, 512));
-        texture[5] =
-            std::unique_ptr<util::Image>(util::Image::loadPNG("../assets/entity/skybox/night_front.png", 512, 512));
-        this->night = std::make_unique<shader::Cubemap>(texture);
+        this->negativeSky = std::make_unique<shader::Cubemap>(texture);
         
         this->shader = std::make_unique<shader::ShaderCubemap>("../shader/skybox.vs.glsl", "../shader/skybox.fs.glsl");
         this->shader->addUniform("uMVP", shader::UNIFORM_MATRIX_4F);
+        this->shader->addUniform("uSkyColor", shader::UNIFORM_3_F);
         
         glGenBuffers(1, &this->vbo);
         glGenVertexArrays(1, &this->vao);
@@ -68,7 +55,8 @@ namespace mastercraft::entity {
         glCullFace(GL_FRONT);
         this->shader->use();
         this->shader->loadUniform("uMVP", glm::value_ptr(MVPMatrix));
-        this->shader->bindCubemap(game->isDay() ? *this->day : *this->night);
+        this->shader->loadUniform("uSkyColor", glm::value_ptr(game::ConfigManager::getSkyboxColor(game->tickCycle)));
+        this->shader->bindCubemap(*this->negativeSky);
         glBindVertexArray(this->vao);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);

@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iostream>
 
 #include <cpuid/libcpuid.h>
 
@@ -264,5 +265,121 @@ namespace mastercraft::game {
     
     void ConfigManager::switchDebug() {
         this->debug = !this->debug;
+    }
+    
+    
+    GLfloat ConfigManager::changeIntervalTo01(GLfloat x, GLfloat oldMin, GLfloat oldMax) {
+        GLfloat oldRange = (oldMax - oldMin);
+        GLfloat newRange = (1.f - 0.f);
+        
+        return std::min(1.f, std::max(0.f, (((x - oldMin) * newRange) / oldRange))) ;
+    }
+        
+        
+        glm::vec3 ConfigManager::getSkyboxColor(GLuint tick) {
+            GLfloat value;
+            if (tick >= DAWN_END && tick <= DUSK_START) { // Day
+                return DAY_SKYBOX_COLOR;
+            }
+            else if (tick >= DUSK_END && tick <= DAWN_START) { // Night
+                return NIGHT_SKYBOX_COLOR;
+            }
+            else if (tick >= DUSK_START && tick <= DUSK) { // Day to Dusk
+                value = changeIntervalTo01(tick, DUSK_START, DUSK);
+                return glm::mix(DAY_SKYBOX_COLOR, DAWN_DUSK_SKYBOX_COLOR, value);
+            }
+            else if (tick >= DUSK && tick <= DUSK_END) { // Dusk to Night
+                value = changeIntervalTo01(tick, DUSK, DUSK_END);
+                return glm::mix(DAWN_DUSK_SKYBOX_COLOR, NIGHT_SKYBOX_COLOR, value);
+            }
+            else if (tick >= DAWN_START && tick <= DAWN) { // Night to Dawn
+                value = changeIntervalTo01(tick, DAWN_START, DAWN);
+                return glm::mix(NIGHT_SKYBOX_COLOR, DAWN_DUSK_SKYBOX_COLOR, value);
+            }
+            else { // Dawn to DAY
+                value = changeIntervalTo01(tick, 0.f, DAWN_END);
+                return glm::mix(DAWN_DUSK_SKYBOX_COLOR, DAY_SKYBOX_COLOR, value);
+            }
+        }
+        
+        
+        glm::vec3 ConfigManager::getLightColor(GLuint tick) {
+            GLfloat value;
+            if (tick >= DAWN_END && tick <= DUSK_START) { // Day
+                return DAY_LIGHT_COLOR;
+            }
+            else if (tick >= DUSK_END && tick <= DAWN_START) { // Night
+                return NIGHT_LIGHT_COLOR;
+            }
+            else if (tick >= DUSK_START && tick <= DUSK) { // Day to Dusk
+                value = changeIntervalTo01(tick, DUSK_START, DUSK);
+                return glm::mix(DAY_LIGHT_COLOR, DAWN_DUSK_LIGHT_COLOR, value);
+            }
+            else if (tick >= DUSK && tick <= DUSK_END) { // Dusk to Night
+                value = changeIntervalTo01(tick, DUSK, DUSK_END);
+                return glm::mix(DAWN_DUSK_LIGHT_COLOR, NIGHT_LIGHT_COLOR, value);
+            }
+            else if (tick >= DAWN_START && tick <= DAWN) { // Night to Dawn
+                value = changeIntervalTo01(tick, DAWN_START, DAWN);
+                return glm::mix(NIGHT_LIGHT_COLOR, DAWN_DUSK_LIGHT_COLOR, value);
+            }
+            else { // Dawn to DAY
+                value = changeIntervalTo01(tick, DAWN, DAWN_END);
+                return glm::mix(DAWN_DUSK_LIGHT_COLOR, DAY_LIGHT_COLOR, value);
+            }
+        }
+    
+    
+    GLfloat ConfigManager::getLightDirIntensity(GLuint tick) {
+        GLfloat value;
+        if (tick >= DAWN_END && tick <= DUSK_START) { // Day
+            return DAY_LIGHT_DIR_INTENSITY;
+        }
+        else if (tick >= DUSK_END && tick <= DAWN_START) { // Night
+            return NIGHT_LIGHT_DIR_INTENSITY;
+        }
+        else if (tick >= DUSK_START && tick <= DUSK) { // Day to Dusk
+            value = changeIntervalTo01(tick, DUSK_START, DUSK);
+            return glm::mix(DAY_LIGHT_DIR_INTENSITY, DAWN_DUSK_DIR_LIGHT_INTENSITY, value);
+        }
+        else if (tick >= DUSK && tick <= DUSK_END) { // Dusk to Night
+            value = changeIntervalTo01(tick, DUSK, DUSK_END);
+            return glm::mix(DAWN_DUSK_DIR_LIGHT_INTENSITY, NIGHT_LIGHT_DIR_INTENSITY, value);
+        }
+        else if (tick >= DAWN_START && tick <= DAWN) { // Night to Dawn
+            value = changeIntervalTo01(tick, DAWN_START, DAWN);
+            return glm::mix(NIGHT_LIGHT_DIR_INTENSITY, DAWN_DUSK_DIR_LIGHT_INTENSITY, value);
+        }
+        else { // Dawn to DAY
+            value = changeIntervalTo01(tick, DAWN, DAWN_END);
+            return glm::mix(DAWN_DUSK_DIR_LIGHT_INTENSITY, DAY_LIGHT_DIR_INTENSITY, value);
+        }
+    }
+    
+    
+    GLfloat ConfigManager::getLightAmbIntensity(GLuint tick) {
+        GLfloat value;
+        if (tick >= DAWN_END && tick <= DUSK_START) { // Day
+            return DAY_LIGHT_AMB_INTENSITY;
+        }
+        else if (tick >= DUSK_END && tick <= DAWN_START) { // Night
+            return NIGHT_LIGHT_AMB_INTENSITY;
+        }
+        else if (tick >= DUSK_START && tick <= DUSK) { // Day to Dusk
+            value = changeIntervalTo01(tick, DUSK_START, DUSK);
+            return glm::mix(DAY_LIGHT_AMB_INTENSITY, DAWN_DUSK_AMB_LIGHT_INTENSITY, value);
+        }
+        else if (tick >= DUSK && tick <= DUSK_END) { // Dusk to Night
+            value = changeIntervalTo01(tick, DUSK, DUSK_END);
+            return glm::mix(DAWN_DUSK_AMB_LIGHT_INTENSITY, NIGHT_LIGHT_AMB_INTENSITY, value);
+        }
+        else if (tick >= DAWN_START && tick <= DAWN) { // Night to Dawn
+            value = changeIntervalTo01(tick, DAWN_START, DAWN);
+            return glm::mix(NIGHT_LIGHT_AMB_INTENSITY, DAWN_DUSK_AMB_LIGHT_INTENSITY, value);
+        }
+        else { // Dawn to DAY
+            value = changeIntervalTo01(tick, DAWN, DAWN_END);
+            return glm::mix(DAWN_DUSK_AMB_LIGHT_INTENSITY, DAY_LIGHT_AMB_INTENSITY, value);
+        }
     }
 }

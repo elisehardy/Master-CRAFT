@@ -24,17 +24,17 @@ namespace mastercraft::entity {
     
     GLuint Sun::update() {
         game::Game *game = game::Game::getInstance();
-        GLfloat angle = glm::radians(360.f / game::ConfigManager::TICK_CYCLE * game->tickCycle);
-        glm::mat4 rotationZ = glm::rotate(glm::mat4(1.f), angle, glm::vec3(0.f, 0.f, 1.f));
+        GLfloat angle = 360.f / game::ConfigManager::TICK_CYCLE * game->tickCycle;
+        glm::mat4 rotationZ = glm::rotate(glm::mat4(1.f), glm::radians(angle), glm::vec3(0.f, 0.f, 1.f));
         glm::mat4 rotationY = glm::rotate(glm::mat4(1.f), glm::radians(45.f), glm::vec3(0.f, 1.f, 0.f));
         glm::vec3 position, camera = game->camera->getPosition();
         glm::vec3 vertices[36];
         
         this->position = glm::vec3(rotationY * rotationZ * glm::vec4(1000, 0, 0, 1));
         
-        
         for (GLuint i = 0; i < 36; i++) {
-            position = glm::vec3(rotationY * rotationZ * glm::vec4(this->vertices[i] + glm::vec3(20, 0, 0), 1)) + camera;
+            position =
+                glm::vec3(rotationY * rotationZ * glm::vec4(this->vertices[i] + glm::vec3(20, 0, 0), 1)) + camera;
             vertices[i] = position;
         }
         

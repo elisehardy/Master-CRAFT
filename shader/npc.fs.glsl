@@ -9,40 +9,34 @@ out vec4 fFragColor;
 
 uniform sampler2D uTexture;
 uniform vec3 uLightPosition;
-uniform int uDay;
+uniform vec3 uLightColor;
+uniform float uLightDirIntensity;
+uniform float uLightAmbIntensity;
+
 
 /**
  * Compute the diffuse lighting of the fragment.
  *
  * @return The computed diffuse lighting.
  */
-vec3 computeDiffuseLighting(vec3 lightDirection, vec3 lightColor) {
+vec3 computeDiffuseLighting() {
+    vec3 lightDirection = normalize(uLightPosition - vPosition);
     vec3 diffuse = vec3(max(dot(vNormal, lightDirection), 0.0f));
-    return diffuse * lightColor;
+    return diffuse * uLightDirIntensity;
 }
-
 
 
 void main() {
     vec4 textureColor = texture(uTexture, vec2(vTexture.x, vTexture.y));
 
-    vec3 light;
-    if (uDay == 1) {
-        vec3 lightColor = vec3(1);
-        vec3 lightDirection = normalize(uLightPosition - vPosition);
-
-        vec3 diffuse = vec3(computeDiffuseLighting(lightDirection, lightColor));
-        vec3 ambient = vec3(.4);
-        light = diffuse + ambient;
-    }
-    else {
-        light = vec3(.1);
-    }
+    vec3 diffuse = computeDiffuseLighting();
+    vec3 ambient = vec3(uLightAmbIntensity);
+    vec3 light =  (diffuse + ambient) * uLightColor;
 
     fFragColor = vec4(
-        min(1.f, light.x),
-        min(1.f, light.y),
-        min(1.f, light.z),
-        1
+    min(1.f, light.x),
+    min(1.f, light.y),
+    min(1.f, light.z),
+    1
     ) * textureColor;
 }
