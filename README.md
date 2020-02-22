@@ -1,19 +1,20 @@
 # Master-craft
-The goal of this project is to realize a 3Dworld represented only by 3D cubes in the spirit of  «Minecraft».
 
-##
-### Prerequisites
+The goal of this project is to realize a 3D voxel world represented only by 3D cubes in the spirit of **Minecraft**.
 
-For this project you need:
+## Prerequisites
 
-````bash
-CMake version 3.7 at least
-SDL2
-OpenGL
-GLEW
-````
-##
-### Compilation
+To run *Mastercraft*, you need:
+
+* `CMake >= 3.7`
+* `SDL2 >= 2.0.2`
+* `OpenGL >= 3.3`
+* `GLEW >= 2.1.0`
+
+
+## Compilation
+
+The compilation is done through `CMake` :
 
 ````bash
 mkdir build
@@ -21,36 +22,47 @@ cd build
 cmake ..
 make
 ````
+
+Compilation has been tested with `g++ >= 6.2.0` and `clang >= 7.0.1`.
+
 The program is launch with the compiled executable `mastercraft`.
 
 ```
 ./mastercraft
 ```
 
-##
-### Manual
 
-The key `escape` exits the application.
+## Manual
 
-The camera is controlled by:  
-    * `z` (advance), `s` (back), `q` (left), `d` (right) or the arrow keys  
-    * the mouse to turn around  
-    
-The `e` key changes from day to night mode.    
+Use `ESC` to exit the application.
 
-**Keys Fn:**
+* Movement :
 
-`F1` : disable/enable Face culling  
-`F2` : disable/enable occlusion culling  
-`F3` : modifie FPS  
-`F4` : reduces the land  
-`F5` : extends the land  
-`F10` : displays the program information  
+    * `w` / `↑` : Move forward.
+    * `s` / `↓` : Move backward.
+    * `a` / `←` : Strafe left.
+    * `d` / `→` : Straft right.    
+    * Use the mouse to look around.
 
-  
-   
-##
-### Authors
+* Miscellaneous :
+
+    * `E` To switch between day / night.
+    * `F1` : Disable/enable face culling (enable by default).
+    * `F2` : Disable/enable occlusion culling (enable by default), will reload the scene.
+    * `F3` : Cycle between framerate settings (default to `VSYNC`). Available FPS settings are
+             `60`, `75`, `120`, `144`, `180`, `240`, `VSYNC` and `Uncapped`.
+    * `F4` : Decrease distance view  .
+    * `F5` : Increase distance view.
+    * `F10` : Displays debug information.
+
+Some notes :
+
+* Controls should adapt to your keyboard layout.
+* Disabling occlusion culling and increasing distance view will heavily impact performance.
+* Framerate may be overridden by your GPU configuration. 
+
+
+## Authors
 
 * Quentin Coumes and Elise Hardy
 
