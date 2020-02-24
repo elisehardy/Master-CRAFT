@@ -41,11 +41,14 @@ Use `ESC` to exit the application.
     * `w` / `↑` : Move forward.
     * `s` / `↓` : Move backward.
     * `a` / `←` : Strafe left.
-    * `d` / `→` : Straft right.    
+    * `d` / `→` : Straft right.  
+    * `CTRL` : Move downward.
+    * `SPACE` : Move upward.  
     * Use the mouse to look around.
 
 * Miscellaneous :
 
+ 
     * `E` To switch between day / night.
     * `F1` : Disable/enable face culling (enable by default).
     * `F2` : Disable/enable occlusion culling (enable by default), will reload the scene.
