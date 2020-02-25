@@ -34,21 +34,20 @@ The program is launch with the compiled executable `mastercraft`.
 
 ## Manual
 
-Use `ESC` to exit the application.
 
 * Movement :
 
-    * `w` / `↑` : Move forward.
-    * `s` / `↓` : Move backward.
-    * `a` / `←` : Strafe left.
-    * `d` / `→` : Straft right.  
+    * `W` / `↑` : Move forward.
+    * `S` / `↓` : Move backward.
+    * `A` / `←` : Strafe left.
+    * `D` / `→` : Straft right.  
     * `CTRL` : Move downward.
     * `SPACE` : Move upward.  
     * Use the mouse to look around.
 
 * Miscellaneous :
 
- 
+ 	* `ESC` To exit the application.
     * `E` To switch between day / night.
     * `F1` : Disable/enable face culling (enable by default).
     * `F2` : Disable/enable occlusion culling (enable by default), will reload the scene.
@@ -61,8 +60,27 @@ Use `ESC` to exit the application.
 Some notes :
 
 * Controls should adapt to your keyboard layout.
-* Disabling occlusion culling and increasing distance view will heavily impact performance.
-* Framerate may be overridden by your GPU configuration. 
+* Disabling occlusion culling or increasing distance view a lot will heavily impact performance.
+* Framerate may be overridden by your GPU / OpenGL configuration. 
+
+
+## Work done
+
+* Infinite world built from 2D and 3D noises.
+* Multiple biome also generated from 2D noises.
+* Multiple kind of tree.
+* Multiple NPC.
+* Transparent textures (water, leaves).
+* Animated texture (water).
+* Occlusion culling.
+* Dynamic skybox.
+* Dynamic lighting (sun's position, underwater).
+
+
+## To do
+
+* Loading SuperChunk on another thread (to avoid freeze on main loop)
+* Frustum culling
 
 
 ## Authors
