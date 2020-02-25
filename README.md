@@ -81,6 +81,7 @@ Some notes :
 
 * Loading SuperChunk on another thread (to avoid freeze on main loop)
 * Frustum culling
+* Fog to hide world's boundaries
 
 
 ## Authors
