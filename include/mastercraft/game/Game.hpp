@@ -41,6 +41,7 @@ namespace mastercraft::game {
             std::chrono::steady_clock::time_point lastTick;
             GLuint tickSecond;
             GLint tickCycle;
+            GLboolean underwater;
             GLboolean day;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
             

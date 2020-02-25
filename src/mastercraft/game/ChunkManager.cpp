@@ -378,6 +378,9 @@ namespace mastercraft::game {
         
         glm::vec3 lightPos = glm::vec3(MVMatrix * glm::vec4(game->sun->getPosition(), 0));
         glm::vec3 lightColor = ConfigManager::getLightColor(game->tickCycle);
+        if (game->underwater) {
+            lightColor *= glm::vec3(0.36, 0.56, 1);
+        }
         GLfloat lightDirIntensity = ConfigManager::getLightDirIntensity(game->tickCycle);
         GLfloat lightAmbIntensity = ConfigManager::getLightAmbIntensity(game->tickCycle);
         
@@ -390,6 +393,7 @@ namespace mastercraft::game {
         this->cubeShader->loadUniform("uLightColor", glm::value_ptr(lightColor));
         this->cubeShader->loadUniform("uLightDirIntensity", &lightDirIntensity);
         this->cubeShader->loadUniform("uLightAmbIntensity", &lightAmbIntensity);
+        
         this->cubeShader->bindTexture(this->cubeTexture);
         game->configManager->getFaceCulling() ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
         game->stats.rendered_face = 0;

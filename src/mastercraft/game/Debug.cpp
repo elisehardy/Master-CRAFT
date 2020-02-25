@@ -151,6 +151,10 @@ namespace mastercraft::game {
         glm::vec3 lightColor = ConfigManager::getLightColor(game->tickCycle);
         GLfloat lightDirIntensity = ConfigManager::getLightDirIntensity(game->tickCycle);
         GLfloat lightAmbIntensity = ConfigManager::getLightAmbIntensity(game->tickCycle);
+    
+        if (game->underwater) {
+            lightColor *= glm::vec3(0.36, 0.56, 1);
+        }
         
         color = glm::vec3(1) - ConfigManager::getSkyboxColor(game->tickCycle);
         

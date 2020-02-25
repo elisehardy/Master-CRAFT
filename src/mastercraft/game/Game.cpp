@@ -111,6 +111,7 @@ namespace mastercraft::game {
             this->chunkManager->update();
         }
         this->sun->update();
+        underwater = chunkManager->get(camera->getPosition()) == cube::CubeType::WATER;
     }
     
     
