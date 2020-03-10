@@ -1,6 +1,7 @@
 #include <mastercraft/game/InputManager.hpp>
 #include <mastercraft/game/Game.hpp>
 #include <iostream>
+#include <c3ga/Mvec.hpp>
 
 
 namespace mastercraft::game {
@@ -16,8 +17,12 @@ namespace mastercraft::game {
     
     void InputManager::handleMouseMotion(const SDL_MouseMotionEvent &event) {
         Game *game = Game::getInstance();
-        game->camera->rotateUp(-event.yrel);
+        //game->camera->rotateUp(-event.yrel);
         game->camera->rotateLeft(-event.xrel);
+        game->magie->rotateLeft(-event.xrel);
+        //game->magie->rotateUp(-event.yrel);
+
+
     }
     
     
@@ -38,21 +43,34 @@ namespace mastercraft::game {
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_W) || InputManager::isKeyPressed(SDL_SCANCODE_UP)) {
             game->camera->moveForward(0.6f);
+            game->magie->moveForward(0.6f);
+
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_S) || InputManager::isKeyPressed(SDL_SCANCODE_DOWN)) {
             game->camera->moveForward(-0.6f);
+            game->magie->moveForward(-0.6f);
+
+
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_A) || InputManager::isKeyPressed(SDL_SCANCODE_LEFT)) {
             game->camera->moveLeft(0.6f);
+            game->magie->moveLeft(0.6f);
+
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_D) || InputManager::isKeyPressed(SDL_SCANCODE_RIGHT)) {
             game->camera->moveLeft(-0.6f);
+            game->magie->moveLeft(-0.6f);
+
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_LCTRL)) {
             game->camera->moveUp(-0.6f);
+            game->magie->moveUp(-0.6f);
+
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_SPACE)) {
             game->camera->moveUp(0.6f);
+            game->magie->moveUp(0.6f);
+
         }
     
         if (InputManager::isKeyPressed(SDL_SCANCODE_F1)) {
@@ -74,6 +92,9 @@ namespace mastercraft::game {
         if (InputManager::isKeyPressed(SDL_SCANCODE_F10)) {
             game->configManager->switchDebug();
         }
+        if(InputManager::isKeyPressed(SDL_SCANCODE_K)){
+            game->configManager->switchScore();
+        }
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {
             if (game->isDay()) {
@@ -83,7 +104,34 @@ namespace mastercraft::game {
             }
             game->switchDay();
         }
-    }
+        if (InputManager::isKeyPressed(SDL_SCANCODE_T)) {
+            std::cout << "tir" << std::endl;
+            for(auto &entity: game->chunkManager->entities){
+                    auto oldPos = game->magie->getPosition();
+                    for(int i=0;i<10;i++) {
+                        auto newPos = oldPos;
+                        game->magie->setPosition(newPos.x, newPos.y, newPos.z-0.6f*i);
+                        if (game->magie->isTouch(entity->getSphereDual())) {
+                            std::cout << " BUT BUT " << std::endl;
+
+                            game->magie->setPosition(oldPos.x, oldPos.y, oldPos.z);
+                            game->score->addMonsterKill(entity->getType());
+
+                            break;
+                        } else {
+                            std::cout << " RATE " << std::endl;
+
+                        }
+                        game->magie->setPosition(oldPos.x, oldPos.y, oldPos.z);
+                    }
+
+            }
+
+
+
+        }
+
+        }
     
     
     void InputManager::handleHeldMouseButton() {

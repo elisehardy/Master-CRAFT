@@ -1,11 +1,9 @@
 //
-// Created by ehardy on 2/11/20.
+// Created by ehardy on 2/24/20.
 //
 
-#ifndef MASTERCRAFT_SPIDER_HPP
-#define MASTERCRAFT_SPIDER_HPP
-
-
+#ifndef RECONSTRUCTION3D_MAGIE_HPP
+#define RECONSTRUCTION3D_MAGIE_HPP
 #include <string>
 #include <vector>
 
@@ -16,11 +14,11 @@
 #include <mastercraft/entity/EntityVertex.hpp>
 #include <mastercraft/shader/Texture.hpp>
 #include <mastercraft/game/ConfigManager.hpp>
-
+#include <mastercraft/shader/ShaderTexture.hpp>
 
 namespace mastercraft::entity {
 
-    class Spider : public IEntity {
+    class Magie : public IEntity {
     private:
         static constexpr GLuint VERTEX_ATTR_POSITION = 0;
         static constexpr GLuint VERTEX_ATTR_NORMAL = 1;
@@ -30,6 +28,7 @@ namespace mastercraft::entity {
 
     private:
         std::vector<EntityVertex> vertices;
+        std::unique_ptr<shader::ShaderTexture> shader;
         shader::Texture texture;
         glm::vec3 direction;
         glm::vec3 goal;
@@ -40,21 +39,18 @@ namespace mastercraft::entity {
 
     public:
 
-        explicit Spider(const glm::vec3 &position);
+        explicit Magie(const glm::vec3 &position);
 
-        ~Spider();
+        ~Magie();
+
+        void init(GLfloat r, GLsizei discLat, GLsizei discLong);
 
         GLuint update();
 
         GLuint render();
-        c3ga::Mvec<double> getSphereDual();
+        //c3ga::Mvec<double> getSphere();
 
-        GLint getType();
-        c3ga::Mvec<double> getSphere();
-
-
-    };
+        };
 }
 
-
-#endif //MASTERCRAFT_SPIDER_HPP
+#endif //RECONSTRUCTION3D_MAGIE_HPP

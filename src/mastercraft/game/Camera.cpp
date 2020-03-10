@@ -3,7 +3,7 @@
 #include <mastercraft/game/Camera.hpp>
 #include <glm/ext.hpp>
 #include <mastercraft/game/Game.hpp>
-
+#include <iostream>
 
 #ifndef M_PIf32
 #define M_PIf32    3.141592653589793238462643383279502884f /* pi */
@@ -23,8 +23,23 @@ namespace mastercraft::game {
     
     void Camera::init() {
         Game *game = Game::getInstance();
+
         SDL_DisplayMode display = game->windowManager->getDisplayMode();
         this->setProjectionMatrix(game->configManager->getFov(), display.w, display.h);
+        glm::vec3 nextPosition = this->position;
+
+
+        if (game->chunkManager->get(nextPosition) != cube::CubeType::AIR) { // Next cube is solid, trying he one above
+            nextPosition += glm::vec3(0, 1, 0);
+
+        }
+        else {
+            // Fall until reaching solid cube
+            while (game->chunkManager->get(nextPosition - glm::vec3(0, 1, 0)) == cube::CubeType::AIR) {
+                nextPosition -= glm::vec3(0, 1, 0);
+            }
+        }
+        this->position = nextPosition;
     }
     
     

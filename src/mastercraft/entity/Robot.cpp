@@ -6,6 +6,7 @@
 #include <mastercraft/entity/Robot.hpp>
 #include <mastercraft/util/OBJ.hpp>
 #include <mastercraft/game/Game.hpp>
+#include <mastercraft/util/C3GATools.hpp>
 
 
 using Random = effolkronium::random_static;
@@ -77,7 +78,7 @@ namespace mastercraft::entity {
     
     
     GLuint Robot::update() {
-        walk();
+        //walk();
         
         GLfloat yaw = std::atan2(this->direction.x, this->direction.z);
         glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw, glm::vec3(0.f, 1.f, 0.f));
@@ -132,5 +133,26 @@ namespace mastercraft::entity {
         game->chunkManager->entityShader->unbindTexture();
         
         return 1;
+
+
+
     }
+    c3ga::Mvec<double> Robot::getSphereDual(){
+        return dualSphere(double(this->position.x+0.6f), double(this->position.y+1), double(this->position.z+0.6f), double(0.5));
+    }
+
+
+    GLint Robot::getType(){
+        return 1;
+    }
+
+    c3ga::Mvec<double> Robot::getSphere(){
+        glm::vec3 p1 = vertices[0].vertex;
+        glm::vec3 p2 = vertices[1].vertex;
+        glm::vec3 p3 = vertices[vertices.size()-1].vertex;
+        glm::vec3 p4 = vertices[vertices.size()-2].vertex;
+        c3ga::Mvec<double> sphere = point(double(p1.x),double(p1.y),double(p1.z)) ^ point(double(p2.x),double(p2.y),double(p2.z)) ^point(double(p3.x),double(p3.y),double(p3.z)) ^point(double(p4.x),double(p4.y),double(p4.z));
+        return sphere;
+    }
+
 }

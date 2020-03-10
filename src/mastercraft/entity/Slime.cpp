@@ -5,6 +5,8 @@
 
 #include <mastercraft/entity/Slime.hpp>
 #include <mastercraft/util/OBJ.hpp>
+#include <mastercraft/util/C3GATools.hpp>
+
 #include <mastercraft/game/Game.hpp>
 
 
@@ -81,7 +83,7 @@ namespace mastercraft::entity {
     
     
     GLuint Slime::update() {
-        walk();
+       // walk();
         
         GLfloat yaw = std::atan2(this->direction.x, this->direction.z);
         glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw + M_PIf32, glm::vec3(0.f, 1.f, 0.f));
@@ -134,4 +136,22 @@ namespace mastercraft::entity {
         
         return 1;
     }
+
+    c3ga::Mvec<double> Slime::getSphereDual(){
+        return dualSphere(double(this->position.x+0.6f), double(this->position.y+1), double(this->position.z+0.6f), double(0.3));
+    }
+
+    c3ga::Mvec<double> Slime::getSphere(){
+        glm::vec3 p1 = vertices[0].vertex;
+        glm::vec3 p2 = vertices[1].vertex;
+        glm::vec3 p3 = vertices[vertices.size()-1].vertex;
+        glm::vec3 p4 = vertices[vertices.size()-2].vertex;
+        c3ga::Mvec<double> sphere = point(double(p1.x),double(p1.y),double(p1.z)) ^ point(double(p2.x),double(p2.y),double(p2.z)) ^point(double(p3.x),double(p3.y),double(p3.z)) ^point(double(p4.x),double(p4.y),double(p4.z));
+        return sphere;
+    }
+
+    GLint Slime::getType(){
+        return 0;
+    }
+
 }

@@ -9,6 +9,7 @@
 #include <mastercraft/entity/Slime.hpp>
 #include <mastercraft/entity/Robot.hpp>
 #include <mastercraft/entity/Spider.hpp>
+#include <mastercraft/entity/Magie.hpp>
 #include <mastercraft/cube/ColumnGenerator.hpp>
 #include <mastercraft/cube/TreeGenerator.hpp>
 
@@ -141,6 +142,8 @@ namespace mastercraft::game {
     
     cube::SuperChunk *ChunkManager::createSuperChunk(glm::ivec3 position) {
         auto *chunk = new cube::SuperChunk(position);
+        //Game *game = Game::getInstance();
+
         cube::CubeType biome;
         float temperature;
         GLubyte height;
@@ -246,6 +249,16 @@ namespace mastercraft::game {
                 }
             }
         }
+
+      /*  if(!game->magieNB){
+            auto pos = game->camera->getPosition();
+            entities.emplace_back(std::make_unique<entity::Magie>(glm::vec3(
+                    pos.x,
+                    pos.y ,
+                    pos.z
+            )));
+            game->magieNB++;
+        }*/
         
         GLint startx = position.x - cube::SuperChunk::X;
         GLint startz = position.z - cube::SuperChunk::Z;

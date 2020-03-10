@@ -5,6 +5,8 @@
 #include <glm/vec3.hpp>
 
 #include <mastercraft/util/INonCopyable.hpp>
+#include <c3ga/Mvec.hpp>
+#include <mastercraft/util/C3GATools.hpp>
 
 
 namespace mastercraft::entity {
@@ -25,6 +27,11 @@ namespace mastercraft::entity {
             virtual GLuint render() = 0;
             
             [[nodiscard]] glm::vec3 getPosition();
-    };
+
+
+        virtual c3ga::Mvec<double> getSphereDual() = 0;
+        virtual GLint getType()=0;
+        virtual c3ga::Mvec<double> getSphere() = 0;
+        };
 }
 #endif //MASTERCRAFT_IENTITY_HPP

@@ -40,7 +40,6 @@ namespace mastercraft::game {
         
         private:
             std::unordered_map<glm::ivec3, std::unique_ptr<cube::SuperChunk>, Ivec3Hash> chunks;
-            std::vector<std::unique_ptr<entity::IEntity>> entities;
             std::vector<glm::ivec3> keys;
             GLuint textureVerticalOffset;
             Noise2D temperatureNoise;
@@ -50,8 +49,9 @@ namespace mastercraft::game {
             std::unique_ptr<shader::ShaderTexture> entityShader;
             std::unique_ptr<shader::ShaderTexture> cubeShader;
             shader::Texture cubeTexture;
-        
-            Noise2D heightNoise;
+            std::vector<std::unique_ptr<entity::IEntity>> entities;
+
+        Noise2D heightNoise;
         
         private:
         

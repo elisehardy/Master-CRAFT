@@ -10,4 +10,7 @@ namespace mastercraft::entity {
     glm::vec3 IEntity::getPosition() {
         return this->position;
     }
+
+
+
 }

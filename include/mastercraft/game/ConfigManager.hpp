@@ -83,7 +83,8 @@ namespace mastercraft::game {
             GLboolean occlusionCulling = true; /**< Whether occlusion culling is enabled. */
             GLboolean frustumCulling = true;   /**< Whether frustum culling is enabled. */
             GLboolean debug = false;           /**< Whether debug display. */
-        
+            GLboolean score = false;
+
         public:
             
             ConfigManager() = default;
@@ -147,10 +148,13 @@ namespace mastercraft::game {
             void switchFrustumCulling();
             
             [[nodiscard]] GLboolean getDebug() const;
-            
-            void setDebug(GLboolean debug);
+
+            [[nodiscard]] GLboolean getScore() const;
+
+        void setDebug(GLboolean debug);
             
             void switchDebug();
+            void switchScore();
         
             [[nodiscard]] static GLfloat changeIntervalTo01(GLfloat x, GLfloat oldMin, GLfloat oldMax);
         

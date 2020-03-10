@@ -42,6 +42,13 @@ class Slime : public IEntity {
             GLuint update();
             
             GLuint render();
+
+            c3ga::Mvec<double> getSphereDual();
+    GLint getType();
+
+    c3ga::Mvec<double> getSphere();
+
+
     };
 }
 

@@ -258,12 +258,17 @@ namespace mastercraft::game {
     GLboolean ConfigManager::getDebug() const {
         return debug;
     }
-    
+    GLboolean ConfigManager::getScore() const {
+        return score;
+    }
     
     void ConfigManager::setDebug(GLboolean debug) {
         this->debug = debug;
     }
-    
+
+    void ConfigManager::switchScore() {
+        this->score = !this->score;
+    }
     
     void ConfigManager::switchDebug() {
         this->debug = !this->debug;

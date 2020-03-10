@@ -33,12 +33,17 @@ namespace mastercraft::game {
         this->inputManager = std::make_unique<InputManager>();
         this->camera = std::make_unique<Camera>();
         this->debug = std::make_unique<Debug>();
+        this->score = std::make_unique<Score>();
+
         this->chunkManager = std::make_unique<ChunkManager>(atlas);
         this->skybox = std::make_unique<entity::Skybox>();
         this->sun = std::make_unique<entity::Sun>();
+        this->magie = std::make_unique<entity::Magie2>();
+
         this->chunkManager->init();
         this->configManager->init();
         this->camera->init();
+        this->magie->init();
         this->lastTick = std::chrono::steady_clock::now();
         this->tickCycle = 0;
         this->day = true;
@@ -111,6 +116,7 @@ namespace mastercraft::game {
             this->chunkManager->update();
         }
         this->sun->update();
+        this->magie->update();
     }
     
     
@@ -122,12 +128,16 @@ namespace mastercraft::game {
         glEnable(GL_DEPTH_TEST);
         this->sun->render();
         glClear(GL_DEPTH_BUFFER_BIT);
-        
+
         this->chunkManager->render();
+        this->magie->render();
         if (this->configManager->getDebug()) {
             this->debug->render();
         }
-        
+        if(this->configManager->getScore()){
+            this->score->render();
+        }
+
         this->windowManager->refresh();
     }
     

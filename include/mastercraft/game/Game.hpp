@@ -12,9 +12,12 @@
 #include <mastercraft/game/WindowManager.hpp>
 #include <mastercraft/game/ChunkManager.hpp>
 #include <mastercraft/game/Debug.hpp>
+#include <mastercraft/game/Score.hpp>
+
 #include <mastercraft/game/Statistics.hpp>
 #include <mastercraft/entity/Skybox.hpp>
 #include <mastercraft/entity/Sun.hpp>
+#include <mastercraft/entity/Magie2.hpp>
 
 
 namespace mastercraft::game {
@@ -24,9 +27,9 @@ namespace mastercraft::game {
      */
     class Game : public util::ISingleton {
         private:
-            
+
             Game();
-        
+
         public:
             std::unique_ptr<WindowManager> windowManager;
             std::unique_ptr<ConfigManager> configManager;
@@ -35,33 +38,38 @@ namespace mastercraft::game {
             std::unique_ptr<entity::Skybox> skybox;
             std::unique_ptr<entity::Sun> sun;
             std::unique_ptr<Camera> camera;
-            std::unique_ptr<Debug> debug;
-            Statistics stats;
-            
+            std::unique_ptr<entity::Magie2> magie;
+
+
+        std::unique_ptr<Debug> debug;
+        std::unique_ptr<Score> score;
+
+        Statistics stats;
+
             std::chrono::steady_clock::time_point lastTick;
             GLuint tickSecond;
             GLint tickCycle;
             GLboolean day;
             GLboolean running; /**< Boolean indicating if the game is running or should cleaned up and quit. */
-            
-            
+            GLint magieNB = 0;
+
             /**
              * Return the instance of Game.
              *
              * @return The instance of Game.
              */
             static Game *getInstance();
-            
+
             /**
              * Initialize the game.
              */
             void init();
-            
+
             /**
              * Cleanup the whole game.
              */
             void cleanup();
-            
+
             /**
              * Check whether the game should be updated, so that the game loop runs at a fixed rate of
              * 'ConfigManager::TICK_PER_SEC' ticks per second.
@@ -69,32 +77,32 @@ namespace mastercraft::game {
              * @return true if a tick happened.
              */
             bool tick();
-            
+
             /**
              * Update the game.
              */
             void update();
-            
+
             /**
              * Draw the State at the top of the stack.
              */
             void render();
-            
+
             /**
              * Stops the game.
              */
             void stop();
-        
+
             /**
              * Switch day and night.
              */
             void switchDay();
-            
+
             /**
              * Return if it's currently the day or the night.
              */
             [[nodiscard]] bool isDay();
-            
+
             /**
              * Return whether the game is currently running or should be cleaned-up and closes.
              */
