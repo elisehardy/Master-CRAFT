@@ -49,6 +49,11 @@ class Robot : public IEntity {
     GLint getType();
 
     c3ga::Mvec<double> getSphere();
+    c3ga::Mvec<double> getLine();
+
+
+    GLboolean isTouch(c3ga::Mvec<double> sphereDual);
+
 
 };
 }

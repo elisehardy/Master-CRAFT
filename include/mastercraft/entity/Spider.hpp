@@ -51,6 +51,7 @@ namespace mastercraft::entity {
 
         GLint getType();
         c3ga::Mvec<double> getSphere();
+        GLboolean isTouch(c3ga::Mvec<double> sphereDual);
 
 
     };

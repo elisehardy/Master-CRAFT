@@ -45,6 +45,7 @@ namespace mastercraft::game {
             game->camera->moveForward(0.6f);
             game->magie->moveForward(0.6f);
 
+
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_S) || InputManager::isKeyPressed(SDL_SCANCODE_DOWN)) {
             game->camera->moveForward(-0.6f);
@@ -63,14 +64,16 @@ namespace mastercraft::game {
 
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_LCTRL)) {
-            game->camera->moveUp(-0.6f);
-            game->magie->moveUp(-0.6f);
-
+            if(game->configManager->getCheat()) {
+                game->camera->moveUp(-0.6f);
+                game->magie->moveUp(-0.6f);
+            }
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_SPACE)) {
-            game->camera->moveUp(0.6f);
-            game->magie->moveUp(0.6f);
-
+            if(game->configManager->getCheat()) {
+                game->camera->moveUp(0.6f);
+                game->magie->moveUp(0.6f);
+            }
         }
     
         if (InputManager::isKeyPressed(SDL_SCANCODE_F1)) {
@@ -90,10 +93,20 @@ namespace mastercraft::game {
             game->configManager->incDistanceView();
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_F10)) {
+            if(game->configManager->getScore()){
+                game->configManager->switchScore();
+            }
             game->configManager->switchDebug();
         }
         if(InputManager::isKeyPressed(SDL_SCANCODE_K)){
+            if(game->configManager->getDebug()) {
+                game->configManager->switchDebug();
+            }
             game->configManager->switchScore();
+        }
+        if(InputManager::isKeyPressed(SDL_SCANCODE_C)){
+            game->configManager->switchCheat();
+
         }
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {

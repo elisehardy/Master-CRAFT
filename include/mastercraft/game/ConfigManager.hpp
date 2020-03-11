@@ -84,6 +84,7 @@ namespace mastercraft::game {
             GLboolean frustumCulling = true;   /**< Whether frustum culling is enabled. */
             GLboolean debug = false;           /**< Whether debug display. */
             GLboolean score = false;
+            GLboolean cheat = false;
 
         public:
             
@@ -150,13 +151,17 @@ namespace mastercraft::game {
             [[nodiscard]] GLboolean getDebug() const;
 
             [[nodiscard]] GLboolean getScore() const;
+            [[nodiscard]] GLboolean getCheat() const;
+
 
         void setDebug(GLboolean debug);
             
             void switchDebug();
             void switchScore();
-        
-            [[nodiscard]] static GLfloat changeIntervalTo01(GLfloat x, GLfloat oldMin, GLfloat oldMax);
+            void switchCheat();
+
+
+        [[nodiscard]] static GLfloat changeIntervalTo01(GLfloat x, GLfloat oldMin, GLfloat oldMax);
         
             [[nodiscard]] static glm::vec3 getSkyboxColor(GLint tick);
             

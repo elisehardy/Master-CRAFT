@@ -160,6 +160,9 @@ namespace mastercraft::game {
         ss << "life: " << game->score->life;
         this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
 
+        ss.str(std::string());
+        ss << "life: " << game->score->life2;
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
 
 
         i++;

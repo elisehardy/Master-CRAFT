@@ -29,18 +29,56 @@ namespace mastercraft::game {
         glm::vec3 nextPosition = this->position;
 
 
-        if (game->chunkManager->get(nextPosition) != cube::CubeType::AIR) { // Next cube is solid, trying he one above
-            nextPosition += glm::vec3(0, 1, 0);
+        if(game->chunkManager->get(nextPosition)!= cube::CubeType::AIR) {
+           // while (game->chunkManager->get(nextPosition) !=
+                 //  cube::CubeType::AIR) { // Next cube is solid, trying he one above
+                nextPosition += glm::vec3(0, 1, 0);
 
+            //}
         }
         else {
             // Fall until reaching solid cube
-            while (game->chunkManager->get(nextPosition - glm::vec3(0, 1, 0)) == cube::CubeType::AIR) {
+            while (game->chunkManager->get(nextPosition) == cube::CubeType::AIR) {
                 nextPosition -= glm::vec3(0, 1, 0);
             }
         }
+
+        auto height = static_cast<GLubyte>(game->chunkManager->heightNoise(
+                { position.x , position.z  }, -1, 1, ConfigManager::GEN_MIN_HEIGHT,
+                ConfigManager::GEN_MAX_HEIGHT
+        ));
+        nextPosition.y = height+1;
         this->position = nextPosition;
+
     }
+
+    void Camera::init2() {
+        Game *game = Game::getInstance();
+        SDL_DisplayMode display = game->windowManager->getDisplayMode();
+        this->setProjectionMatrix(game->configManager->getFov(), display.w, display.h);
+        glm::vec3 nextPosition = this->position;
+
+
+        if(game->chunkManager->get(nextPosition)!= cube::CubeType::AIR) {
+            // while (game->chunkManager->get(nextPosition) !=
+            //  cube::CubeType::AIR) { // Next cube is solid, trying he one above
+            nextPosition += glm::vec3(0, 1, 0);
+
+            //}
+        }
+        else {
+            // Fall until reaching solid cube
+            while (game->chunkManager->get(nextPosition-glm::vec3(0,1,0)) == cube::CubeType::AIR) {
+                nextPosition -= glm::vec3(0, 1, 0);
+            }
+        }
+
+        nextPosition.y+=1;
+        this->position = nextPosition;
+
+    }
+
+
     
     
     void Camera::computeDirectionVectors() {
@@ -113,5 +151,21 @@ namespace mastercraft::game {
     
     glm::mat4 Camera::getProjMatrix() const {
         return this->projMatrix;
+    }
+
+
+    c3ga::Mvec<double> Camera::getSphereDual(){
+        return dualSphere(double(this->position.x), double(this->position.y), double(this->position.z), double(0.5));
+    }
+
+    GLboolean Camera::isTouch(c3ga::Mvec<double> sphereDual){
+        c3ga::Mvec<double> sphereDual2 = this->getSphereDual();
+        c3ga::Mvec<double> intersection = (sphereDual2 ^ sphereDual).dual();
+        double radius  = sqrt(intersection * intersection);
+        auto cercle = (radius/(radius*c3ga::Ei)) * (radius/(radius*c3ga::Ei));
+        if(cercle >=0.0){
+            return true;
+        }
+        return false;
     }
 }

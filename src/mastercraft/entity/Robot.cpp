@@ -78,7 +78,7 @@ namespace mastercraft::entity {
     
     
     GLuint Robot::update() {
-        //walk();
+        walk();
         
         GLfloat yaw = std::atan2(this->direction.x, this->direction.z);
         glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw, glm::vec3(0.f, 1.f, 0.f));
@@ -154,5 +154,27 @@ namespace mastercraft::entity {
         c3ga::Mvec<double> sphere = point(double(p1.x),double(p1.y),double(p1.z)) ^ point(double(p2.x),double(p2.y),double(p2.z)) ^point(double(p3.x),double(p3.y),double(p3.z)) ^point(double(p4.x),double(p4.y),double(p4.z));
         return sphere;
     }
+
+
+    c3ga::Mvec<double> Robot::getLine(){
+        glm::vec3 p1 = -position;
+        glm::vec3 p2 = direction;
+
+        c3ga::Mvec<double> line = point(double(p1.x),double(p1.y),double(p1.z)) ^ point(double(p2.x),double(p2.y),double(p2.z))^c3ga::ei<double>();
+        return line;
+    }
+
+    GLboolean Robot::isTouch(c3ga::Mvec<double> sphereDual){
+        c3ga::Mvec<double> line = this->getLine();
+        c3ga::Mvec<double> intersection = (line.dual() ^ sphereDual).dual();
+        double radius  = sqrt(intersection * intersection);
+        auto cercle = (radius/(radius*c3ga::Ei)) * (radius/(radius*c3ga::Ei));
+        if(cercle >=0.0){
+            return true;
+        }
+        return false;
+    }
+
+
 
 }

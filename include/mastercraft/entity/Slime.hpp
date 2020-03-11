@@ -47,9 +47,11 @@ class Slime : public IEntity {
     GLint getType();
 
     c3ga::Mvec<double> getSphere();
+     GLboolean isTouch(c3ga::Mvec<double> sphereDual);
 
 
-    };
+
+};
 }
 
 #endif //MASTERCRAFT_SLIME_HPP

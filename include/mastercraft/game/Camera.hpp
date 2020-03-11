@@ -5,6 +5,7 @@
 #include <glm/mat4x4.hpp>
 
 #include <mastercraft/util/INonCopyable.hpp>
+#include <c3ga/Mvec.hpp>
 
 
 namespace mastercraft::game {
@@ -27,8 +28,10 @@ namespace mastercraft::game {
             Camera();
             
             void init();
-            
-            void moveLeft(float delta);
+            void init2();
+
+
+        void moveLeft(float delta);
             
             void moveForward(float delta);
             
@@ -51,7 +54,13 @@ namespace mastercraft::game {
             void setProjectionMatrix(float fov, int width, int height);
             
             [[nodiscard]] glm::mat4 getProjMatrix() const;
-    };
+
+            c3ga::Mvec<double> getSphereDual();
+
+            GLboolean isTouch(c3ga::Mvec<double> sphereDual);
+
+
+        };
 }
 
 #endif //MASTERCRAFT_CAMERA_HPP

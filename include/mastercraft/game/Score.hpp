@@ -42,6 +42,7 @@ namespace mastercraft::game {
         void renderText(GLfloat x, GLfloat y, GLfloat scale, const std::string &text, const glm::vec3 &color);
 
     public:
+        GLint life2 = 0;
 
         Score();
 

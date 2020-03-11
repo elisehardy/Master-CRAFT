@@ -32,6 +32,8 @@ namespace mastercraft::entity {
         virtual c3ga::Mvec<double> getSphereDual() = 0;
         virtual GLint getType()=0;
         virtual c3ga::Mvec<double> getSphere() = 0;
+        virtual GLboolean isTouch(c3ga::Mvec<double> sphereDual)=0;
+
         };
 }
 #endif //MASTERCRAFT_IENTITY_HPP

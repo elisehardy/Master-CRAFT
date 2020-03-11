@@ -77,7 +77,7 @@ namespace mastercraft::entity {
 
 
     GLuint Spider::update() {
-        //walk();
+        walk();
 
         GLfloat yaw = std::atan2(this->direction.x, this->direction.z);
         glm::mat4 rY = glm::rotate(glm::mat4(1.f), yaw , glm::vec3(0.f, 1.f, 0.f));
@@ -149,5 +149,9 @@ namespace mastercraft::entity {
         glm::vec3 p4 = vertices[vertices.size()-2].vertex;
         c3ga::Mvec<double> sphere = point(double(p1.x),double(p1.y),double(p1.z)) ^ point(double(p2.x),double(p2.y),double(p2.z)) ^point(double(p3.x),double(p3.y),double(p3.z)) ^point(double(p4.x),double(p4.y),double(p4.z));
         return sphere;
+    }
+
+    GLboolean Spider::isTouch(c3ga::Mvec<double> sphereDual){
+        return false;
     }
 }

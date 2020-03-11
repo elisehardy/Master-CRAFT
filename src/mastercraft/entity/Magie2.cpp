@@ -84,6 +84,7 @@ namespace mastercraft::entity {
 
 
 
+
         // Fill the VBO
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
