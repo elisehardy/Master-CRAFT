@@ -171,4 +171,9 @@ namespace mastercraft::game {
         }
         return false;
     }
+
+
+    GLboolean Camera::isCercle(glm::vec3 pos, double rayon){
+        return pos.x>0 && static_cast<double>(pos.x) < static_cast<double>(this->position.x) + rayon && pos.y > 0 && static_cast<double>(pos.y) < static_cast<double>(this->position.y+1) + rayon && pos.z > 0 && static_cast<double>(pos.z) < static_cast<double>(this->position.z) + rayon;
+    }
 }

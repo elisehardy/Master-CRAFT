@@ -52,6 +52,8 @@ namespace mastercraft::game {
 
         void addMonsterKill(GLint type);
         void removeLife(GLint type) ;
+        GLint getMonster_kill();
+        void removeMonsterKill();
 
         };
 }

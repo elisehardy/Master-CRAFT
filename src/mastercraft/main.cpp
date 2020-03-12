@@ -48,22 +48,16 @@ int main(int argc, char **argv) {
         for(auto &entity: game->chunkManager->entities){
             if(entity->getType() == 1){
                 if(entity->isTouch(game->camera->getSphereDual())){
-                    std::cout << " ARGG " << std::endl;
-
                     game->score->life2--;
                     break;
 
                 }
             }
             if (game->camera->isTouch(entity->getSphereDual())) {
-                std::cout << " AIE " << std::endl;
 
                 game->score->removeLife(entity->getType());
 
                 break;
-            } else {
-                std::cout << " RATE2 " << std::endl;
-
             }
         }
     }

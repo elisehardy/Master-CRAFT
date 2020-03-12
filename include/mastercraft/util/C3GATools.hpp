@@ -35,4 +35,31 @@ c3ga::Mvec<T> vector(const T &x, const T &y, const T &z){
     return mv;
 }
 
+
+template<typename T>
+c3ga::Mvec<T> translation(c3ga::Mvec<T> t){
+
+    c3ga::Mvec<T> mv = (1.0 + (-1.0 / 2.0) * t * c3ga::ei<double>());
+
+    return mv;
+}
+
+
+
+template<typename T>
+c3ga::Mvec<T> scale(T t){
+
+    c3ga::Mvec<T> mv = ( 1-(1.0 - t/ (1.0 + t)) * -c3ga::e0i<double>());
+
+    return mv;
+}
+
+template<typename T>
+void radiusAndCenterFromDualSphere(const c3ga::Mvec<T> &dualSphere, T &radius, c3ga::Mvec<T> &center){
+    radius = (dualSphere | dualSphere) / dualSphere[c3ga::E0];
+    center = dualSphere / dualSphere[c3ga::E0];
+}
+
+
+
 #endif //MASTERCRAFT_C3GATOOLS_HPP

@@ -44,29 +44,33 @@ namespace mastercraft::game {
         if (InputManager::isKeyPressed(SDL_SCANCODE_W) || InputManager::isKeyPressed(SDL_SCANCODE_UP)) {
             game->camera->moveForward(0.6f);
             game->magie->moveForward(0.6f);
-            game->camera->init2();
-
+            if(!game->configManager->getCheat()) {
+                game->camera->init2();
+            }
 
 
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_S) || InputManager::isKeyPressed(SDL_SCANCODE_DOWN)) {
             game->camera->moveForward(-0.6f);
             game->magie->moveForward(-0.6f);
-            game->camera->init2();
-
+            if(!game->configManager->getCheat()) {
+                game->camera->init2();
+            }
 
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_A) || InputManager::isKeyPressed(SDL_SCANCODE_LEFT)) {
             game->camera->moveLeft(0.6f);
             game->magie->moveLeft(0.6f);
-            game->camera->init2();
-
+            if(!game->configManager->getCheat()) {
+                game->camera->init2();
+            }
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_D) || InputManager::isKeyPressed(SDL_SCANCODE_RIGHT)) {
             game->camera->moveLeft(-0.6f);
             game->magie->moveLeft(-0.6f);
-            game->camera->init2();
-
+            if(!game->configManager->getCheat()) {
+                game->camera->init2();
+            }
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_LCTRL)) {
             if(game->configManager->getCheat()) {
@@ -122,12 +126,78 @@ namespace mastercraft::game {
             }
             game->switchDay();
         }
+
+        if (InputManager::isKeyPressed(SDL_SCANCODE_B)) {
+            if(game->score->getMonster_kill() > 10) {
+
+
+                int ind = 0;
+                std::vector<int> toDelete;
+                auto pos = game->camera->getPosition();
+                auto sphere = game->camera->getSphereDual();
+                auto D = scale(0.5);
+                sphere = D * sphere * D.inv();
+                sphere.roundZero(1.0e-10);
+                auto pz = pos.z*5 - pos.z;
+                auto py = pos.y*5-pos.y;
+                auto px = pos.x*5-pos.x;
+                auto T = translation(c3ga::Mvec<double>(c3ga::e3<double>()*-pz+c3ga::e2<double>()*-py+c3ga::e1<double>()*-px));
+                sphere = T * sphere * T.inv();
+                sphere.roundZero(1.0e-10);
+                double rayon;
+                c3ga::Mvec<double> center;
+                radiusAndCenterFromDualSphere(sphere, rayon, center);
+                for (auto &entity: game->chunkManager->entities) {
+                    auto ent = entity->getPosition();
+                    ent.x +=0.6f;
+                    ent.z+=0.6f;
+                    ent.y+=1;
+                    if (game->magie->isTouch2(entity->getSphereDual(), sphere)|| game->camera->isCercle(ent, rayon)) {
+                            game->score->addMonsterKill(entity->getType());
+                            game->score->removeMonsterKill();
+                            toDelete.push_back(ind);
+
+
+                            break;
+                        }
+
+                    ind++;
+
+                }
+
+                int i = 0;
+                for (const auto &index: toDelete) {
+                    game->chunkManager->entities.erase(
+                            game->chunkManager->entities.begin() + index - i++);
+                }
+            }
+        }
+
         if (InputManager::isKeyPressed(SDL_SCANCODE_T)) {
-            std::cout << "tir" << std::endl;
             int ind=0;
             std::vector<int> toDelete;
 
             for(auto &entity: game->chunkManager->entities){
+                auto sphere = game->magie->getSphereDual();
+
+                for(int i=0;i<10;i++) {
+                    auto T = translation(c3ga::Mvec<double>(c3ga::e3<double>()*(-0.6f*i)));
+                    sphere = T*sphere*T.inv();
+                    if (game->magie->isTouch2(entity->getSphereDual(), sphere)) {
+
+                        game->score->addMonsterKill(entity->getType());
+                        toDelete.push_back(ind);
+
+
+                        break;
+                    }
+                }
+                ind++;
+
+            }
+
+
+          /*  for(auto &entity: game->chunkManager->entities){
                     auto oldPos = game->magie->getPosition();
                     for(int i=0;i<10;i++) {
                         auto newPos = oldPos;
@@ -149,7 +219,7 @@ namespace mastercraft::game {
                     }
                     ind++;
 
-            }
+            }*/
             int  i = 0;
             for (const auto &index: toDelete) {
                 game->chunkManager->entities.erase(game->chunkManager->entities.begin() + index - i++);

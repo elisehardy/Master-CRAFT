@@ -158,6 +158,10 @@ namespace mastercraft::entity {
         return dualSphere(double(this->position.x), double(this->position.y), double(this->position.z), double(0.15));
     }
 
+    c3ga::Mvec<double> Magie2::getSphereDual2(glm::vec3 t_position){
+        return dualSphere(double(t_position.x), double(t_position.y), double(t_position.z), double(0.15));
+    }
+
     c3ga::Mvec<double> Magie2::getSphere(){
         glm::vec3 p1 = vertices[0];
         glm::vec3 p2 = vertices[1];
@@ -169,6 +173,19 @@ namespace mastercraft::entity {
 
     GLboolean Magie2::isTouch(c3ga::Mvec<double> sphereDual){
         c3ga::Mvec<double> sphereDual2 = this->getSphereDual();
+        c3ga::Mvec<double> intersection = (sphereDual2 ^ sphereDual).dual();
+        double radius  = sqrt(intersection * intersection);
+        auto cercle = (radius/(radius*c3ga::Ei)) * (radius/(radius*c3ga::Ei));
+        if(cercle >=0.0){
+            return true;
+        }
+        return false;
+    }
+
+
+
+    GLboolean Magie2::isTouch2(c3ga::Mvec<double> sphereDual, c3ga::Mvec<double> sphereDual2){
+
         c3ga::Mvec<double> intersection = (sphereDual2 ^ sphereDual).dual();
         double radius  = sqrt(intersection * intersection);
         auto cercle = (radius/(radius*c3ga::Ei)) * (radius/(radius*c3ga::Ei));

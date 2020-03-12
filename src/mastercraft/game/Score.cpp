@@ -184,6 +184,35 @@ namespace mastercraft::game {
 
 
 
+        auto posi = game->camera->getPosition();
+        auto sphere = game->camera->getSphereDual();
+        double r;
+        c3ga::Mvec<double> c;
+        radiusAndCenterFromDualSphere(sphere, r, c);
+        auto D = scale(0.5);
+        sphere = D * sphere * D.inv();
+        sphere.roundZero(1.0e-10);
+        auto pz = posi.z*5 - posi.z;
+        auto py = posi.y*5-posi.y;
+        auto px = posi.x*5-posi.x;
+        auto T = translation(c3ga::Mvec<double>(c3ga::e3<double>()*-pz+c3ga::e2<double>()*-py+c3ga::e1<double>()*-px));
+        sphere = T * sphere * T.inv();
+        double r2;
+        c3ga::Mvec<double> c2;
+        radiusAndCenterFromDualSphere(sphere, r2, c2);
+        ss.str(std::string());
+        ss << "pos: " << c.e1() << " " <<  c.e2() << " " << c.e3() << "r" << r;
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
+        ss.str(std::string());
+
+        ss << " pos: " << posi.x << " " <<  posi.y << " " << posi.z << "r" << r;
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
+
+        ss.str(std::string());
+
+        ss << " pos: " << c2.e1() << " " <<  c2.e2() << " " << c2.e3() << "r" << r2;
+
+        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
 
 
     }
@@ -228,4 +257,14 @@ namespace mastercraft::game {
                 break;
         }
     }
+
+
+    GLint Score::getMonster_kill() {
+        return monster_kill;
+    }
+
+    void Score::removeMonsterKill() {
+        this->monster_kill-=10;
+    }
+
 }

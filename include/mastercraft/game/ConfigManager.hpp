@@ -35,7 +35,7 @@ namespace mastercraft::game {
             static constexpr GLubyte GEN_WATER_LEVEL = GEN_MIN_HEIGHT + 22;
             
             // Time
-            static constexpr GLint SECONDS_CYCLE = 40;
+            static constexpr GLint SECONDS_CYCLE = 60;
             static constexpr GLint TICK_PER_SEC = 20;
             static constexpr GLint TICK_CYCLE = SECONDS_CYCLE * TICK_PER_SEC;
             

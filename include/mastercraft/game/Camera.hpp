@@ -58,6 +58,7 @@ namespace mastercraft::game {
             c3ga::Mvec<double> getSphereDual();
 
             GLboolean isTouch(c3ga::Mvec<double> sphereDual);
+            GLboolean isCercle(glm::vec3 pos, double rayon);
 
 
         };

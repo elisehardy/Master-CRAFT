@@ -22,7 +22,7 @@ namespace mastercraft::entity {
 
 
     private:
-        glm::vec3 vertices[36] = {
+       glm::vec3 vertices[36] = {
                 // face
                 { -1, -1, 1 },
                 { 1,  -1, 1 },
@@ -65,6 +65,51 @@ namespace mastercraft::entity {
                 { 1,  1,  -1 },
                 { 1,  1,  1 },
                 { 1,  -1, 1 },
+        };
+
+        glm::vec2 tex[36] = {
+                // face
+                { 1, 1 },
+                { 0, 1 },
+                { 0, 0 },
+                { 0, 0 },
+                { 1, 0 },
+                { 1, 1 },
+                // top
+                { 1, 1 },
+                { 0, 1 },
+                { 0, 0 },
+                { 0, 0 },
+                { 1, 0 },
+                { 1, 1 },
+                // back
+                { 1, 1 },
+                { 0, 1 },
+                { 0, 0 },
+                { 0, 0 },
+                { 1, 0 },
+                { 1, 1 },
+                // bottom
+                { 1, 1 },
+                { 0, 1 },
+                { 0, 0 },
+                { 0, 0 },
+                { 1, 0 },
+                { 1, 1 },
+                // left
+                { 1, 1 },
+                { 0, 1 },
+                { 0, 0 },
+                { 0, 0 },
+                { 1, 0 },
+                { 1, 1 },
+                // right
+                { 1, 1 },
+                { 0, 1 },
+                { 0, 0 },
+                { 0, 0 },
+                { 1, 0 },
+                { 1, 1 },
         };
 
         shader::Texture texture;
@@ -115,6 +160,8 @@ namespace mastercraft::entity {
         void setPosition(GLfloat x, GLfloat y, GLfloat z);
         c3ga::Mvec<double> getSphere();
         void setPositionheight(GLfloat y) ;
+        GLboolean isTouch2(c3ga::Mvec<double> sphereDual, c3ga::Mvec<double> sphereDual2);
+        c3ga::Mvec<double> getSphereDual2(glm::vec3 position);
 
         };
 }
