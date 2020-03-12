@@ -62,18 +62,21 @@ namespace mastercraft::game {
         if(game->chunkManager->get(nextPosition)!= cube::CubeType::AIR) {
             // while (game->chunkManager->get(nextPosition) !=
             //  cube::CubeType::AIR) { // Next cube is solid, trying he one above
-            nextPosition += glm::vec3(0, 1, 0);
+            nextPosition += glm::vec3(0, 0.6f*3, 0);
+            game->magie->setPositionheight(0.6f*3);
 
             //}
         }
         else {
             // Fall until reaching solid cube
             while (game->chunkManager->get(nextPosition-glm::vec3(0,1,0)) == cube::CubeType::AIR) {
-                nextPosition -= glm::vec3(0, 1, 0);
+                nextPosition -= glm::vec3(0, 0.6f, 0);
+                game->magie->setPositionheight(-0.6f);
             }
         }
 
-        nextPosition.y+=1;
+        //nextPosition.y+=0.6f;
+        //game->magie->setPositionheight(0.6f);
         this->position = nextPosition;
 
     }

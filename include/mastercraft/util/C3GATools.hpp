@@ -24,4 +24,15 @@ c3ga::Mvec<T> dualSphere(const T &centerX, const T &centerY, const T &centerZ, c
     return dualSphere;
 }
 
+
+template<typename T>
+c3ga::Mvec<T> vector(const T &x, const T &y, const T &z){
+
+    c3ga::Mvec<T> mv;
+    mv[c3ga::E1] = x;
+    mv[c3ga::E2] = y;
+    mv[c3ga::E3] = z;
+    return mv;
+}
+
 #endif //MASTERCRAFT_C3GATOOLS_HPP

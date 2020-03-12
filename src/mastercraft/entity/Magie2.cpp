@@ -60,6 +60,20 @@ namespace mastercraft::entity {
 
     }
 
+    void Magie2::init2() {
+        game::Game *game = game::Game::getInstance();
+        glm::mat4 rinit = glm::rotate(glm::mat4(1.f), 3.f, glm::vec3(0.f, 1.f, 0.f));
+
+
+        glm::vec3 nextPosition = game->camera->getPosition();
+
+
+        nextPosition.z +=0;
+        this->position = rinit *glm::vec4(nextPosition,1);
+
+
+    }
+
 
     GLuint Magie2::update() {
         //game::Game *game = game::Game::getInstance();
@@ -203,6 +217,10 @@ namespace mastercraft::entity {
 
     void Magie2::setPosition(GLfloat x, GLfloat y, GLfloat z) {
         this->position = { x, y, z };
+    }
+
+    void Magie2::setPositionheight(GLfloat y) {
+        this->position.y +=  y;
     }
 
 }

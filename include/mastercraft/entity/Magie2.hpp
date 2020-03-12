@@ -110,9 +110,11 @@ namespace mastercraft::entity {
         void rotateUp(float degrees);
 
         void init() ;
+        void init2();
 
         void setPosition(GLfloat x, GLfloat y, GLfloat z);
         c3ga::Mvec<double> getSphere();
+        void setPositionheight(GLfloat y) ;
 
         };
 }

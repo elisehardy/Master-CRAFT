@@ -44,23 +44,28 @@ namespace mastercraft::game {
         if (InputManager::isKeyPressed(SDL_SCANCODE_W) || InputManager::isKeyPressed(SDL_SCANCODE_UP)) {
             game->camera->moveForward(0.6f);
             game->magie->moveForward(0.6f);
+            game->camera->init2();
+
 
 
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_S) || InputManager::isKeyPressed(SDL_SCANCODE_DOWN)) {
             game->camera->moveForward(-0.6f);
             game->magie->moveForward(-0.6f);
+            game->camera->init2();
 
 
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_A) || InputManager::isKeyPressed(SDL_SCANCODE_LEFT)) {
             game->camera->moveLeft(0.6f);
             game->magie->moveLeft(0.6f);
+            game->camera->init2();
 
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_D) || InputManager::isKeyPressed(SDL_SCANCODE_RIGHT)) {
             game->camera->moveLeft(-0.6f);
             game->magie->moveLeft(-0.6f);
+            game->camera->init2();
 
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_LCTRL)) {
@@ -119,6 +124,9 @@ namespace mastercraft::game {
         }
         if (InputManager::isKeyPressed(SDL_SCANCODE_T)) {
             std::cout << "tir" << std::endl;
+            int ind=0;
+            std::vector<int> toDelete;
+
             for(auto &entity: game->chunkManager->entities){
                     auto oldPos = game->magie->getPosition();
                     for(int i=0;i<10;i++) {
@@ -129,6 +137,8 @@ namespace mastercraft::game {
 
                             game->magie->setPosition(oldPos.x, oldPos.y, oldPos.z);
                             game->score->addMonsterKill(entity->getType());
+                            toDelete.push_back(ind);
+
 
                             break;
                         } else {
@@ -137,7 +147,12 @@ namespace mastercraft::game {
                         }
                         game->magie->setPosition(oldPos.x, oldPos.y, oldPos.z);
                     }
+                    ind++;
 
+            }
+            int  i = 0;
+            for (const auto &index: toDelete) {
+                game->chunkManager->entities.erase(game->chunkManager->entities.begin() + index - i++);
             }
 
 
