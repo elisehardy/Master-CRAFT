@@ -176,43 +176,6 @@ namespace mastercraft::game {
         ss << "Spider: " << game->score->nb_spider;
         this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
 
-        i++;
-        ss.str(std::string());
-        auto pos  = game->camera->getPosition();
-        ss << "pos: " << pos.x << " " <<  pos.y << " " << pos.z << "type" << (game->chunkManager->get(pos) == cube::CubeType::AIR);
-        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
-
-
-
-        auto posi = game->camera->getPosition();
-        auto sphere = game->camera->getSphereDual();
-        double r;
-        c3ga::Mvec<double> c;
-        radiusAndCenterFromDualSphere(sphere, r, c);
-        auto D = scale(0.5);
-        sphere = D * sphere * D.inv();
-        sphere.roundZero(1.0e-10);
-        auto pz = posi.z*5 - posi.z;
-        auto py = posi.y*5-posi.y;
-        auto px = posi.x*5-posi.x;
-        auto T = translation(c3ga::Mvec<double>(c3ga::e3<double>()*-pz+c3ga::e2<double>()*-py+c3ga::e1<double>()*-px));
-        sphere = T * sphere * T.inv();
-        double r2;
-        c3ga::Mvec<double> c2;
-        radiusAndCenterFromDualSphere(sphere, r2, c2);
-        ss.str(std::string());
-        ss << "pos: " << c.e1() << " " <<  c.e2() << " " << c.e3() << "r" << r;
-        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
-        ss.str(std::string());
-
-        ss << " pos: " << posi.x << " " <<  posi.y << " " << posi.z << "r" << r;
-        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
-
-        ss.str(std::string());
-
-        ss << " pos: " << c2.e1() << " " <<  c2.e2() << " " << c2.e3() << "r" << r2;
-
-        this->renderText(10.f, this->height - 40 - LINE_HEIGHT * i++, 1.0f, ss.str(), color);
 
 
     }
@@ -258,13 +221,25 @@ namespace mastercraft::game {
         }
     }
 
+    void Score::quit(){
+        Game *game = Game::getInstance();
+
+        if(life <0 || life2 < 0){
+            game->stop();
+        }
+    }
+
 
     GLint Score::getMonster_kill() {
         return monster_kill;
     }
 
     void Score::removeMonsterKill() {
-        this->monster_kill-=10;
+        if(this->monster_kill-3 > 0){
+            this->monster_kill-=3;
+        }else{
+            this->monster_kill = 0;
+        }
     }
 
 }

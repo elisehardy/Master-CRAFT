@@ -250,15 +250,7 @@ namespace mastercraft::game {
             }
         }
 
-      /*  if(!game->magieNB){
-            auto pos = game->camera->getPosition();
-            entities.emplace_back(std::make_unique<entity::Magie>(glm::vec3(
-                    pos.x,
-                    pos.y ,
-                    pos.z
-            )));
-            game->magieNB++;
-        }*/
+
         
         GLint startx = position.x - cube::SuperChunk::X;
         GLint startz = position.z - cube::SuperChunk::Z;

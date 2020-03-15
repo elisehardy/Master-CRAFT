@@ -36,7 +36,7 @@ namespace mastercraft::game {
         GLint nb_slime = 0;
         GLint nb_robot = 0;
         GLint nb_spider = 0;
-        GLint life = 100;
+        GLint life = 10000;
 
 
         void renderText(GLfloat x, GLfloat y, GLfloat scale, const std::string &text, const glm::vec3 &color);
@@ -54,6 +54,8 @@ namespace mastercraft::game {
         void removeLife(GLint type) ;
         GLint getMonster_kill();
         void removeMonsterKill();
+        void quit();
+
 
         };
 }

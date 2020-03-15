@@ -1,10 +1,10 @@
-# Master-craft
+# Kill-mob
 
-The goal of this project is to realize a 3D voxel world represented only by 3D cubes in the spirit of **Minecraft**.
+The goal of this project is to realize a 3D shoot voxel world represented only by 3D cubes.
 
 ## Prerequisites
 
-To run *Mastercraft*, you need:
+To run *kill-mob*, you need:
 
 * `CMake >= 3.7`
 * `SDL2 >= 2.0.2`
@@ -25,10 +25,10 @@ make
 
 Compilation has been tested with `g++ >= 6.2.0` and `clang >= 7.0.1`.
 
-The program is launch with the compiled executable `mastercraft`.
+The program is launch with the compiled executable `kill-mob`.
 
 ```
-./mastercraft
+./kill-mob
 ```
 
 
@@ -43,6 +43,9 @@ Use `ESC` to exit the application.
     * `a` / `←` : Strafe left.
     * `d` / `→` : Straft right.    
     * Use the mouse to look around.
+    * `t` : Shoot with canon
+    * `b` : Shoot bomb
+    * `c` : cheat camera
 
 * Miscellaneous :
 
@@ -54,6 +57,7 @@ Use `ESC` to exit the application.
     * `F4` : Decrease distance view  .
     * `F5` : Increase distance view.
     * `F10` : Displays debug information.
+    * `k` : information kills
 
 Some notes :
 
@@ -64,5 +68,5 @@ Some notes :
 
 ## Authors
 
-* Quentin Coumes and Elise Hardy
+* CetteElise Hardy
 

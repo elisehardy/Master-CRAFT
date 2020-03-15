@@ -22,6 +22,7 @@ namespace mastercraft::entity {
 
 
     private:
+
        glm::vec3 vertices[36] = {
                 // face
                 { -1, -1, 1 },
@@ -67,50 +68,6 @@ namespace mastercraft::entity {
                 { 1,  -1, 1 },
         };
 
-        glm::vec2 tex[36] = {
-                // face
-                { 1, 1 },
-                { 0, 1 },
-                { 0, 0 },
-                { 0, 0 },
-                { 1, 0 },
-                { 1, 1 },
-                // top
-                { 1, 1 },
-                { 0, 1 },
-                { 0, 0 },
-                { 0, 0 },
-                { 1, 0 },
-                { 1, 1 },
-                // back
-                { 1, 1 },
-                { 0, 1 },
-                { 0, 0 },
-                { 0, 0 },
-                { 1, 0 },
-                { 1, 1 },
-                // bottom
-                { 1, 1 },
-                { 0, 1 },
-                { 0, 0 },
-                { 0, 0 },
-                { 1, 0 },
-                { 1, 1 },
-                // left
-                { 1, 1 },
-                { 0, 1 },
-                { 0, 0 },
-                { 0, 0 },
-                { 1, 0 },
-                { 1, 1 },
-                // right
-                { 1, 1 },
-                { 0, 1 },
-                { 0, 0 },
-                { 0, 0 },
-                { 1, 0 },
-                { 1, 1 },
-        };
 
         shader::Texture texture;
         std::unique_ptr<shader::ShaderTexture> shader;

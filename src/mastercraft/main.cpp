@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
             if(entity->getType() == 1){
                 if(entity->isTouch(game->camera->getSphereDual())){
                     game->score->life2--;
+                    game->score->quit();
                     break;
 
                 }
@@ -56,7 +57,7 @@ int main(int argc, char **argv) {
             if (game->camera->isTouch(entity->getSphereDual())) {
 
                 game->score->removeLife(entity->getType());
-
+                game->score->quit();
                 break;
             }
         }

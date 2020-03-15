@@ -119,16 +119,19 @@ namespace mastercraft::game {
         }
         
         if (InputManager::isKeyPressed(SDL_SCANCODE_E)) {
-            if (game->isDay()) {
-                game->tickCycle = ConfigManager::DUSK_END;
-            } else {
-                game->tickCycle = ConfigManager::DAWN_END;
+            if (game->configManager->getCheat()) {
+
+                if (game->isDay()) {
+                    game->tickCycle = ConfigManager::DUSK_END;
+                } else {
+                    game->tickCycle = ConfigManager::DAWN_END;
+                }
+                game->switchDay();
             }
-            game->switchDay();
         }
 
         if (InputManager::isKeyPressed(SDL_SCANCODE_B)) {
-            if(game->score->getMonster_kill() > 10) {
+            if(game->score->getMonster_kill() > 2) {
 
 
                 int ind = 0;
@@ -197,29 +200,7 @@ namespace mastercraft::game {
             }
 
 
-          /*  for(auto &entity: game->chunkManager->entities){
-                    auto oldPos = game->magie->getPosition();
-                    for(int i=0;i<10;i++) {
-                        auto newPos = oldPos;
-                        game->magie->setPosition(newPos.x, newPos.y, newPos.z-0.6f*i);
-                        if (game->magie->isTouch(entity->getSphereDual())) {
-                            std::cout << " BUT BUT " << std::endl;
 
-                            game->magie->setPosition(oldPos.x, oldPos.y, oldPos.z);
-                            game->score->addMonsterKill(entity->getType());
-                            toDelete.push_back(ind);
-
-
-                            break;
-                        } else {
-                            std::cout << " RATE " << std::endl;
-
-                        }
-                        game->magie->setPosition(oldPos.x, oldPos.y, oldPos.z);
-                    }
-                    ind++;
-
-            }*/
             int  i = 0;
             for (const auto &index: toDelete) {
                 game->chunkManager->entities.erase(game->chunkManager->entities.begin() + index - i++);
