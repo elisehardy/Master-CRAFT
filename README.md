@@ -44,12 +44,14 @@ Use `ESC` to exit the application.
     * `d` / `→` : Straft right.    
     * Use the mouse to look around.
     * `t` : Shoot with canon
-    * `b` : Shoot bomb
+    * `b` : Shoot bomb (if monsters kills > 3)
     * `c` : cheat camera
+    * `ctrl` : down camera if cheat activ
+    * `space` : up camera if cheat activ
 
 * Miscellaneous :
 
-    * `E` To switch between day / night.
+    * `E` To switch between day / night (if cheat activ).
     * `F1` : Disable/enable face culling (enable by default).
     * `F2` : Disable/enable occlusion culling (enable by default), will reload the scene.
     * `F3` : Cycle between framerate settings (default to `VSYNC`). Available FPS settings are
